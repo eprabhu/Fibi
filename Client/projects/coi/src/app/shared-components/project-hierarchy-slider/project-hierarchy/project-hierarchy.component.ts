@@ -14,9 +14,11 @@ export class ProjectHierarchyComponent {
     constructor(public hierarchyService: ProjectHierarchySliderService) {}
 
     getProjectDetails(projectNode): void {
-        this.hierarchyService.activeProjectNumber = projectNode.projectNumber;
-        this.hierarchyService.activeProjectTypeCode = projectNode.projectTypeCode;
-        this.hierarchyAction.emit(projectNode);
+        if (this.hierarchyService.activeProjectNumber != projectNode.projectNumber) {
+            this.hierarchyService.activeProjectNumber = projectNode.projectNumber;
+            this.hierarchyService.activeProjectTypeCode = projectNode.projectTypeCode;
+            this.hierarchyAction.emit(projectNode);
+        }
     }
 
 }

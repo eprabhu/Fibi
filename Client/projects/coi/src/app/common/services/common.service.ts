@@ -205,7 +205,7 @@ export class CommonService {
     }
 
     getRequiredParameters() {
-        return this._http.get(this.fibiUrl + '/fetchRequiredParams').toPromise();
+        return this._http.get(this.baseUrl + '/fetchRequiredParams').toPromise();
     }
 
     /**
