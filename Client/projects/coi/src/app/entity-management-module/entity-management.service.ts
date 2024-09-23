@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 import { Subject, Subscription } from 'rxjs';
-import { jumpToSection } from '../common/utilities/custom-utilities';
+import { isEmptyObject, jumpToSection } from '../common/utilities/custom-utilities';
+import { ORGANISATION_FIELDS, SPONSOR_FIELDS } from './shared/entity-interface';
 
 @Injectable()
 export class EntityManagementService {
@@ -55,14 +56,6 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetchHistory/${entityId}`);
     }
 
-    updateOrganizationDetails(changedRO) {
-        return this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, changedRO);
-    }
-
-    updateSponsorDetails(changedRO) {
-        return this._http.patch(this._commonService.baseUrl + '/entity/sponsor/update', changedRO);
-    }
-
 }
 
 export function getEntityFullAddress(entityDetails, valuesToAdd = ['primaryAddressLine1', 'primaryAddressLine2', 'city', 'state' ]): string {
@@ -78,4 +71,19 @@ export function getEntityFullAddress(entityDetails, valuesToAdd = ['primaryAddre
     return address;
 }
 
+export function canUpdateSponsorFeed(reqObj) {
+    if(reqObj && !isEmptyObject(reqObj)) {
+        return Object.keys(reqObj).some(key => SPONSOR_FIELDS.includes(key));
+    } else {
+        return false;
+    }
+}
+
+export function canUpdateOrgFeed(reqObj) {
+    if(reqObj && !isEmptyObject(reqObj)) {
+    return Object.keys(reqObj).some(key => ORGANISATION_FIELDS.includes(key));
+    } else {
+        return false;
+    }
+}
 

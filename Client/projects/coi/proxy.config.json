@@ -701,7 +701,7 @@
         "secure": false
     },
     "/entity/getEntityDashboardData": {
-        "target": "http://10.199.100.3:8070/coi",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/getDisclosureDetailsForSFI/*" : {
