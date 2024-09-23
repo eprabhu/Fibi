@@ -1728,12 +1728,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 //		List<DisclosureDetailDto> projectList = Stream.concat(proposalDetails.stream(), awardDetails.stream())
 //				.collect(Collectors.toList());
 
-		List<DisclosureProjectDto> projectList;
-		if (fcoiDisclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
-			projectList = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
-		} else {
-			projectList = fcoiDisclosureDao.getDisclosureProjects(disclosureId);
-		}
+		List<DisclosureProjectDto> projectList = fcoiDisclosureService.getDisclProjectsByDispStatus(disclosureId);
 
 		projectList.stream().forEach(project -> {
 			List<CoiDisclEntProjDetailsDto> disclosureDetails = new ArrayList<>();
