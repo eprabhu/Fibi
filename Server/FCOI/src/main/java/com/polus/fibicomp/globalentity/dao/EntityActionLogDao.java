@@ -7,7 +7,7 @@ import com.polus.fibicomp.globalentity.pojo.EntityActionType;
 
 public interface EntityActionLogDao {
 
-    void saveObject(Object e);
+	void saveEntityActionLog(EntityActionLog entityActionLog);
 
     /**
      * @param actionLogTypeCode

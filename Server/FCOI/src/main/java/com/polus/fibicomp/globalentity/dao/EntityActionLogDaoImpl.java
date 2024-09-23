@@ -1,6 +1,7 @@
 package com.polus.fibicomp.globalentity.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,8 +30,8 @@ public class EntityActionLogDaoImpl implements EntityActionLogDao {
     private HibernateTemplate hibernateTemplate;
 
     @Override
-    public void saveObject(Object e) {
-        hibernateTemplate.saveOrUpdate(e);
+    public void saveEntityActionLog(EntityActionLog entityActionLog) {
+        hibernateTemplate.saveOrUpdate(entityActionLog);
     }
 
     @Override
@@ -51,7 +52,8 @@ public class EntityActionLogDaoImpl implements EntityActionLogDao {
 		CriteriaQuery<EntityActionLog> criteriaQuery = criteriaBuilder.createQuery(EntityActionLog.class);
 		Root<EntityActionLog> root = criteriaQuery.from(EntityActionLog.class);
 		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("entityId"), entityId))
-				.orderBy(criteriaBuilder.desc(root.get("updateTimestamp")));
+		.orderBy(criteriaBuilder.desc(root.get("updateTimestamp")),
+	             criteriaBuilder.desc(root.get("actionLogId")));
 		return session.createQuery(criteriaQuery).getResultList();
 	}
 

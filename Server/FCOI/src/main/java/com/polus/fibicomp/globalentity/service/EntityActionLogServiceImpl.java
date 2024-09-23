@@ -20,7 +20,7 @@ import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.globalentity.dao.EntityActionLogDao;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
-import com.polus.fibicomp.globalentity.pojo.EntityActionType;;
+import com.polus.fibicomp.globalentity.pojo.EntityActionType;
 
 @Service
 @Transactional
@@ -49,9 +49,9 @@ public class EntityActionLogServiceImpl implements EntityActionLogService {
                     .entityNumber(dto.getEntityId())
                     .description(message)
                     .comment(comment)
-                    .updateTimestamp(commonDao.getCurrentTimestamp())
+					.updateTimestamp(dto.getUpdateTimestamp() != null ? dto.getUpdateTimestamp() : commonDao.getCurrentTimestamp())
                     .updateUser(AuthenticatedUser.getLoginUserName()).build();
-            actionLogDao.saveObject(actionLog);
+            actionLogDao.saveEntityActionLog(actionLog);
         }
     }
 
@@ -62,6 +62,11 @@ public class EntityActionLogServiceImpl implements EntityActionLogService {
 						: personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));
         placeholdersAndValues.put("{DUNS_NUMBER}", dto.getDunsNumber());
         placeholdersAndValues.put("{TAB_NAME}", dto.getTabName());
+        placeholdersAndValues.put("{RISK_TYPE}", dto.getRiskType());
+        placeholdersAndValues.put("{NEW_RISK_LEVEL}", dto.getNewRiskLevel());
+        placeholdersAndValues.put("{OLD_RISK_LEVEL}", dto.getOldRiskLevel());
+        placeholdersAndValues.put("{OLD_STATUS}", dto.getOldFeedStatus());
+        placeholdersAndValues.put("{NEW_STATUS}", dto.getNewFeedStatus());
         return renderPlaceholders(message, placeholdersAndValues);
     }
 

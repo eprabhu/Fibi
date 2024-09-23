@@ -183,4 +183,11 @@ public interface FcoiDisclosureService {
      * @param disclosureId
      */
     void checkDispositionStatusIsVoid(Integer disclosureId);
+
+    /**
+     * Fetch Disclosure projects by disposition status
+     * @param disclosureId
+     * @return
+     */
+    List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId);
 }

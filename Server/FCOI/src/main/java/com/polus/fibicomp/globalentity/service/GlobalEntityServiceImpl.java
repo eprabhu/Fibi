@@ -1,5 +1,6 @@
 package com.polus.fibicomp.globalentity.service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,10 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	private static final String DOCUMENT_STATUS_FLAG_DUPLICATE = "3";
 	private static final String VERIFY_ACTION_LOG_CODE = "4";
 	private static final String DUPLICATE_ACTION_LOG_CODE = "7";
+	private static final String SPONSOR_FEED_ACTION_LOG_CODE = "10";
+	private static final String ORGANIZATION_FEED_ACTION_LOG_CODE = "11";
+	private static final String FEED_STATUS_NOT_READY_TO_FEED = "Not Ready to Feed";
+	private static final String FEED_STATUS_READY_TO_FEED = "Ready to Feed";
 
 	@Override
 	public ResponseEntity<Boolean> isDunsNumberExists(String dunsNumber) {
@@ -114,15 +119,21 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
 			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
 		}
-		processEntityMessageToQ(null, entityId, null, null);
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(entityId);
+			Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId)
-					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).build();
+					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).updateTimestamp(updateTimestamp).build();
 			actionLogService.saveEntityActionLog(VERIFY_ACTION_LOG_CODE, logDTO, null);
+			logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityName(entityDetails.getEntityName())
+					.updatedBy(entityDetails.getUpdatedBy()).oldFeedStatus(FEED_STATUS_NOT_READY_TO_FEED)
+					.newFeedStatus(FEED_STATUS_READY_TO_FEED).updateTimestamp(updateTimestamp).build();
+			actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
+			actionLogService.saveEntityActionLog(ORGANIZATION_FEED_ACTION_LOG_CODE, logDTO, null);
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
 		}
+		processEntityMessageToQ(null, entityId, null, null);
 		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
 	}
 
