@@ -19,10 +19,8 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.globalentity.dao.EntityActionLogDao;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
-import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
 import com.polus.fibicomp.globalentity.pojo.EntityActionType;
-import com.polus.fibicomp.globalentity.pojo.EntityRiskActionLog;;
 
 @Service
 @Transactional

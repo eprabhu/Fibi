@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
 import com.polus.fibicomp.globalentity.pojo.EntityActionType;
-import com.polus.fibicomp.globalentity.pojo.EntityRiskActionLog;
 
 @Repository
 @Primary
