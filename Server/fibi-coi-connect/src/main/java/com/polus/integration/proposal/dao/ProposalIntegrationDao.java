@@ -3,6 +3,7 @@ package com.polus.integration.proposal.dao;
 
 import org.springframework.stereotype.Service;
 
+import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
 import com.polus.integration.proposal.pojo.COIIntegrationProposal;
 import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
@@ -68,7 +69,20 @@ public interface ProposalIntegrationDao {
 	 * @param COIIntegrationProposalPerson
 	 * @return
 	 */
-	public void saveProposalPerson(COIIntegrationProposalPerson proposalPerson) throws Exception;	
+	public void saveProposalPerson(COIIntegrationProposalPerson proposalPerson) throws Exception;
+
+	/**
+	 * @param integrationPropQuestAns
+	 */
+	public void saveQuestionnaireAnswer(COIIntegrationPropQuestAns integrationPropQuestAns);
+
+	/**
+	 * @param questionnaireId
+	 * @param personId
+	 * @param moduleItemId
+	 * @return
+	 */
+	public Boolean canMarkDisclosureAsVoid(Integer questionnaireId, String personId, String moduleItemId);	
 	
 	
 }
