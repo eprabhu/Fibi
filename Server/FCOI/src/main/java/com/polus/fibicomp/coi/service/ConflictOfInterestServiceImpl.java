@@ -1917,7 +1917,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			disclosure.setPersonAttachmentsCount(conflictOfInterestDao.personAttachmentsCount(AuthenticatedUser.getLoginPersonId()));
 			disclosure.setPersonNotesCount(conflictOfInterestDao.personNotesCount(AuthenticatedUser.getLoginPersonId()));
 			disclosure.setPersonEntitiesCount(conflictOfInterestDao.getSFIOfDisclosureCount(ConflictOfInterestVO.builder().personId(AuthenticatedUser.getLoginPersonId()).build()));
-			if (disclosure.getFcoiTypeCode().equals("1")) {
+			if (disclosure.getFcoiTypeCode().equals("1") || disclosure.getFcoiTypeCode().equals("3")) {
 				conflictOfInterestDao.archiveDisclosureOldVersions(disclosureId, disclosureNumber);
 			}
 			fcoiDisclosureDao.generateProjectSnapshot(disclosureId, disclosure.getPersonId());
