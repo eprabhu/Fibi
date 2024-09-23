@@ -1,5 +1,5 @@
 <div class="card overflow-hidden coi-card-bg-body mt-0">
-    <div class="card-header px-1" [class.border-bottom-0]="!keyPersonData?.disclosures?.length">
+    <div class="card-header px-1" [class.border-bottom-0]="!keyPersonData?.disclosures?.length || !isShowAllDisclosures">
         <div class="row row-gap-2 w-100 mx-0 position-relative">
             <!-- Name -->
             <div tabindex="-1" class="col-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3"
@@ -71,7 +71,7 @@
         </div>
     </div>
     <!-- key person table -->
-    <div *ngIf="keyPersonData?.disclosures?.length" class="card-body overflow-hidden p-0">
+    <div *ngIf="keyPersonData?.disclosures?.length && isShowAllDisclosures" class="card-body overflow-hidden p-0" [@heightAnimation]>
         <div class="table-responsive coi-table-striped rounded-bottom-3">
             <table class="table fs-14 fw-medium table-striped mb-0"
                 id="COI_KEYPERSON_DISCLOSURE_TABLE_{{keyPersonData?.keyPersonId}}_{{uniqueId}}">
@@ -85,8 +85,8 @@
                     </tr>
                 </thead>
                 <tbody class="coi-table-last-border-0">
-                    <ng-container *ngFor="let keyPersonDisclosure of keyPersonData?.disclosures; let disclosureIndex = index; let first = first">
-                        <tr *ngIf="first || isShowAllDisclosures" id="{{keyPersonDisclosure?.disclosureId + disclosureIndex}}">
+                    <ng-container *ngFor="let keyPersonDisclosure of keyPersonData?.disclosures; let disclosureIndex = index;">
+                        <tr id="{{keyPersonDisclosure?.disclosureId + disclosureIndex}}">
                             <!-- Disclosure Type -->
                             <td class="align-middle">
                                 <app-no-data-label [valueToShow]="keyPersonDisclosure?.disclosureType">
