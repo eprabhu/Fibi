@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.polus.integration.client.FcoiFeignClient;
 import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.proposal.dao.ProposalIntegrationDao;
-import com.polus.integration.proposal.dao.ProposalIntegrationDaoImpl;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.dto.ProposalPersonDTO;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
@@ -82,6 +79,7 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	private static final String PROPOSAL_DEACTIVATE_STATUS = "8";
 	private static final String REMARK_PROPOSAL_VOID = "This proposal has been marked as Deactivated in the Source System (Kuali Coeus).";
 	private static final String REMARK_PROPOSAL_PERSON_VOID = "Proposals Person has been inactive in the Source System (Kuali Coeus).";
+	private static final String REMARK_PROPOSAL_PERSON_QUES_VOID = "Proposals Person Certification questionnaire answers validation didn't met in the Source System (Kuali Coeus).";
 	
 	
 	@Override
@@ -203,7 +201,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@Override
-	@Transactional
 	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> questionnaireVOs) {
 		try {
 			log.info("feedPersonQuestionnaireAndCreateDisclosure .... ");
@@ -226,7 +223,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
 	}
 
-	@Transactional
 	private void saveOrUpdateQuestionAnswer(List<COIIntegrationPropQuestAns> questAnswers, List<QuestionnaireVO> questionnaireVOs) {
 		questionnaireVOs.forEach(vo -> {
 			COIIntegrationPropQuestAns integrationPropQuestAns = questAnswers.stream()
@@ -234,11 +230,10 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 							questAnswer.getQuestionId().equals(vo.getQuestionId())).findFirst()
 					.orElse(new COIIntegrationPropQuestAns());
 			prepareQuestionAnswer(integrationPropQuestAns, vo);
-			qnAIntegrationRepository.save(integrationPropQuestAns);
+			proposalIntegrationDao.saveQuestionnaireAnswer(integrationPropQuestAns);			
 		});
 	}
 
-	@Transactional
 	private COIIntegrationPropQuestAns prepareQuestionAnswer(COIIntegrationPropQuestAns integrationPropQuestAns, QuestionnaireVO vo) {
 		integrationPropQuestAns.setAnswer(vo.getAnswer());
 		integrationPropQuestAns.setQuestionId(vo.getQuestionId());
@@ -255,7 +250,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		return integrationPropQuestAns;
 	}
 	
-	@Transactional
 	private void prepareValidateAndCreateDisclosure(QuestionnaireVO vo) {
 		ProcessProposalDisclosureVO processProposalDisclosureVO = new ProcessProposalDisclosureVO();
 		processProposalDisclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
@@ -266,7 +260,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		validateAndCreateDisclosure(createValidateDisclosureVO(vo), processProposalDisclosureVO, vo.getQuestionnaireId());
 	}
 
-	@Transactional
 	private ValidateDisclosureVO createValidateDisclosureVO(QuestionnaireVO vo) {
 		ValidateDisclosureVO disclosureVO = new ValidateDisclosureVO();
 	    disclosureVO.setModuleCode(Constant.DEV_PROPOSAL_MODULE_CODE.toString());
@@ -276,7 +269,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public void validateAndCreateDisclosure(ValidateDisclosureVO validateDisclosureVO, ProcessProposalDisclosureVO vo, Integer questionnaireId) {			
 		try {
 			Boolean canCreateDisclosure = proposalIntegrationDao.canCreateProjectDisclosure(questionnaireId, vo.getPersonId(), vo.getModuleItemId().toString());
@@ -299,6 +291,10 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 					Map<String, Object> coiDisclosure = (Map<String, Object>) responseObject.get(Constant.PENDING_PROJECT);
 					log.info("Disclosure Id : {}", (Integer) coiDisclosure.get("disclosureId"));
 					syncQuestionniareAnswers(coiDisclosure, vo, questionnaireId);
+					Boolean canMarkDisclosureAsVoid = proposalIntegrationDao.canMarkDisclosureAsVoid(questionnaireId, vo.getPersonId(), vo.getModuleItemId().toString());
+					if (Boolean.TRUE.equals(canMarkDisclosureAsVoid)) {
+						markDisclosureAsVoidForNoAnswer(vo.getPersonId(),vo.getModuleItemId().toString());
+					}
 				}
             }
 		} catch (Exception e) {
@@ -307,7 +303,22 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		}
     }
 
-	@Transactional
+	private void markDisclosureAsVoidForNoAnswer(String personId, String moduleItemId) {
+		try {
+			MarkVoidVO vo = prepareMarkProposalPersonQuesVoidVO(moduleItemId, personId);
+			fcoiFeignClient.makeDisclosureVoid(vo);
+		} catch (DataAccessException dae) {
+			log.error("Error in markDisclosureAsVoidForNoAnswer {}: ", dae);
+
+		} catch (FeignException fe) {
+			log.error("Error in markDisclosureAsVoidForNoAnswer {}: ", fe);
+
+		} catch (Exception e) {
+			log.error("Error in markDisclosureAsVoidForNoAnswer {} {}", personId, e.getMessage());
+		}
+		
+	}
+
 	private void syncQuestionniareAnswers(Map<String, Object> coiDisclosure, ProcessProposalDisclosureVO vo, Integer questionnaireId) {
 		QuestionnaireVO questionnaireVO = new QuestionnaireVO();
 		questionnaireVO.setProposalNumber(vo.getModuleItemId().toString());
@@ -318,7 +329,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		getQuestionnaire(questionnaireVO);
 	}
 
-	@Transactional
 	private CreateProposalDisclosureVO prepareCreateProposalDisclosureResponse(ProcessProposalDisclosureVO vo) {
 		CreateProposalDisclosureVO disclosureVO = new CreateProposalDisclosureVO();
 		disclosureVO.setCoiProjectTypeCode(vo.getCoiProjectTypeCode());
@@ -358,7 +368,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		return saveQuestionnaireAnswers(questionnaireSaveDto, qnrMapping.getQuestions(), vo.getPersonId(), Integer.parseInt(vo.getProposalNumber()), vo.getDisclosureId(), vo.getQuestionnaireId(), questionnaire.getQuestionnaireAnswerHeaderId());
 	}
 
-	@Transactional
 	private GetQNRDetailsDto getQuestionnaireByParam(GetQNRDetailsDto questionnaire, Integer fibiQuestionnaireId, String moduleItemKey) {
 		Integer questionnaireAnswerHeaderId = getQuestionnaireAnswerHeaderId(moduleItemKey, fibiQuestionnaireId);
 		questionnaire.setQuestionnaireAnswerHeaderId(questionnaireAnswerHeaderId);
@@ -452,11 +461,15 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	private MarkVoidVO prepareMarkProposalVoidVO(String proposalNumber) {
-		return prepareMarkVoidVO(proposalNumber, null,REMARK_PROPOSAL_VOID);
+		return prepareMarkVoidVO(proposalNumber, null, REMARK_PROPOSAL_VOID);
 	}
 
 	private MarkVoidVO prepareMarkProposalPersonVoidVO(String proposalNumber, String personId) {
-		return prepareMarkVoidVO(proposalNumber, personId,REMARK_PROPOSAL_PERSON_VOID);
+		return prepareMarkVoidVO(proposalNumber, personId, REMARK_PROPOSAL_PERSON_VOID);
+	}
+
+	private MarkVoidVO prepareMarkProposalPersonQuesVoidVO(String proposalNumber, String personId) {
+		return prepareMarkVoidVO(proposalNumber, personId, REMARK_PROPOSAL_PERSON_QUES_VOID);
 	}
 
 	private MarkVoidVO prepareMarkVoidVO(String proposalNumber, String personId, String remark) {
