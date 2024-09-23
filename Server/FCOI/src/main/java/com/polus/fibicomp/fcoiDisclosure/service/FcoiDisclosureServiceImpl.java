@@ -211,7 +211,8 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
 
-    private List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId) {
+    @Override
+    public List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId) {
         List<DisclosureProjectDto> disclProjects;
         if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
             disclProjects = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
@@ -847,15 +848,19 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     @Override
     public void checkDispositionStatusIsVoid(String dispositionStatusCode) {
         if (dispositionStatusCode.equals(Constants.COI_DISCL_DISPOSITION_STATUS_VOID)) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+            throwVoidException();
         }
     }
 
     @Override
     public void checkDispositionStatusIsVoid(Integer disclosureId) {
         if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_VOID, disclosureId)) {
-            throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
+            throwVoidException();
         }
+    }
+
+    private void throwVoidException() {
+        throw new ApplicationException("Disclosure is in void status!",CoreConstants.JAVA_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
 }
