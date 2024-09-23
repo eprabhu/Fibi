@@ -1,7 +1,5 @@
 package com.polus.integration.proposal.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +10,7 @@ import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
 import com.polus.integration.proposal.questionnaire.pojo.FibiCoiQnrMapping;
 import com.polus.integration.proposal.repository.ProposalIntegrationRepository;
 import com.polus.integration.proposal.repository.ProposalPersonIntegrationRepository;
+import com.polus.integration.proposal.repository.ProposalQnAIntegrationRepository;
 import com.polus.questionnaire.dto.FetchQnrAnsHeaderDto;
 import com.polus.questionnaire.dto.GetQNRDetailsDto;
 import com.polus.questionnaire.dto.QuestionnaireSaveDto;
@@ -24,12 +23,12 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.extern.slf4j.Slf4j;
 
 @Transactional
 @Service
+@Slf4j
 public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
-
-	protected static Logger logger = LogManager.getLogger(ProposalIntegrationDaoImpl.class.getName());
 
 	@Autowired
 	private EntityManager entityManager;
@@ -42,6 +41,9 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	
 	@Autowired
 	private ProposalPersonIntegrationRepository proposalPersonIntegrationRepository;
+
+	@Autowired
+	private ProposalQnAIntegrationRepository qnAIntegrationRepository;
 
 	@Override
 	public FibiCoiQnrMapping getQuestionnaireMappingInfo(Integer questionnaireId) {
@@ -67,9 +69,9 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	        query.where(builder.and(predicate1, predicate2, predicate3, predicate4));
 	        answer = entityManager.createQuery(query).getSingleResult();
 	    } catch (NoResultException e) {
-	        logger.error("No answer found for the provided parameters.", e.getMessage());
+	        log.error("No answer found for the provided parameters.", e.getMessage());
 	    } catch (Exception e) {
-	    	logger.error("Exception in getQuestionAnswerByParams", e.getMessage());
+	    	log.error("Exception in getQuestionAnswerByParams", e.getMessage());
 	    }
 	    return answer;
 	}
@@ -104,7 +106,7 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	        }
 	        return false;
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	        log.error("Error in canCreateProjectDisclsoure", e.getMessage());
 	        return false;
 	    }
 	}
@@ -118,6 +120,30 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	public void saveProposalPerson(COIIntegrationProposalPerson proposalPerson) throws Exception {
 		proposalPersonIntegrationRepository.save(proposalPerson);
 		
+	}
+
+	@Override
+	public void saveQuestionnaireAnswer(COIIntegrationPropQuestAns integrationPropQuestAns) {
+		qnAIntegrationRepository.save(integrationPropQuestAns);
+	}
+
+	@Override
+	public Boolean canMarkDisclosureAsVoid(Integer questionnaireId, String personId, String moduleItemId) {
+		try {
+	        Query query = entityManager.createNativeQuery("SELECT FN_INT_CAN_MARK_DISCL_VOID(:proposalNumber, :personId, :questionnaireId)")
+	        							.setParameter("proposalNumber", moduleItemId)
+	                                   .setParameter("personId", personId)
+	                                   .setParameter("questionnaireId", questionnaireId);
+
+	        Object result = query.getSingleResult();
+	        if (result instanceof Number) {
+	            return ((Number) result).intValue() == 1;
+	        }
+	        return Boolean.FALSE;
+	    } catch (Exception e) {
+	        log.error("Error in canMarkDisclosureAsVoid", e.getMessage());
+	        return Boolean.FALSE;
+	    }
 	}
 
 }
