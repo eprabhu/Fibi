@@ -594,7 +594,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public ResponseEntity<Object> reviseDisclosure(ConflictOfInterestVO vo) {
-        CoiDisclosure fcoiDisclosure = disclosureDao.isFCOIDisclosureExists(AuthenticatedUser.getLoginPersonId(), "1", Constants.COI_PENDING_STATUS);
+        CoiDisclosure fcoiDisclosure = disclosureDao.isFCOIDisclosureExists(AuthenticatedUser.getLoginPersonId(), Arrays.asList("1", "3"), Constants.COI_PENDING_STATUS);
         if (fcoiDisclosure != null) {
             CoiDisclosureDto coiDisclosureDto = new CoiDisclosureDto();
             BeanUtils.copyProperties(fcoiDisclosure, coiDisclosureDto);

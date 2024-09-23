@@ -563,16 +563,16 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
     }
 
     @Override
-    public CoiDisclosure isFCOIDisclosureExists(String personId, String fcoiTypeCode, String versionStatus) {
+    public CoiDisclosure isFCOIDisclosureExists(String personId, List<String> fcoiTypeCodes, String versionStatus) {
         try {
             StringBuilder hqlQuery = new StringBuilder();
             Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
             hqlQuery.append("SELECT d FROM CoiDisclosure d ");
-            hqlQuery.append("WHERE d.fcoiTypeCode = :fcoiTypeCode AND ");
+            hqlQuery.append("WHERE d.fcoiTypeCode IN :fcoiTypeCodes AND ");
             hqlQuery.append("d.versionStatus = :versionStatus AND d.personId = :personId");
             Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
             Query query = session.createQuery(hqlQuery.toString());
-            query.setParameter("fcoiTypeCode", fcoiTypeCode);
+            query.setParameter("fcoiTypeCodes", fcoiTypeCodes);
             query.setParameter("versionStatus", versionStatus);
             query.setParameter("personId", personId);
             List<CoiDisclosure> disclData = query.getResultList();

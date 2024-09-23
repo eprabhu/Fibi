@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +38,10 @@ public class FCOIDisclProjectServiceImpl implements FCOIDisclProjectService {
                 projectDto.setProjectNumber(jsonNode.get("PROJECT_NUMBER").asText());
                 projectDto.setTitle(jsonNode.get("PROJECT_TITLE").asText());
                 projectDto.setProjectStatus(jsonNode.get("PROJECT_STATUS").asText());
-                if (jsonNode.has("PROJECT_START_DATE") && jsonNode.get("PROJECT_START_DATE").isNull())
-                    projectDto.setProjectStartDate(Timestamp.valueOf(jsonNode.get("PROJECT_START_DATE").asText()));
-                if (jsonNode.has("PROJECT_END_DATE") && jsonNode.get("PROJECT_END_DATE").isNull())
-                    projectDto.setProjectEndDate(Timestamp.valueOf(jsonNode.get("PROJECT_END_DATE").asText()));
+                if (jsonNode.has("PROJECT_START_DATE") && !jsonNode.get("PROJECT_START_DATE").isNull())
+                    projectDto.setProjectStartDate(convertToTimestamp(jsonNode.get("PROJECT_START_DATE").asText()));
+                if (jsonNode.has("PROJECT_END_DATE") && !jsonNode.get("PROJECT_END_DATE").isNull())
+                    projectDto.setProjectEndDate(convertToTimestamp(jsonNode.get("PROJECT_END_DATE").asText()));
                 projectDto.setHomeUnitName(jsonNode.get("LEAD_UNIT_NAME").asText());
                 projectDto.setHomeUnitNumber(jsonNode.get("LEAD_UNIT_NUMBER").asText());
                 if (jsonNode.has("SPONSOR_CODE") && !jsonNode.get("SPONSOR_CODE").isNull())
@@ -68,5 +69,16 @@ public class FCOIDisclProjectServiceImpl implements FCOIDisclProjectService {
             }
         });
         return projectDtos;
+    }
+
+    Timestamp convertToTimestamp(String date) {
+        Timestamp startDateTimestamp;
+        try {
+            startDateTimestamp = Timestamp.valueOf(date);
+        } catch (IllegalArgumentException e) {
+            LocalDate formatedDate = LocalDate.parse(date);
+            startDateTimestamp = Timestamp.valueOf(formatedDate.atStartOfDay());
+        }
+        return startDateTimestamp;
     }
 }

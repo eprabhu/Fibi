@@ -168,6 +168,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 	private static final String ADMIN_GROUP_NAME = "ADMIN_GROUP_NAME";
 	private static final String ADMINISTRATOR = "ADMINISTRATOR";
 	private static final String REVISION_COMMENT = "REVISION_COMMENT";
+	private static final List<String> FCOI_TYPE_CODES = Arrays.asList("1", "3");
 
 	@Override
 	public Integer numberOfSFI (String personId) {
@@ -780,14 +781,17 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	private CoiDisclosure getPendingFCOIDisclosure(String personId) {
 		try {
+			StringBuilder hqlQuery = new StringBuilder();
 			Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<CoiDisclosure> query = builder.createQuery(CoiDisclosure.class);
-			Root<CoiDisclosure> rootCoiDisclosure = query.from(CoiDisclosure.class);
-			query.where(builder.and(builder.equal(rootCoiDisclosure.get("personId"), personId),
-					builder.equal(rootCoiDisclosure.get("fcoiTypeCode"), "1"),
-					builder.equal(rootCoiDisclosure.get("versionStatus"), "Pending")));
-			List<CoiDisclosure> resultData = session.createQuery(query).getResultList();
+			hqlQuery.append("SELECT d FROM CoiDisclosure d");
+			hqlQuery.append(" WHERE d.personId = :personId");
+			hqlQuery.append(" AND d.fcoiTypeCode IN :fcoiTypeCode");
+			hqlQuery.append(" AND d.versionStatus = :versionStatus");
+			org.hibernate.query.Query query = session.createQuery(hqlQuery.toString());
+			query.setParameter("personId", personId);
+			query.setParameter("fcoiTypeCode", FCOI_TYPE_CODES);
+			query.setParameter("versionStatus", Constants.COI_PENDING_STATUS);
+			List<CoiDisclosure> resultData = query.getResultList();
 			if (!resultData.isEmpty()) {
 				return resultData.get(0);
 			}
