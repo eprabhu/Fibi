@@ -3,7 +3,7 @@ import { EntityManagementService } from '../../entity-management.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { Subscription } from 'rxjs';
 import { EntityCardDetails } from '../entity-interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { isEmptyObject, openInNewTab } from '../../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
 
@@ -29,7 +29,8 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
     @Output() emitCardNextAction = new EventEmitter<'USE' | 'OPEN_MODAL'>();
 
     constructor(public entityManagementService: EntityManagementService,
-        private _dataStorService: EntityDataStoreService, private _router: Router) { }
+        private _route: ActivatedRoute,
+        private _dataStorService: EntityDataStoreService) { }
 
     ngOnInit() {
         this.getDataFromStore();
@@ -37,7 +38,8 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
         if (this.detailsSource === 'DUNS') {
             this.setMatchingPercentage();
         }
-        this.isDuplicateEntityAvailable = this.entityDetailsObj.duplicateEntityDetails && !isEmptyObject(this.entityDetailsObj.duplicateEntityDetails);
+        this.isDuplicateEntityAvailable = this.entityDetailsObj.duplicateEntityDetails && !isEmptyObject(this.entityDetailsObj.duplicateEntityDetails) &&
+        this.entityDetailsObj.duplicateEntityDetails.entityId != this._route.snapshot.queryParamMap.get('entityManageId');
     }
 
     setMatchingPercentage() {
