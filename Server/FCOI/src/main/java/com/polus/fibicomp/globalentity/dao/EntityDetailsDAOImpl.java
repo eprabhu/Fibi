@@ -262,47 +262,27 @@ public class EntityDetailsDAOImpl implements EntityDetailsDAO {
 	@Override
 	public List<Entity> validateDuplicateByParams(ValidateDuplicateRequestDTO dto) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-	    CriteriaBuilder cb = session.getCriteriaBuilder();
-	    CriteriaQuery<Entity> cq = cb.createQuery(Entity.class);
-	    Root<Entity> entity = cq.from(Entity.class);
-	    List<Predicate> predicates = new ArrayList<>();
-	    if (dto.getEntityName() != null && !dto.getEntityName().trim().isEmpty()) {
-	        Predicate entityNamePredicate = cb.like(
-	            cb.lower(cb.trim(entity.get("entityName"))),
-	            "%" + dto.getEntityName().trim().toLowerCase() + "%"
-	        );
-	        predicates.add(entityNamePredicate);
-	    }
-	    if (dto.getPrimaryAddressLine1() != null && !dto.getPrimaryAddressLine1().trim().isEmpty()) {
-	        Predicate addressLine1Predicate1 = cb.and(
-	            cb.isNotNull(entity.get("primaryAddressLine1")),
-	            cb.notEqual(cb.trim(entity.get("primaryAddressLine1")), ""),
-	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%")
-	        );
-	        Predicate addressLine1Predicate2 = cb.and(
-	            cb.isNotNull(entity.get("primaryAddressLine2")),
-	            cb.notEqual(cb.trim(entity.get("primaryAddressLine2")), ""),
-	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%")
-	        );
-	        predicates.add(cb.or(addressLine1Predicate1, addressLine1Predicate2));
-	    }
-	    if (dto.getPrimaryAddressLine2() != null && !dto.getPrimaryAddressLine2().trim().isEmpty()) {
-	        Predicate addressLine2Predicate1 = cb.and(
-	            cb.isNotNull(entity.get("primaryAddressLine2")),
-	            cb.notEqual(cb.trim(entity.get("primaryAddressLine2")), ""),
-	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine2"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%")
-	        );
-	        Predicate addressLine2Predicate2 = cb.and(
-	            cb.isNotNull(entity.get("primaryAddressLine1")),
-	            cb.notEqual(cb.trim(entity.get("primaryAddressLine1")), ""),
-	            cb.like(cb.lower(cb.trim(entity.get("primaryAddressLine1"))), "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%")
-	        );
-	        predicates.add(cb.or(addressLine2Predicate1, addressLine2Predicate2));
-	    }
-	    Predicate countryPredicate = cb.equal(entity.get("countryCode"), dto.getCountryCode());
-	    predicates.add(countryPredicate);
-	    cq.where(cb.and(predicates.toArray(new Predicate[0])));
-	    return session.createQuery(cq).getResultList();
+		StringBuilder hql = new StringBuilder("SELECT e FROM Entity e WHERE e.countryCode = :countryCode");
+		hql.append(" AND (LOWER(TRIM(e.entityName)) LIKE :entityName");
+		hql.append(" OR (e.primaryAddressLine1 IS NOT NULL AND TRIM(e.primaryAddressLine1) != '' ");
+		hql.append(" AND LOWER(TRIM(e.primaryAddressLine1)) LIKE :primaryAddressLine1)");
+		hql.append(" OR (e.primaryAddressLine2 IS NOT NULL AND TRIM(e.primaryAddressLine2) != '' ");
+		hql.append(" AND LOWER(TRIM(e.primaryAddressLine2)) LIKE :primaryAddressLine1)");
+		if (dto.getPrimaryAddressLine2() != null && !dto.getPrimaryAddressLine2().trim().isEmpty()) {
+		    hql.append(" OR (e.primaryAddressLine2 IS NOT NULL AND TRIM(e.primaryAddressLine2) != '' ");
+		    hql.append(" AND LOWER(TRIM(e.primaryAddressLine2)) LIKE :primaryAddressLine2)");
+		    hql.append(" OR (e.primaryAddressLine1 IS NOT NULL AND TRIM(e.primaryAddressLine1) != '' ");
+		    hql.append(" AND LOWER(TRIM(e.primaryAddressLine1)) LIKE :primaryAddressLine2)");
+		}
+		hql.append(" )");
+		Query query = session.createQuery(hql.toString());
+		query.setParameter("entityName", "%" + dto.getEntityName().trim().toLowerCase() + "%");
+		query.setParameter("primaryAddressLine1", "%" + dto.getPrimaryAddressLine1().trim().toLowerCase() + "%");
+		if (dto.getPrimaryAddressLine2() != null && !dto.getPrimaryAddressLine2().trim().isEmpty()) {
+		    query.setParameter("primaryAddressLine2", "%" + dto.getPrimaryAddressLine2().trim().toLowerCase() + "%");
+		}
+		query.setParameter("countryCode", dto.getCountryCode());
+		return query.getResultList();
 	}
 
 	@Override
