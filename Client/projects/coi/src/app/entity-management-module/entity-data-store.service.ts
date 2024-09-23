@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { EntireEntityDetails, EntityDetails, EntityTabStatus } from './shared/entity-interface';
 import { CommonService } from '../common/services/common.service';
-import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS } from '../app-constants';
+import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE } from '../app-constants';
+import { canUpdateSponsorFeed, canUpdateOrgFeed } from './entity-management.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 
 export class EntityDataStoreService {
-    constructor(private _commonService: CommonService) { }
+    constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
     private storeData = new EntireEntityDetails();
     entitySectionConfig: any = {};
@@ -80,12 +82,12 @@ export class EntityDataStoreService {
     }
 
     updateFeedStatus(entityTabStatus: EntityTabStatus, type: 'ORG'|'SPONSOR'|'BOTH') {
-        if(type === 'ORG' || type === 'BOTH') {
-            entityTabStatus.organization_feed_status_code = '2';
+        if((type === 'ORG' || type === 'BOTH') && this.storeData?.entityTabStatus?.entity_sub_org_info) {
+            entityTabStatus.organization_feed_status_code = FEED_STATUS_CODE.READY_TO_FEED;
             entityTabStatus.organization_feed_status = 'Ready to Feed';
         }
-        if(type === 'SPONSOR' || type === 'BOTH') {
-            entityTabStatus.sponsor_feed_status_code = '2';
+        if((type === 'SPONSOR' || type === 'BOTH') && this.storeData?.entityTabStatus?.entity_sponsor_info) {
+            entityTabStatus.sponsor_feed_status_code = FEED_STATUS_CODE.READY_TO_FEED;
             entityTabStatus.sponsor_feed_status = 'Ready to Feed';
         }
         this.updateStore(['entityTabStatus'], { entityTabStatus });
@@ -93,6 +95,18 @@ export class EntityDataStoreService {
 
     enableModificationHistoryTracking() {
         this.canLogModificationHistory = this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED;
+    }
+
+    getApiCalls(entityId, reqObj): any[] {
+        const REQUEST = [];
+        const REQ_OBJ = { entityId: entityId, feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED }
+        if(canUpdateSponsorFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sponsor_info) {
+            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/sponsor/update`, REQ_OBJ));
+        }
+        if(canUpdateOrgFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sub_org_info) {
+            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, REQ_OBJ));
+        }
+        return REQUEST;
     }
 
 }

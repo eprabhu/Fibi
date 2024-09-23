@@ -156,3 +156,10 @@ export const DISCLOSURE_TYPE = {
     FCOI: '1',
     REVISION: '3'
 }
+
+export const FEED_STATUS_CODE = {
+    READY_TO_FEED: '2',
+    SUCCESS: '3',
+    ERROR: '4',
+    NOT_READY_TO_FEED: '1'
+}

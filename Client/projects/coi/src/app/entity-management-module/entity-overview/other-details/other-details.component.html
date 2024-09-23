@@ -185,7 +185,8 @@
                 <app-common-help-text [subSectionId]="2606" [elementId]="'coi-other-details-employees'"></app-common-help-text>
             </label>
             <input *ngIf="isEditMode" type="text" class="form-control fs-13" id="coi-other-details-employees"
-                [(ngModel)]="otherDetailsObj.numberOfEmployees" (ngModelChange)="changeEvent('numberOfEmployees')">
+                [(ngModel)]="otherDetailsObj.numberOfEmployees" (ngModelChange)="changeEvent('numberOfEmployees')"
+                (keypress)="checkForValidNumber($event)">
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
                 <app-no-data-label [valueToShow]="otherDetailsObj.numberOfEmployees"></app-no-data-label>
             </span>

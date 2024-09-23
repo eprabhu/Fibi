@@ -4,7 +4,7 @@ import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-uti
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
-import { EntityManagementService } from '../../entity-management.service';
+import { canUpdateSponsorFeed, EntityManagementService } from '../../entity-management.service';
 import { EntitySponsorService } from '../entity-sponsor.service';
 import { CommonService } from '../../../common/services/common.service';
 import { debounce } from 'rxjs/operators';
@@ -139,7 +139,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                     this.sponsorDetailsObj.sponsorCode = this.autoSaveRO.sponsorTypeCode;
                 }
                 showEntityToast('SUCCESS');
-                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode') && this.autoSaveRO?.sponsorTypeCode) {
                     this.updateSponsorCompleteFlag();
                 }
                 this.updateEntireFeed();
@@ -154,15 +154,20 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         }
     }
     private updateEntireFeed(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+        if(this.canUpdateFeed()) {
            this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'SPONSOR');
         }
     }
 
     private addFeedStatusInRO(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+        if(this.canUpdateFeed()) {
             this.autoSaveRO.feedStatusCode = '2';
         }
+    }
+
+    canUpdateFeed(): boolean {
+        return (this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateSponsorFeed(this.autoSaveRO) &&
+               (this.autoSaveRO.hasOwnProperty('sponsorTypeCode') && this.autoSaveRO?.sponsorTypeCode));
     }
 
     addOtherDetailsAPI() {
@@ -180,7 +185,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                 if (this.autoSaveRO.sponsorTypeCode) {
                     this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType = this.sponsorDetailsObj.sponsorType;
                 }
-                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode')) {
+                if (this.autoSaveRO.hasOwnProperty('sponsorTypeCode') && this.autoSaveRO?.sponsorTypeCode) {
                     this.updateSponsorCompleteFlag();
                 }
                 this.updateEntireFeed();
