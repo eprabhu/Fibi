@@ -4,7 +4,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { AutoSaveService } from '../../../common/services/auto-save.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
-import { EntityManagementService } from '../../entity-management.service';
+import { canUpdateOrgFeed, EntityManagementService } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabStatus, showEntityToast } from '../../shared/entity-interface';
@@ -149,17 +149,20 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     }
 
     private addFeedStatusInRO(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')
-            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization)) {
+        if(this.canUpdateFeed()) {
             this.autoSaveRO.feedStatusCode = '2';
         }
     }
 
     private updateEntireFeed(): void {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && this.autoSaveRO.hasOwnProperty('organizationTypeCode')
-            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization)) {
+        if(this.canUpdateFeed()) {
             this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
         }
+    }
+
+    canUpdateFeed(): boolean {
+        return this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateOrgFeed(this.autoSaveRO)
+            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization);
     }
 
     onDateSelect(dateType: 'SAM_EXPIRATION' | 'RISK_ASSESSMENT'): void {

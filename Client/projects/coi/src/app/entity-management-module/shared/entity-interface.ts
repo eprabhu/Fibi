@@ -526,3 +526,16 @@ export class DuplicateMarkingAPIReq {
     duplicateEntityId: any;
     description: string;
 }
+
+
+//changes during modification in the following fields need to update feed status of sponsor
+export const SPONSOR_FIELDS = [
+    'entityName', 'sponsorTypeCode', 'countryCode', 'state', 'postCode', 'ueiNumber', 'dunsNumber', 'cageNumber', 'acronym'
+]
+
+//changes during modification in the following fields need to update feed status of organization
+export const ORGANISATION_FIELDS = [
+    'entityName', 'numberOfEmployees', 'federalEmployerId', 'ueiNumber', 'cageNumber', 'humanSubAssurance', 'anumalWelfareAssurance', 'samExpirationDate',
+    'incorporatedIn', 'incorporationDate', 'congressionalDistrict', 'phoneNumber', 'primaryAddressLine1', 'primaryAddressLine2', 'city', 'state', 'postCode', 'countryCode',
+    'dunsNumber', 'organizationTypeCode'
+]

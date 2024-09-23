@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {EntityDetails, OtherDetails, showEntityToast} from '../../shared/entity-interface';
+import {EntityDetails, EntityTabStatus, OtherDetails, showEntityToast} from '../../shared/entity-interface';
 import {getDateObjectFromTimeStamp, parseDateWithoutTimestamp} from '../../../common/utilities/date-utilities';
 import {CommonService} from '../../../common/services/common.service';
-import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../app-constants';
-import {interval, Subject, Subscription} from 'rxjs';
+import {DATE_PLACEHOLDER, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../../app-constants';
+import {forkJoin, interval, Subject, Subscription} from 'rxjs';
 import {debounce} from 'rxjs/operators';
 import {hideModal, isEmptyObject} from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import {EntityDataStoreService} from '../../entity-data-store.service';
@@ -12,7 +12,7 @@ import {AutoSaveService} from '../../../common/services/auto-save.service';
 import {subscriptionHandler} from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import {EntityManagementService} from '../../entity-management.service';
 import {COIModalConfig, ModalActionEvent} from '../../../shared-components/coi-modal/coi-modal.interface';
-import {closeCommonModal, openCommonModal} from '../../../common/utilities/custom-utilities';
+import {closeCommonModal, inputRestrictionForNumberField, openCommonModal} from '../../../common/utilities/custom-utilities';
 import { Router } from '@angular/router';
 
 @Component({
@@ -49,6 +49,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     isEditIndex: null | number = null;
     isEditMode = false;
     deletePriorNameObj = null;
+    entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public commonService: CommonService, private _entityOverviewService: EntityOverviewService,
                 private _router: Router,public dataStore: EntityDataStoreService, private _autoSaveService: AutoSaveService,
@@ -85,6 +86,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         this.setOtherDetailsObject();
         this.isEditMode = this.dataStore.getEditMode();
         this.checkUserHasRight();
+        this.entityTabStatus = entityData?.entityTabStatus;
     }
 
     getCurrencyList() {
@@ -183,6 +185,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
             this.commonService.setLoaderRestriction();
             this.$subscriptions.push(this._entityOverviewService.updateOtherDetails(this.autoSaveRO).subscribe((data) => {
                 this.dataStore.enableModificationHistoryTracking();
+                this.updateSponsorOrgFeed(this.entityDetails?.entityId, this.autoSaveRO);
                 this.updateStoreData(this.autoSaveRO);
                 this.autoSaveRO = {};
                 this.isOtherDetailsFormChanged = false;
@@ -195,6 +198,24 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
                 showEntityToast('ERROR');
             }));
             this.commonService.removeLoaderRestriction();
+        }
+    }
+
+    updateSponsorOrgFeed(entityId, reqObj) {
+        const FEED_API_CALLS = this.dataStore.getApiCalls(entityId, reqObj);
+        if (FEED_API_CALLS.length && this.entityDetails.entityStatusType.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED) {
+            this.$subscriptions.push(forkJoin(FEED_API_CALLS).subscribe((data: [] = []) => {
+                    this.dataStore.updateFeedStatus(this.entityTabStatus, 'BOTH');
+                }, err => {
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating feed status.');
+                }
+            ));
+        }
+    }
+
+    checkForValidNumber(event) {
+        if(inputRestrictionForNumberField(String.fromCharCode(event.charCode))) {
+            event.preventDefault();
         }
     }
 

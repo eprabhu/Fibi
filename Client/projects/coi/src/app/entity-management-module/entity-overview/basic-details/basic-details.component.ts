@@ -25,7 +25,7 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     entityCountryDetails: Country = new Country();
     entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
-    constructor(public dataStore: EntityDataStoreService, private _commonService: CommonService, private _route: ActivatedRoute, private _entityManagementService: EntityManagementService) {}
+    constructor(public dataStore: EntityDataStoreService, private _commonService: CommonService, private _entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
         this.getDataFromStore();
@@ -80,32 +80,21 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
                 this.entityDetails[ele] = event?.autoSaveRO[ele];
             });
             this.dataStore.updateStore(['entityDetails'], { 'entityDetails':  this.entityDetails });
-            this.callFeedStatusAPI(event?.autoSaveRO);
+            this.updateSponsorOrgFeed(this.entityDetails?.entityId, event?.autoSaveRO);
         }
         this.dataStore.enableModificationHistoryTracking();
     }
-
-    private callFeedStatusAPI(saveReq): void {
-        if (saveReq.hasOwnProperty('entityName') && this.entityDetails.entityStatusType.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED) {
-            this.$subscriptions.push(
-                forkJoin(this.getApiCalls()).subscribe((data: [] = []) => {
+    updateSponsorOrgFeed(entityId, reqObj) {
+        const FEED_API_CALLS = this.dataStore.getApiCalls(entityId, reqObj);
+        if (FEED_API_CALLS.length && this.entityDetails.entityStatusType.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED) {
+            this.$subscriptions.push(forkJoin(FEED_API_CALLS).subscribe((data: [] = []) => {
                     this.dataStore.updateFeedStatus(this.entityTabStatus, 'BOTH');
                 }, err => {
                     this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating feed status.');
                 }
-                ));
+            ));
         }
     }
-
-    private getApiCalls(): any[] {
-        const REQUEST = [];
-        const REQ_OBJ = { entityId: this._route.snapshot.queryParamMap.get('entityManageId'), feedStatusCode: '2' }
-        REQUEST.push(
-            this._entityManagementService.updateSponsorDetails(REQ_OBJ),
-            this._entityManagementService.updateOrganizationDetails(REQ_OBJ))
-        return REQUEST;
-    }
-
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
