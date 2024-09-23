@@ -12,6 +12,7 @@ import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/
 import {
     CREATE_DISCLOSURE_ROUTE_URL,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL,
+    DISCLOSURE_TYPE,
     HTTP_ERROR_STATUS,
     HTTP_SUCCESS_STATUS
 } from '../../app-constants';
@@ -388,9 +389,8 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private checkForFCOIActive(): void {
-        this.hasFCOI = this.activeDisclosures.find(disclosure =>
-            disclosure.fcoiTypeCode == '1'
-        );
+        //the revision condition is also applied in user disclosure component for showing revise btn in fcoi card.
+        this.hasFCOI = this.activeDisclosures.find((disclosure: any) => [DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode) && disclosure?.versionStatus !== 'PENDING');
         this.canReviseFCOI = this.activeDisclosures.find(disclosure =>
             disclosure.fcoiTypeCode == '1' && disclosure.coiReviewStatusType.reviewStatusCode != '4'
         );
@@ -531,17 +531,6 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.manualProjectAddDetails = {};
         this.manualProjectAddDetails.moduleItemId = null;
         this.manualProjectAddDetails.title = null;
-    }
-
-    private setHelpTextToolTip(): string {
-        if (this.triggeredFrom === 'FCOI_DISCLOSURE' && !this.isShowExistingDisclosure) {
-            this.hasFCOI ? this.title = 'Create Revision help text' : this.title = 'Create FCOI help text';
-        } else if (this.triggeredFrom === 'PROJECT_DISCLOSURE' && !this.isShowExistingDisclosure) {
-            this.title = 'Create Project Disclosure help text';
-        } else if (this.triggeredFrom === 'TRAVEL_DISCLOSURE') {
-            this.title = 'Create Travel Disclosure help text';
-        }
-        return this.title;
     }
 
     @HostListener('document:keydown.escape', ['$event'])

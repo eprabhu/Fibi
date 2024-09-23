@@ -448,6 +448,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.hasActiveOPA = false;
         this.hasPendingOPA = false;
         this.headerService.activeDisclosures.forEach(disclosure => {
+            //the revision condition is also applied in disclosure create modal for showing revise btn.
             if (([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus == 'PENDING') {
                 this.hasPendingFCOI = true;
             }
