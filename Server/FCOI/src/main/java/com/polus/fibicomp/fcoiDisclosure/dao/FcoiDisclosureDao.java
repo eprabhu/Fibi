@@ -223,10 +223,10 @@ public interface FcoiDisclosureDao {
      * This method is used to check FCOI disclosure is exists or not
      * @param personId
      * @param versionStatus
-     * @param fcoiTypeCode
+     * @param fcoiTypeCodes
      * @return
      */
-    CoiDisclosure isFCOIDisclosureExists(String personId, String fcoiTypeCode, String versionStatus);
+    CoiDisclosure isFCOIDisclosureExists(String personId, List<String> fcoiTypeCodes, String versionStatus);
 
     /**
      * This method is used for evaluate DisclosureQuestionnaire
