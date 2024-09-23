@@ -57,7 +57,7 @@
                 </div>
             </div>
             <!-- expand / collapse -->
-            <div *ngIf="keyPersonData?.disclosures?.length > 1"
+            <div *ngIf="keyPersonData?.disclosures?.length"
                 class="col-auto d-flex justify-content-center align-items-center ps-0 ms-auto">
                 <button (click)="isShowAllDisclosures = !isShowAllDisclosures"
                     id="coi-keyperson-{{uniqueId}}-expand-btn" name="coi-keyperson-{{uniqueId}}-expand-btn"
