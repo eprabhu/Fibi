@@ -17,10 +17,9 @@ import com.polus.core.common.dao.CommonDao;
 import com.polus.core.common.service.CommonService;
 import com.polus.core.filemanagement.FileManagementOutputDto;
 import com.polus.core.filemanagement.FileManagementService;
-import com.polus.core.person.dao.PersonDao;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dao.COIAttachmentDao;
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.DisclAttaType;
@@ -34,9 +33,6 @@ public class COIAttachmentServiceImpl implements COIAttachmentService {
 
 	@Autowired
 	CommonDao commonDao;
-
-	@Autowired
-	PersonDao personDao;
 
 	@Autowired
 	COIAttachmentDao coiAttachmentDao;
@@ -58,14 +54,14 @@ public class COIAttachmentServiceImpl implements COIAttachmentService {
 
 	@Override
 	public ResponseEntity<Object> saveOrReplaceAttachments(MultipartFile[] files, String formDataJSON) {
-		List<PersonAttachmentDto> attachments = new ArrayList<>();
-		PersonAttachmentDto personAttachmentDto = new PersonAttachmentDto();
+		List<Attachments> attachmentsList = new ArrayList<>();
+		AttachmentsDto dto = new AttachmentsDto();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			personAttachmentDto = mapper.readValue(formDataJSON, PersonAttachmentDto.class);
-			personAttachmentDto.getNewAttachments().forEach(ele -> {
+			dto = mapper.readValue(formDataJSON, AttachmentsDto.class);
+			dto.getNewAttachments().forEach(ele -> {
 				int count = 0;
-				PersonAttachmentDto request = PersonAttachmentDto.builder().personId(AuthenticatedUser.getLoginPersonId())
+				AttachmentsDto request = AttachmentsDto.builder().personId(AuthenticatedUser.getLoginPersonId())
 						.attaTypeCode(ele.getAttaTypeCode()).fileName(ele.getFileName()).mimeType(ele.getMimeType())
 						.description(ele.getDescription()).createUser(AuthenticatedUser.getLoginUserName())
 						.createTimestamp(commonDao.getCurrentTimestamp())
@@ -78,32 +74,16 @@ public class COIAttachmentServiceImpl implements COIAttachmentService {
 						.getDisclosureAttachmentForTypeCode(ele.getAttaTypeCode());
 				Attachments attachment = addAttachments(files[count], request, AuthenticatedUser.getLoginPersonId());
 				attachment.setDisclAttaTypeDetails(disclosureAttachmentType);
-				PersonAttachmentDto attachmentsDto = PersonAttachmentDto.builder()
-				        .attachmentId(attachment.getAttachmentId())
-				        .personId(attachment.getPersonId())
-				        .fileName(attachment.getFileName())
-				        .mimeType(attachment.getMimeType())
-				        .description(attachment.getDescription())
-				        .attachmentNumber(attachment.getAttachmentNumber())
-				        .versionNumber(attachment.getVersionNumber())
-				        .createTimestamp(attachment.getCreateTimestamp())
-				        .createUser(attachment.getCreateUser())
-				        .updateTimestamp(attachment.getUpdateTimestamp())
-				        .updateUser(attachment.getUpdateUser())
-				        .attaTypeCode(attachment.getAttaTypeCode())
-				        .attachmentTypeDescription(attachment.getDisclAttaTypeDetails().getDescription())
-				        .updateUserFullame(personDao.getPersonFullNameByPersonId(attachment.getPersonId()))
-				        .build();
-				attachments.add(attachmentsDto);
+				attachmentsList.add(attachment);
 				count++;
 			});
 		} catch (JsonProcessingException e) {
-			throw new ApplicationException("error in adding attachment ", e, Constants.JAVA_ERROR);
+			throw new ApplicationException("error in adding attachment", e, Constants.JAVA_ERROR);
 		}
-		return new ResponseEntity<>(attachments, HttpStatus.OK);
+		return new ResponseEntity<>(attachmentsList, HttpStatus.OK);
 	}
 
-	private Attachments addAttachments(MultipartFile file, PersonAttachmentDto request, String personId) {
+	private Attachments addAttachments(MultipartFile file, AttachmentsDto request, String personId) {
 		try {
 			Attachments attachment = null;
 			if (file != null) {
@@ -117,7 +97,7 @@ public class COIAttachmentServiceImpl implements COIAttachmentService {
 	}
 
 	@Override
-	public ResponseEntity<String> updateAttachmentDetails(PersonAttachmentDto request) {
+	public ResponseEntity<String> updateAttachmentDetails(AttachmentsDto request) {
 		try {
 			coiAttachmentDao.updateAttachmentDetail(request.getAttachmentId(), request.getDescription());
 		} catch (Exception e) {
@@ -143,7 +123,7 @@ public class COIAttachmentServiceImpl implements COIAttachmentService {
 	}
 
 	@Override
-	public ResponseEntity<String> deleteAttachment(PersonAttachmentDto request) {
+	public ResponseEntity<String> deleteAttachment(AttachmentsDto request) {
 		List<Attachments> attachments = coiAttachmentDao.fetchAttachmentByAttachmentNumber(request.getAttachmentNumber());
 		attachments.stream().forEach(attach -> {
 			fileManagementService.deleteFile(COI_MODULE_CODE, attach.getFileDataId());

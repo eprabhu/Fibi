@@ -28,7 +28,7 @@ import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.repository.COIDisclosureAttachmentRepository;
 import com.polus.fibicomp.constants.Constants;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 
 @Component
@@ -69,7 +69,7 @@ public class COIFileAttachmentDao {
 	}
 	
 	@Transactional(rollbackFor = {COIFileAttachmentException.class})
-	public Attachments saveAttachmentDetails(PersonAttachmentDto request, String fileDataId) {
+	public Attachments saveAttachmentDetails(AttachmentsDto request, String fileDataId) {
 		try {
 			Attachments attachment = Attachments.builder()
 			.attachmentId(request.getAttachmentId())

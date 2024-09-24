@@ -30,7 +30,6 @@ import com.polus.core.pojo.FileType;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.authorization.document.UserDocumentAuthorization;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
@@ -38,9 +37,10 @@ import com.polus.fibicomp.coi.dto.CompleteReivewRequestDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
 import com.polus.fibicomp.coi.dto.SearchDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
@@ -52,13 +52,10 @@ import com.polus.fibicomp.coi.service.GeneralService;
 import com.polus.fibicomp.coi.vo.CoiDashboardVO;
 import com.polus.fibicomp.coi.vo.ConflictOfInterestVO;
 import com.polus.fibicomp.constants.Constants;
-import com.polus.fibicomp.globalentity.pojo.Entity;
-
-import lombok.extern.slf4j.Slf4j;;
+import com.polus.fibicomp.globalentity.pojo.Entity;;
 
 @RestController
 @RequestMapping("/coi")
-@Slf4j
 public class ConflictOfInterestController {
 
 	protected static Logger logger = LogManager.getLogger(ConflictOfInterestController.class.getName());
@@ -470,8 +467,8 @@ public class ConflictOfInterestController {
 	}
 
     @GetMapping("/loadAllAttachmentsForPerson/{personId}")
-   	public List<PersonAttachmentDto> loadAllAttachmentsForPerson(@PathVariable("personId") String personId) {
-    	log.info("Request for loadAllAttachmentsForPerson:{}", personId);
+   	public List<Attachments> loadAllAttachmentsForPerson(@PathVariable("personId") String personId) {
+    	logger.info("Request for loadAllAttachmentsForPerson");
    		return conflictOfInterestService.loadAllAttachmentsForPerson(personId);
    	}
 

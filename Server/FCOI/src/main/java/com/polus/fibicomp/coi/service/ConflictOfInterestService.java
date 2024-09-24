@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.polus.core.inbox.pojo.Inbox;
 import com.polus.core.pojo.FileType;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiTravelHistoryDto;
@@ -22,8 +21,9 @@ import com.polus.fibicomp.coi.dto.CommonRequestDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
+import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
 import com.polus.fibicomp.coi.pojo.CoiTravelConflictHistory;
@@ -314,7 +314,7 @@ public interface ConflictOfInterestService {
     
     ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON);
     
-    List<PersonAttachmentDto> loadAllAttachmentsForPerson(String personId);
+    List<Attachments> loadAllAttachmentsForPerson(String personId);
 
 	/**
 	 * This method fetches all person entity with entity and relationship of a person

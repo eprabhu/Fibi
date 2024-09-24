@@ -28,7 +28,7 @@ import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.exception.COIFileAttachmentException;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.core.security.AuthenticatedUser;
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 
 @Transactional
@@ -73,7 +73,7 @@ public class COIFileAttachmentServiceImpl implements COIFileAttachmentService {
 
 	@Override
 	@Transactional(rollbackFor = {COIFileAttachmentException.class, IOException.class})
-	public Attachments saveAttachment(PersonAttachmentDto request, String personId) {
+	public Attachments saveAttachment(AttachmentsDto request, String personId) {
 		FileManagementOutputDto fileOutput = null;
 		try {
 			FileManagmentInputDto input = FileManagmentInputDto.builder()

@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
+import com.polus.fibicomp.coi.dto.AttachmentsDto;
 
 @Service
 public interface COIAttachmentService {
@@ -22,7 +22,7 @@ public interface COIAttachmentService {
 	 * @param request
 	 * @return
 	 */
-	public ResponseEntity<String> updateAttachmentDetails(PersonAttachmentDto request);
+	public ResponseEntity<String> updateAttachmentDetails(AttachmentsDto request);
 
 	/**
 	 * This method is used to download an attachment
@@ -36,7 +36,7 @@ public interface COIAttachmentService {
 	 * @param request
 	 * @return
 	 */
-	public ResponseEntity<String> deleteAttachment(PersonAttachmentDto request);
+	public ResponseEntity<String> deleteAttachment(AttachmentsDto request);
 
 }
 
