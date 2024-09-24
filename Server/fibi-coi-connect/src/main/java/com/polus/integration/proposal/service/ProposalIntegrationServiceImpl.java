@@ -129,12 +129,9 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 	}
 
 	private void saveProposalPerson(List<ProposalPersonDTO> proposalPersonDTOs, List<COIIntegrationProposalPerson> proposalPersons) {
-		
 		proposalPersonDTOs.forEach(proposalPersonDTO -> {
-			
 			COIIntegrationProposalPerson proposalPerson = proposalPersons.stream()
 					.filter(person -> person.getKeyPersonId().equals(proposalPersonDTO.getKeyPersonId())
-							&& person.getKeyPersonRole().equals(proposalPersonDTO.getKeyPersonRole())
 							&& person.getProposalNumber().equals(proposalPersonDTO.getProposalNumber()))
 					.findFirst().orElse(new COIIntegrationProposalPerson());
 			preparePersonDetail(proposalPerson, proposalPersonDTO);
@@ -143,28 +140,19 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 			} catch (Exception e) {
 				log.error("Error in saving proposal saveProposalPerson {}", proposalPerson, e.getMessage());
 			}
-			
 		});
-		
 		checkAndDeactivatePerson(proposalPersonDTOs, proposalPersons);
-		
 	}
 
-	private void checkAndDeactivatePerson(List<ProposalPersonDTO> proposalPersonDTOs,
-			List<COIIntegrationProposalPerson> proposalPersons) {
-		Set<String> incomingKeyPersonIds = proposalPersonDTOs.stream()
-				.map(proposalPersonDTO -> proposalPersonDTO.getKeyPersonId()).collect(Collectors.toSet());
-		proposalPersons.stream()
-				.filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
+	private void checkAndDeactivatePerson(List<ProposalPersonDTO> proposalPersonDTOs, List<COIIntegrationProposalPerson> proposalPersons) {
+		Set<String> incomingKeyPersonIds = proposalPersonDTOs.stream().map(proposalPersonDTO -> proposalPersonDTO.getKeyPersonId()).collect(Collectors.toSet());
+		proposalPersons.stream().filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 				.forEach(existingPerson -> {
-					
 					existingPerson.setStatus(Constant.INACTIVE);
-					
 					try {
 						proposalIntegrationDao.saveProposalPerson(existingPerson);
 						MarkVoidVO vo = prepareMarkProposalPersonVoidVO(existingPerson.getProposalNumber(), existingPerson.getKeyPersonId());
 						fcoiFeignClient.makeDisclosureVoid(vo);
-						
 					} catch (DataAccessException dae) {
 						log.error("Error in checkAndDeactivatePerson {}: ", dae);
 
@@ -174,7 +162,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 					} catch (Exception e) {
 						log.error("Error in checkAndDeactivatePerson {}", existingPerson, e.getMessage());
 					}
-					
 				});
 	}
 
@@ -182,9 +169,9 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		if (coiIntegrationProposalPerson.getProposalNumber() == null) {
 			coiIntegrationProposalPerson.setProposalNumber(proposalPersonDTO.getProposalNumber());
 			coiIntegrationProposalPerson.setKeyPersonId(proposalPersonDTO.getKeyPersonId());
-			coiIntegrationProposalPerson.setKeyPersonRoleCode(proposalPersonDTO.getKeyPersonRoleCode());
-	        coiIntegrationProposalPerson.setKeyPersonRole(proposalPersonDTO.getKeyPersonRole());
 		}
+		coiIntegrationProposalPerson.setKeyPersonRoleCode(proposalPersonDTO.getKeyPersonRoleCode());
+        coiIntegrationProposalPerson.setKeyPersonRole(proposalPersonDTO.getKeyPersonRole());
 		coiIntegrationProposalPerson.setAttribute1Label(proposalPersonDTO.getAttribute1Label());
         coiIntegrationProposalPerson.setAttribute1Value(proposalPersonDTO.getAttribute1Value());
         coiIntegrationProposalPerson.setAttribute2Label(proposalPersonDTO.getAttribute2Label());
@@ -316,7 +303,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		} catch (Exception e) {
 			log.error("Error in markDisclosureAsVoidForNoAnswer {} {}", personId, e.getMessage());
 		}
-		
 	}
 
 	private void syncQuestionniareAnswers(Map<String, Object> coiDisclosure, ProcessProposalDisclosureVO vo, Integer questionnaireId) {
@@ -376,7 +362,6 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 		questionnaire.setQuestionnaireId(fibiQuestionnaireId);
 		return proposalIntegrationDao.getQuestionnaireDetails(questionnaire);
 	}
-
 	
 	private Integer getQuestionnaireAnswerHeaderId(String disclosureId, Integer fibiQnrId) {
 		FetchQnrAnsHeaderDto ansHeaderDto = new FetchQnrAnsHeaderDto();

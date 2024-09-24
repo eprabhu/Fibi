@@ -15,10 +15,6 @@ public class COIIntPropPersonCompositeKey implements Serializable {
 
 	private String proposalNumber;
 
-	private String keyPersonRole;
-
-	private Integer keyPersonRoleCode;
-
 	private String keyPersonId;
 
 	@Override
@@ -27,14 +23,12 @@ public class COIIntPropPersonCompositeKey implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         COIIntPropPersonCompositeKey that = (COIIntPropPersonCompositeKey) o;
         return Objects.equals(proposalNumber, that.proposalNumber) &&
-                Objects.equals(keyPersonRole, that.keyPersonRole) &&
-                Objects.equals(keyPersonRoleCode, that.keyPersonRoleCode) &&
                 Objects.equals(keyPersonId, that.keyPersonId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(proposalNumber, keyPersonRole, keyPersonRoleCode, keyPersonId);
+        return Objects.hash(proposalNumber, keyPersonId);
     }
 
 }
