@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
 import com.polus.fibicomp.coi.service.COIAttachmentService;
 import com.polus.fibicomp.coi.service.COIAttachmentServiceImpl;
 
@@ -37,7 +37,7 @@ public class COIAttachmentController {
 	}
 
 	@PostMapping(value = "/updateAttachmentDetails", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> updateAttachmentDetails(@RequestBody AttachmentsDto request) {
+	public ResponseEntity<String> updateAttachmentDetails(@RequestBody PersonAttachmentDto request) {
 		logger.info("Request for updateAttachmentDetails");
 		return coiAttachmentService.updateAttachmentDetails(request);
 	}
@@ -49,7 +49,7 @@ public class COIAttachmentController {
 	}
 
 	@PostMapping(value = "/deleteAttachment", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<String> deleteDisclAttachment(@RequestBody AttachmentsDto request) {
+	public ResponseEntity<String> deleteDisclAttachment(@RequestBody PersonAttachmentDto request) {
 		logger.info("Request for deleteDisclAttachment");
 		return coiAttachmentService.deleteAttachment(request);
 	}
