@@ -33,8 +33,11 @@ import com.polus.fibicomp.globalentity.repository.EntityMailingAddressRepository
 import com.polus.fibicomp.globalentity.repository.EntityRegistrationRepository;
 import com.polus.fibicomp.globalentity.repository.GlobalEntityRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service(value = "entityDetailsService")
 @Transactional
+@Slf4j
 public class EntityDetailsServiceImpl implements EntityDetailsService {
 
 	@Autowired
@@ -115,6 +118,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 	@Override
 	public ResponseEntity<EntityResponseDTO> fetchEntityDetails(Integer entityId) {
 		String originalName = null;
+		Integer originalEntityId;
 		List<EntityIndustryClassification> entityIndustryClassifications = entityIndustryClassificationRepository
 				.findByEntityId(entityId);
 		List<EntityRegistration> entityRegistrations = entityRegistrationRepository.findByEntityId(entityId);
@@ -125,8 +129,11 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 		List<ForeignNameResponseDTO> foreignNames = companyDetailsService.fetchForeignNames(entityId);
 		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(GENERAL_SECTION_CODE, entityId);
 		Entity entityDetails = entityRepository.findByEntityId(entityId);
-		if (entityDetails.getOriginalEntityId() != null) {
-			originalName = entityRepository.fetchEntityNameByEntityId(entityId);
+		originalEntityId = entityDetails.getOriginalEntityId();
+		log.info("originalEntityId : {}", originalEntityId);
+		if (originalEntityId != null) {
+			originalName = entityRepository.fetchEntityNameByEntityId(originalEntityId);
+			log.info("originalName : {}", originalName);
 		}
 		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
 		return new ResponseEntity<>(EntityResponseDTO.builder().entityDetails(entityDetails)

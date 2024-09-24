@@ -362,7 +362,7 @@ BEGIN
         									    COALESCE(T14.PROPOSAL_ID, T21.IP_NUMBER, T15.AWARD_NUMBER)
         									ELSE
         									    CASE WHEN T1.FCOI_TYPE_CODE = 2 AND T50.PROJECT_SNAPSHOT IS NOT NULL THEN
-                                                    CONVERT(T50.PROJECT_SNAPSHOT->>''$.PROJECT_TITLE'' USING latin1) COLLATE latin1_swedish_ci
+                                                    CONVERT(T50.PROJECT_SNAPSHOT->>''$.PROJECT_NUMBER'' USING latin1) COLLATE latin1_swedish_ci
                                                 ELSE NULL END
                                             END AS PROJECT_NUMBER,
         									T22.BADGE_COLOR,

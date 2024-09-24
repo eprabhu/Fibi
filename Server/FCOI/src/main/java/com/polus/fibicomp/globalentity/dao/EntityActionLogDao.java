@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
 import com.polus.fibicomp.globalentity.pojo.EntityActionType;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskActionLog;
 
 public interface EntityActionLogDao {
 
@@ -20,5 +21,16 @@ public interface EntityActionLogDao {
      * @return
      */
     List<EntityActionLog> fetchAllEntityActionLog(Integer entityId);
+
+    /**
+     * @param entityRiskActionLog
+     */
+    void saveEntityRiskActionLog(EntityRiskActionLog entityRiskActionLog);
+
+    /**
+     * @param entityRiskId
+     * @return
+     */
+    List<EntityRiskActionLog> fetchAllEntityRiskActionLog(Integer entityRiskId);
 
 }
