@@ -29,11 +29,9 @@ public class COIIntegrationProposalPerson implements Serializable {
 	@Column(name = "PROPOSAL_NUMBER")
 	private String proposalNumber;
 
-	@Id
 	@Column(name = "KEY_PERSON_ROLE")
 	private String keyPersonRole;
 
-	@Id
 	@Column(name = "KEY_PERSON_ROLE_CODE")
 	private Integer keyPersonRoleCode;
 
