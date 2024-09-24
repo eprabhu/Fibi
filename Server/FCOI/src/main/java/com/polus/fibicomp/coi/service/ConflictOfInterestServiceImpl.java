@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
-import com.polus.core.constants.CoreConstants;
-import com.polus.fibicomp.fcoiDisclosure.service.FCOIDisclProjectService;
-import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polus.core.applicationexception.dto.ApplicationException;
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.inbox.pojo.Inbox;
 import com.polus.core.messageq.config.MessageQServiceRouter;
 import com.polus.core.messageq.vo.MessageQVO;
@@ -49,9 +47,9 @@ import com.polus.core.questionnaire.dto.QuestionnaireDataBus;
 import com.polus.core.questionnaire.service.QuestionnaireService;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
-import com.polus.fibicomp.coi.dto.AttachmentsDto;
 import com.polus.fibicomp.coi.dto.CoiAssignTravelDisclosureAdminDto;
 import com.polus.fibicomp.coi.dto.CoiDisclEntProjDetailsDto;
+import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.dto.CoiEntityDto;
 import com.polus.fibicomp.coi.dto.CoiSectionTypeDto;
 import com.polus.fibicomp.coi.dto.CoiTravelDisclosureActionsDto;
@@ -66,10 +64,10 @@ import com.polus.fibicomp.coi.dto.DisclosureProjectDto;
 import com.polus.fibicomp.coi.dto.NotesDto;
 import com.polus.fibicomp.coi.dto.NotificationBannerDto;
 import com.polus.fibicomp.coi.dto.NotificationDto;
+import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
 import com.polus.fibicomp.coi.dto.PersonEntityDto;
 import com.polus.fibicomp.coi.dto.TravelDisclosureActionLogDto;
 import com.polus.fibicomp.coi.dto.WithdrawDisclosureDto;
-import com.polus.fibicomp.coi.dto.CoiDisclosureDto;
 import com.polus.fibicomp.coi.pojo.Attachments;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.pojo.CoiReview;
@@ -98,6 +96,8 @@ import com.polus.fibicomp.fcoiDisclosure.dao.FcoiDisclosureDao;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
+import com.polus.fibicomp.fcoiDisclosure.service.FCOIDisclProjectService;
+import com.polus.fibicomp.fcoiDisclosure.service.FcoiDisclosureService;
 import com.polus.fibicomp.globalentity.pojo.Entity;
 import com.polus.fibicomp.opa.dao.OPADao;
 import com.polus.fibicomp.opa.dto.OPADashboardRequestDto;
@@ -1818,13 +1818,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> saveOrUpdateAttachments(MultipartFile[] files, String formDataJSON) {
 		List<Attachments> attachmentsList = new ArrayList<>();
-		AttachmentsDto dto = new AttachmentsDto();
+		PersonAttachmentDto dto = new PersonAttachmentDto();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			dto = mapper.readValue(formDataJSON, AttachmentsDto.class);
+			dto = mapper.readValue(formDataJSON, PersonAttachmentDto.class);
 			dto.getNewAttachments().forEach(ele -> {
 				int count = 0;
-				AttachmentsDto request = AttachmentsDto.builder()
+				PersonAttachmentDto request = PersonAttachmentDto.builder()
 						.personId(AuthenticatedUser.getLoginPersonId())
 						.attaTypeCode(ele.getAttaTypeCode())
 						.fileName(ele.getFileName())
@@ -1847,7 +1847,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(attachmentsList, HttpStatus.OK);
 	}
 
-	private Attachments addAttachments(MultipartFile file, AttachmentsDto request, String personId) {
+	private Attachments addAttachments(MultipartFile file, PersonAttachmentDto request, String personId) {
 		try {
 			Attachments attachment = null;
 			if (file != null) {
@@ -1867,9 +1867,29 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	}
 
 	@Override
-	public List<Attachments> loadAllAttachmentsForPerson(String personId) {
-		List<Attachments> attachmentsList = conflictOfInterestDao.loadAllAttachmentsForPerson(personId);
-		return attachmentsList;
+	public List<PersonAttachmentDto> loadAllAttachmentsForPerson(String personId) {
+		List<Attachments> attachments = conflictOfInterestDao.loadAllAttachmentsForPerson(personId);
+		List<PersonAttachmentDto> attachmentsDto = new ArrayList<>();
+	    attachments.forEach(attachment -> {
+	        PersonAttachmentDto dto = PersonAttachmentDto.builder()
+	            .attachmentId(attachment.getAttachmentId())
+	            .personId(attachment.getPersonId())
+	            .attaTypeCode(attachment.getAttaTypeCode())
+	            .fileName(attachment.getFileName())
+	            .mimeType(attachment.getMimeType())
+	            .description(attachment.getDescription())
+	            .createUser(attachment.getCreateUser())
+	            .createTimestamp(attachment.getCreateTimestamp())
+	            .updateUser(attachment.getUpdateUser())
+	            .updateTimestamp(attachment.getUpdateTimestamp())
+	            .attachmentNumber(attachment.getAttachmentNumber())
+	            .versionNumber(attachment.getVersionNumber())
+	            .updateUserFullame(personDao.getPersonFullNameByPersonId(attachment.getPersonId()))
+	            .attachmentTypeDescription(attachment.getDisclAttaTypeDetails().getDescription())
+	            .build();
+	        attachmentsDto.add(dto);
+	    });
+	    return attachmentsDto;
 	}
 
 	@Override
