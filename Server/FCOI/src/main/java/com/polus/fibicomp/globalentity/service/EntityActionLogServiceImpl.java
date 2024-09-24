@@ -19,11 +19,16 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.EntityActionLogDto;
 import com.polus.fibicomp.globalentity.dao.EntityActionLogDao;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
 import com.polus.fibicomp.globalentity.pojo.EntityActionType;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskActionLog;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class EntityActionLogServiceImpl implements EntityActionLogService {
 
     @Autowired
@@ -89,5 +94,37 @@ public class EntityActionLogServiceImpl implements EntityActionLogService {
         });
         return entityLogs;
     }
+
+    @Override
+	public void saveEntityRiskActionLog(String actionLogTypeCode, ActionLogRequestDTO dto) {
+		EntityActionType entityActionType = actionLogDao.getEntityActionType(actionLogTypeCode);
+        if (entityActionType != null) {
+        	log.info("Entity action type: {}", entityActionType.getDescription());
+            String message = buildEntityLogMessage(entityActionType.getMessage(), dto);
+            EntityRiskActionLog actionLog = EntityRiskActionLog.builder().actionTypeCode(actionLogTypeCode)
+                    .entityId(dto.getEntityId())
+                    .entityRiskId(dto.getEntityRiskId())
+                    .description(message)
+                    .oldComment(dto.getOldComment())
+                    .newComment(dto.getNewComment())
+                    .oldRiskLevel(dto.getOldRiskLevel())
+                    .newRiskLevel(dto.getNewRiskLevel())
+                    .updateTimestamp(commonDao.getCurrentTimestamp())
+                    .updatedBy(AuthenticatedUser.getLoginPersonId()).build();
+            actionLogDao.saveEntityRiskActionLog(actionLog);
+        }
+	}
+
+	@Override
+	public List<EntityRiskActionLogResponseDTO> fetchAllEntityRiskActionLog(Integer entityRiskId) {
+		 List<EntityRiskActionLogResponseDTO> entityRiskLogs = new ArrayList<>();
+	        actionLogDao.fetchAllEntityRiskActionLog(entityRiskId).forEach(entityRiskActionLog -> {
+	        	EntityRiskActionLogResponseDTO dto = new EntityRiskActionLogResponseDTO();
+	            BeanUtils.copyProperties(entityRiskActionLog, dto);
+	            dto.setComment(entityRiskActionLog.getNewComment());
+	            entityRiskLogs.add(dto);
+	        });
+	        return entityRiskLogs;
+	}
 
 }

@@ -43,3 +43,8 @@ INSERT INTO dyn_element_config (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, 
 INSERT INTO dyn_element_config (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-sub-head-2615', 'Entity Name', '2615', 'GE2604', 'admin', now());
 INSERT INTO dyn_element_config (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-sub-head-2616', 'Entity Name', '2616', 'GE2604', 'admin', now());
 INSERT INTO dyn_element_config (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, SECTION_CODE, UPDATE_USER, UPDATE_TIMESTAMP) VALUES ('coi-attach-desc-2616', 'Entity Name', '2616', 'GE2604', 'admin', now());
+
+
+INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('12', '<b>{RISK_TYPE}</b> risk with level <b>{NEW_RISK_LEVEL}</b> added by <b>{ADMIN_NAME}</b>', 'Add Risk', now(), '10000000001');
+INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('13', '<b>{RISK_TYPE}</b> risk description <b>changed</b> by <b>{ADMIN_NAME}</b>', 'Risk Description Modify', now(), '10000000001');
+INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('14', '<b>{RISK_TYPE}</b> risk level <b>changed</b> from <b>{OLD_RISK_LEVEL}</b> to <b>{NEW_RISK_LEVEL}</b> by <b>{ADMIN_NAME}</b>', 'Risk Level Modify', now(), '10000000001');

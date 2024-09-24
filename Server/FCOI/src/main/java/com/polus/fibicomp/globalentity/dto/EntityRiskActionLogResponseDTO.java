@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dto;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,17 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EntityRiskRequestDTO {
+public class EntityRiskActionLogResponseDTO {
 
+	private Integer actionLogId;
 	private Integer entityId;
 	private Integer entityRiskId;
-	private String riskTypeCode;
-	private String riskType;
-	private String riskLevelCode;
-	private String riskLevel;
-	private String oldRiskLevelCode;
-	private String oldRiskLevel;
+	private String actionTypeCode;
 	private String description;
-	private String oldDescription;
+	private String comment;
+	private String updateUser;
+	private Timestamp updateTimestamp;
 
 }
