@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AttachmentsDto {
+public class PersonAttachmentDto {
 
 	private Integer attachmentId;
 
@@ -49,4 +49,9 @@ public class AttachmentsDto {
 	private Integer attachmentNumber;
 
 	private Integer versionNumber;
+	
+	private String updateUserFullame;
+
+	private String attachmentTypeDescription;
+
 }
