@@ -12,6 +12,7 @@ import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.AddressDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityResponseDTO;
+import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ExternalReferenceRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ForeignNameRequestDTO;
@@ -194,6 +195,10 @@ public interface GlobalEntityService {
 	}
 
 	public default ResponseMessageDTO logAction(ActionLogRequestDTO dto) {
+		return null;
+	}
+
+	public default List<EntityRiskActionLogResponseDTO> fetchRiskHistory(Integer entityRiskId) {
 		return null;
 	}
 

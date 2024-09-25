@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import com.polus.fibicomp.coi.dto.COIFileRequestDto;
 import com.polus.fibicomp.coi.pojo.DisclAttachment;
 import com.polus.fibicomp.coi.pojo.Attachments;
-import com.polus.fibicomp.coi.dto.AttachmentsDto;
+import com.polus.fibicomp.coi.dto.PersonAttachmentDto;
 
 public interface COIFileAttachmentService {
 
@@ -32,7 +32,7 @@ public interface COIFileAttachmentService {
 
 	String updateDisclAttachmentDetails(COIFileRequestDto request);
 	
-	Attachments saveAttachment(AttachmentsDto request, String personId);
+	Attachments saveAttachment(PersonAttachmentDto request, String personId);
 
 	/**
 	 * This method deletes an Attachment by attachment if
