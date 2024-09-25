@@ -28,6 +28,7 @@ import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
 import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
@@ -209,6 +210,11 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			logger.error("Exception in saveEntityActionLog in logAction");
 		}
 		return new ResponseMessageDTO("Entity action log saved successfully");
+	}
+
+	@Override
+	public List<EntityRiskActionLogResponseDTO> fetchRiskHistory(Integer entityRiskId) {
+		return actionLogService.fetchAllEntityRiskActionLog(entityRiskId);
 	}
 
 }

@@ -44,7 +44,8 @@ CREATE OR REPLACE VIEW `coi_project_proposal_v` AS
         `t1`.`HOME_UNIT_NAME` AS `LEAD_UNIT_NAME`,
         NULL AS `PROPOSAL_TYPE_CODE`,
         NULL AS `UPDATE_TIMESTAMP`,
-        NULL AS `LINKED_IP_NUMBER`
+        NULL AS `LINKED_IP_NUMBER`,
+        NULL as `PERSON_STATUS`
     FROM
         (((((`eps_proposal` `t1`
         JOIN `eps_proposal_status` `t3` ON ((`t3`.`STATUS_CODE` = `t1`.`STATUS_CODE`)))
@@ -96,7 +97,8 @@ CREATE OR REPLACE VIEW `coi_project_proposal_v` AS
         `coi_int_stage_dev_proposal`.`LEAD_UNIT_NAME` AS `LEAD_UNIT_NAME`,
         `coi_int_stage_dev_proposal`.`PROPOSAL_TYPE_CODE` AS `PROPOSAL_TYPE_CODE`,
         `coi_int_stage_dev_proposal`.`SRC_SYS_UPDATE_TIMESTAMP` AS `UPDATE_TIMESTAMP`,
-        `coi_int_stage_dev_proposal`.`IP_NUMBER` AS `LINKED_IP_NUMBER`
+        `coi_int_stage_dev_proposal`.`IP_NUMBER` AS `LINKED_IP_NUMBER`,
+        `coi_int_stage_dev_proposal_person`.`STATUS` as `PERSON_STATUS`
     FROM
         (`coi_int_stage_dev_proposal`
         JOIN `coi_int_stage_dev_proposal_person` ON ((`coi_int_stage_dev_proposal`.`PROPOSAL_NUMBER` = `coi_int_stage_dev_proposal_person`.`PROPOSAL_NUMBER`)));

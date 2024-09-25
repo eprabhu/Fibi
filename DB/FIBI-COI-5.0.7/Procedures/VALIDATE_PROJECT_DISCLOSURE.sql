@@ -20,7 +20,8 @@ BEGIN
                 AND t2.MODULE_ITEM_KEY = AV_MODULE_ITEM_KEY
                 AND t1.PERSON_ID = AV_PERSON_ID
                 AND t1.VERSION_STATUS = 'PENDING'
-                AND t1.FCOI_TYPE_CODE = 2;
+                AND t1.FCOI_TYPE_CODE = 2
+                AND t1.DISPOSITION_STATUS_CODE != 2;
 
         ELSE
             SELECT

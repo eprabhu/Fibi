@@ -1,7 +1,6 @@
 package com.polus.fibicomp.globalentity.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.globalentity.pojo.EntityActionLog;
 import com.polus.fibicomp.globalentity.pojo.EntityActionType;
+import com.polus.fibicomp.globalentity.pojo.EntityRiskActionLog;
 
 @Repository
 @Primary
@@ -54,6 +54,22 @@ public class EntityActionLogDaoImpl implements EntityActionLogDao {
 		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("entityId"), entityId))
 		.orderBy(criteriaBuilder.desc(root.get("updateTimestamp")),
 	             criteriaBuilder.desc(root.get("actionLogId")));
+		return session.createQuery(criteriaQuery).getResultList();
+	}
+
+    @Override
+    public void saveEntityRiskActionLog(EntityRiskActionLog entityriskActionLog) {
+        hibernateTemplate.saveOrUpdate(entityriskActionLog);
+    }
+
+	@Override
+	public List<EntityRiskActionLog> fetchAllEntityRiskActionLog(Integer entityRiskId) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<EntityRiskActionLog> criteriaQuery = criteriaBuilder.createQuery(EntityRiskActionLog.class);
+		Root<EntityRiskActionLog> root = criteriaQuery.from(EntityRiskActionLog.class);
+		criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("entityRiskId"), entityRiskId))
+				.orderBy(criteriaBuilder.desc(root.get("updateTimestamp")));
 		return session.createQuery(criteriaQuery).getResultList();
 	}
 
