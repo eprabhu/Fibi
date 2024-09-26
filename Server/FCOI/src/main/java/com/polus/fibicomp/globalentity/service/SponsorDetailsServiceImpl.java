@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.polus.core.common.dao.CommonDao;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dao.SponsorDAO;
+import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.EntitySponsorInfo;
+import com.polus.fibicomp.globalentity.repository.EntityFeedStatusTypeRepository;
 import com.polus.fibicomp.globalentity.repository.EntitySponsorInfoRepository;
 
 @Service
@@ -39,12 +41,23 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	@Autowired
 	private EntityFileAttachmentService entityFileAttachmentService;
 
+	@Autowired
+    private EntityActionLogService actionLogService;
+
+	@Autowired
+    private EntityFeedStatusTypeRepository feedStatusRepository;
+
 	private static final String SPONSOR_SECTION_CODE = "2";
+	private static final String FEED_STATUS_READY_TO_FEED = "2";
+	private static final String FEED_STATUS_NOT_READY_TO_FEED = "1";
+	private static final String SPONSOR_FEED_ACTION_LOG_CODE = "10";
+	private static final String ACTION_TYPE_SAVE = "S";
+	private static final String ACTION_TYPE_UPDATE = "U";
 
 	@Override
-	public ResponseEntity<Map<String, Integer>> saveDetails(SponsorRequestDTO dto) {
+	public Map<String, Integer> saveDetails(SponsorRequestDTO dto) {
 		EntitySponsorInfo entity = mapDTOToEntity(dto);
-		return new ResponseEntity<>(Map.of("id", sponsorDAO.saveDetails(entity)), HttpStatus.OK);
+		return Map.of("id", sponsorDAO.saveDetails(entity));
 	}
 
 	private EntitySponsorInfo mapDTOToEntity(SponsorRequestDTO dto) {
@@ -53,8 +66,33 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 
 	@Override
 	public ResponseEntity<String> updateDetails(SponsorRequestDTO dto) {
+		dto.setAcType(ACTION_TYPE_UPDATE);
+		logAction(dto);
 		sponsorDAO.updateDetails(dto);
 		return new ResponseEntity<>(commonDao.convertObjectToJSON("Sponsor details updated successfully"), HttpStatus.OK);
+	}
+
+	public void logAction(SponsorRequestDTO dto) {
+		if (dto.getFeedStatusCode() != null) {
+			if (dto.getAcType().equals(ACTION_TYPE_SAVE)) {
+				ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(dto.getEntityId())
+						.oldFeedStatus(feedStatusRepository.getDescriptionByCode(FEED_STATUS_NOT_READY_TO_FEED))
+						.newFeedStatus(feedStatusRepository.getDescriptionByCode(FEED_STATUS_READY_TO_FEED)).build();
+				actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
+			} else {
+				EntitySponsorInfo sponsorInfo = entitySponsorInfoRepository.findByEntityId(dto.getEntityId());
+				if (sponsorInfo.getEntityFeedStatusType() == null
+						|| !feedStatusRepository.getDescriptionByCode(FEED_STATUS_READY_TO_FEED).equals(sponsorInfo.getEntityFeedStatusType().getDescription())) {
+					ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(dto.getEntityId())
+							.oldFeedStatus(sponsorInfo.getEntityFeedStatusType() == null
+									? feedStatusRepository.getDescriptionByCode(FEED_STATUS_NOT_READY_TO_FEED)
+									: sponsorInfo.getEntityFeedStatusType().getDescription())
+							.newFeedStatus(feedStatusRepository.getDescriptionByCode(FEED_STATUS_READY_TO_FEED))
+							.build();
+					actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
+				}
+			}
+		}
 	}
 
 	@Override

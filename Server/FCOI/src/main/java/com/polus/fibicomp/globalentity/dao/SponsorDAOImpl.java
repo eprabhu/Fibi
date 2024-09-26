@@ -24,7 +24,7 @@ public class SponsorDAOImpl implements SponsorDAO {
 	private CommonDao commonDao;
 
 	@Override
-	public int saveDetails(EntitySponsorInfo entity) {
+	public Integer saveDetails(EntitySponsorInfo entity) {
 		hibernateTemplate.save(entity);
 		return entity.getId();
 	}

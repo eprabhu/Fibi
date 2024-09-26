@@ -24,7 +24,7 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 	private CommonDao commonDao;
 
 	@Override
-	public int saveDetails(EntitySubOrgInfo entity) {
+	public Integer saveDetails(EntitySubOrgInfo entity) {
 		hibernateTemplate.save(entity);
 		return entity.getId();
 	}

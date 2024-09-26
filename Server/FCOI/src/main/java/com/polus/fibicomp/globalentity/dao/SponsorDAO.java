@@ -10,7 +10,7 @@ import com.polus.fibicomp.globalentity.pojo.EntitySponsorInfo;
 @Service
 public interface SponsorDAO {
 
-	int saveDetails(EntitySponsorInfo entity);
+	Integer saveDetails(EntitySponsorInfo entity);
 
 	void updateDetails(SponsorRequestDTO dto);
 

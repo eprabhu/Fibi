@@ -11,7 +11,7 @@ import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
 @Service
 public interface SponosrService {
 
-	public default ResponseEntity<Map<String, Integer>> saveDetails(SponsorRequestDTO dto) {
+	public default Map<String, Integer> saveDetails(SponsorRequestDTO dto) {
 		return null;
 	}
 
@@ -25,6 +25,9 @@ public interface SponosrService {
 
 	public default ResponseEntity<String> deleteDetails(Integer id) {
 		return null;
+	}
+
+	public default void logAction(SponsorRequestDTO dto) {
 	}
 
 }
