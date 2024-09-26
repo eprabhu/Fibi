@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.polus.fibicomp.globalentity.service.SponosrService;
 public class SponsorController {
 
 	protected static Logger logger = LogManager.getLogger(SponsorController.class.getName());
+	private static final String ACTION_TYPE_SAVE = "S";
+	private static final String ENTITY_ID = "id";
 
 	@Autowired
 	private SponosrService sponosrService;
@@ -38,7 +41,11 @@ public class SponsorController {
 	@PostMapping(value = "/save")
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for saveDetails");
-		return sponosrService.saveDetails(dto);
+		Map<String, Integer> response = sponosrService.saveDetails(dto);
+		dto.setEntityId(response.get(ENTITY_ID));
+		dto.setAcType(ACTION_TYPE_SAVE);
+		sponosrService.logAction(dto);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PatchMapping(value = "/update")

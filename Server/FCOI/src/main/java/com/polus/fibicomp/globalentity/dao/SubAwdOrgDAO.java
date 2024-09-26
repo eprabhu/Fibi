@@ -10,7 +10,7 @@ import com.polus.fibicomp.globalentity.pojo.EntitySubOrgInfo;
 @Service
 public interface SubAwdOrgDAO {
 
-	int saveDetails(EntitySubOrgInfo entity);
+	Integer saveDetails(EntitySubOrgInfo entity);
 
 	void updateDetails(SubAwdOrgRequestDTO dto);
 
