@@ -29,7 +29,6 @@ public class SponsorController {
 
 	protected static Logger logger = LogManager.getLogger(SponsorController.class.getName());
 	private static final String ACTION_TYPE_SAVE = "S";
-	private static final String ENTITY_ID = "id";
 
 	@Autowired
 	private SponosrService sponosrService;
@@ -42,7 +41,6 @@ public class SponsorController {
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for saveDetails");
 		Map<String, Integer> response = sponosrService.saveDetails(dto);
-		dto.setEntityId(response.get(ENTITY_ID));
 		dto.setAcType(ACTION_TYPE_SAVE);
 		sponosrService.logAction(dto);
 		return new ResponseEntity<>(response, HttpStatus.OK);
