@@ -56,7 +56,7 @@ public class EntityDTO {
 	private String lobbyingRegistrant;
 	private String lobbyingIndividual;
 	private Date samExpirationDate;
-	private Date incorporationDate;
+	private String incorporationDate;
 	private String incorporatedIn;
 	private Boolean isCreateSponsor;
 	private Boolean isCreateOrganization;
