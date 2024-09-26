@@ -27,14 +27,14 @@
                     <div class="col">
                         <!-- type -->
                         <div class="coi-text-darker d-flex" id="coi-attachment-comment-{{index}}">
-                            <app-no-data-label [valueToShow]="attachment?.disclAttaTypeDetails?.description">
-                                <span [title]="attachment?.disclAttaTypeDetails?.description"
-                                    [attr.aria-label]="attachment?.disclAttaTypeDetails?.description"
-                                    class="text-slice fs-14">{{attachment?.disclAttaTypeDetails?.description}}</span>
+                            <app-no-data-label [valueToShow]="attachment?.attachmentTypeDescription">
+                                <span [title]="attachment?.attachmentTypeDescription"
+                                    [attr.aria-label]="attachment?.attachmentTypeDescription"
+                                    class="text-slice fs-14">{{attachment?.attachmentTypeDescription}}</span>
                             </app-no-data-label>
                             <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                 <span>(</span>
-                                <span class="fw-500">{{attachment?.updateUser}}</span>
+                                <span class="fw-500">{{attachment?.updateUserFullame}}</span>
                                 <span class="mx-1">On</span>
                                 <span>{{attachment.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                                 <span>)</span>
@@ -141,14 +141,14 @@
                                     <!-- type -->
                                     <div class="coi-text-darker d-flex"
                                         id="coi-attachment-version-type-{{versionIndex}}">
-                                        <app-no-data-label [valueToShow]="version?.disclAttaTypeDetails?.description">
-                                            <span [title]="version?.disclAttaTypeDetails?.description"
-                                                [attr.aria-label]="version?.disclAttaTypeDetails?.description"
-                                                class="text-slice fs-14">{{version?.disclAttaTypeDetails?.description}}</span>
+                                        <app-no-data-label [valueToShow]="version?.attachmentTypeDescription">
+                                            <span [title]="version?.attachmentTypeDescription"
+                                                [attr.aria-label]="version?.attachmentTypeDescription"
+                                                class="text-slice fs-14">{{version?.attachmentTypeDescription}}</span>
                                         </app-no-data-label>
                                         <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                             <span>(</span>
-                                            <span class="fw-500">{{version?.updateUser}}</span>
+                                            <span class="fw-500">{{version?.updateUserFullame}}</span>
                                             <span class="mx-1">On</span>
                                             <span>{{version?.updateTimestamp | dateFormatterWithTimeZone:
                                                 'long'}}</span>

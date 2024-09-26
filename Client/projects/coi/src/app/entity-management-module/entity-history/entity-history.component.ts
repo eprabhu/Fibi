@@ -54,7 +54,7 @@ export class EntityHistoryComponent {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.pipe(debounceTime(200), distinctUntilChanged()).subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.pipe(debounceTime(200), distinctUntilChanged()).subscribe(() => {
                 this.getDataFromStore();
             })
         );

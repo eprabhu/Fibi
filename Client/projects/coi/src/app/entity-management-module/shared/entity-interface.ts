@@ -106,12 +106,17 @@ export class EntityRiskRO {
     riskTypeCode?: string = '';
     riskLevelCode?: string = '';
     entityRiskId?: number | null = null;
+    riskType?: string = '';
+    riskLevel?: string = '';
+    oldRiskLevel?: string = '';
+    oldRiskLevelCode?: string = '';
+    oldDescription?: string = '';
 }
 
-export interface RiskType {
+export class RiskType {
     riskTypeCode: string;
     riskCategoryCode: string;
-    description: string;
+    description = '';
     updateTimestamp: number;
     updatedBy: string;
     isActive: boolean;
@@ -125,9 +130,9 @@ export interface EntityStatusType {
     isActive?: boolean;
 }
 
-export interface RiskLevel {
+export class RiskLevel {
     riskLevelCode: string;
-    description: string;
+    description = '';
     updateTimestamp: number;
     updatedBy: string;
     isActive: boolean;
