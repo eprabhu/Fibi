@@ -1,6 +1,7 @@
 package com.polus.integration.feedentity.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,6 @@ import com.polus.integration.feedentity.client.KCFeignClient;
 import com.polus.integration.feedentity.dao.EntityIntegrationDao;
 import com.polus.integration.feedentity.dto.EntityDTO;
 import com.polus.integration.feedentity.dto.EntityResponse;
-import com.polus.integration.repository.UserTokensRepository;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,20 +26,15 @@ public class EntityOutboundIntegrationService {
 	@Autowired
 	private KCFeignClient kcFeignClient;
 
-	@Autowired
-	private UserTokensRepository userTokensRepository;
-
 	@Value("${kc.integration.user.name}")
 	private String userName;
 
-	public void getEntityDetails(Integer entityId, String personId) {
-		log.info("Requesting feedEntityDetails for entityId: {} and personId: {}", entityId, personId);
+	public void getEntityDetails(Integer entityId) {
+		log.info("Requesting feedEntityDetails for entityId: {}", entityId);
+		String yearPattern = "\\d{4}";
+		String monthYearPattern = "\\d{4}-\\d{2}";
 
 		try {
-			if (personId == null) {
-				personId = userTokensRepository.findByUserName(userName).getPersonId();
-			}
-
 			List<EntityDTO> entityDTOs = entityIntegrationDao.getEntityDetails(entityId);
 			if (entityDTOs.isEmpty()) {
 				log.warn("No entity details found for entityId: {}", entityId);
@@ -47,18 +42,30 @@ public class EntityOutboundIntegrationService {
 			}
 
 			for (EntityDTO entityDTO : entityDTOs) {
-				entityDTO.setUpdatedBy(personId);
-				entityDTO.setCreatedBy(personId);
 				entityDTO.setIsCreateSponsor(Boolean.TRUE);
 				entityDTO.setIsCreateOrganization(Boolean.TRUE);
+				String incorporationDate = entityDTO.getIncorporationDate();
+				log.info("incorporationDate : {}", incorporationDate);
+
+				if (incorporationDate != null && !incorporationDate.isEmpty()) {
+					if (Pattern.matches(yearPattern, incorporationDate)) {
+						incorporationDate = incorporationDate + "-01-01";
+					} else if (Pattern.matches(monthYearPattern, incorporationDate)) {
+						incorporationDate = incorporationDate + "-01";
+					} else {
+						log.warn("Invalid incorporation date format: {}", incorporationDate);
+					}
+					log.info("updated incorporationDate : {}", incorporationDate);
+					entityDTO.setIncorporationDate(incorporationDate);
+				}
 
 				try {
 					EntityResponse entityResponse = kcFeignClient.feedEntityDetails(entityDTO);
 					entityIntegrationDao.updateEntitySponsorInfoByParams(entityResponse);
 				} catch (FeignException | DataAccessException e) {
-					log.error("Error processing entityId: {}, personId: {}: {}", entityId, personId, e.getMessage(), e);
+					log.error("Error processing entityId: {} : {}", entityId, e.getMessage(), e);
 				} catch (Exception e) {
-					log.error("Unexpected error for entityId: {}, personId: {}: {}", entityId, personId, e.getMessage(), e);
+					log.error("Unexpected error for entityId: {} : {}", entityId, e.getMessage(), e);
 				}
 			}
 		} catch (DataAccessException e) {

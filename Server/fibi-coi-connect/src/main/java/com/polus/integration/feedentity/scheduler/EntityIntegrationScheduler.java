@@ -21,7 +21,7 @@ public class EntityIntegrationScheduler {
 			log.info("Scheduler started - Setting up header token and calling getEntityDetails");
 
 			// Calling the service method with parameters
-			integrationService.getEntityDetails(null, null);
+			integrationService.getEntityDetails(null);
 
 			log.info("Scheduler completed successfully");
 
