@@ -34,7 +34,7 @@
                             <!-- replace case -->
                             <ng-container *ngIf="attachmentInputType === 'REPLACE'">
                                 <span id="coi-add-attachment-type"
-                                    class="coi-text-light">{{currentAttachment?.disclAttaTypeDetails?.description}}</span>
+                                    class="coi-text-light">{{currentAttachment?.attachmentTypeDescription}}</span>
                             </ng-container>
                         </div>
                         <!-- file name -->
@@ -80,7 +80,7 @@
                             <span>Attachment Type<app-common-help-text [helpTextHardCoded]="'Select an attachment type'"></app-common-help-text></span>
                         </label>
                         <span id="coi-add-attachment-type"
-                            class="coi-text-light">{{currentAttachment?.disclAttaTypeDetails?.description}}</span>
+                            class="coi-text-light">{{currentAttachment?.attachmentTypeDescription}}</span>
                     </div>
                     <!-- File Name -->
                     <div class="col-6">

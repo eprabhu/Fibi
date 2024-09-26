@@ -3,6 +3,10 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
+    "/entity/fetchRiskHistory/*" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/projectPersonNotify": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false

@@ -27,4 +27,9 @@ export class EntityRiskSectionService {
     fetchRiskLevels(sectionCode: string) {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetchRiskLevels/${sectionCode}`);
     }
+
+    loadRiskHistory(entityRiskId: any) {
+        return this._http.get(`${this._commonService.baseUrl}/entity/fetchRiskHistory/${entityRiskId}`);
+    }
+
 }

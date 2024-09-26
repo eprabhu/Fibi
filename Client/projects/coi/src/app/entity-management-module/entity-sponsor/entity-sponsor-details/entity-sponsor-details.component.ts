@@ -111,15 +111,15 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         if (this.dataChangeCounter > 0 && !this.isRestrictSave) {
             if (!this.entitySponsorService.entitySponsorDetails?.sponsorDetailsResponseDTO?.id) {
                 this.isRestrictSave = true;
-                this.addNewDetail();
+                this.saveSponsorDetails();
             }
             else {
-                this.addOtherDetailsAPI();
+                this.updateSponosrDetails();
             }
         }
     }
 
-    addNewDetail(){
+    saveSponsorDetails(){
         if(Object.keys(this.autoSaveRO).length) {
             this.commonService.setLoaderRestriction();
             this.autoSaveRO.entityId = this.entityDetails.entityId;
@@ -170,7 +170,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
                (this.autoSaveRO.hasOwnProperty('sponsorTypeCode') && this.autoSaveRO?.sponsorTypeCode));
     }
 
-    addOtherDetailsAPI() {
+    updateSponosrDetails() {
         if(Object.keys(this.autoSaveRO).length) {
             this.setDetailsForUpdate();
             this.commonService.setLoaderRestriction();
