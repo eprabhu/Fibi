@@ -40,7 +40,7 @@ public class EntityIntegrationListener {
 			MessageQVO qvo = new ObjectMapper().readValue(message, new TypeReference<MessageQVO>() {});
 			log.info("Processing entityId: {} by user: {}", qvo.getOrginalModuleItemKey(), qvo.getPublishedUserName());
 
-			integrationService.getEntityDetails(qvo.getOrginalModuleItemKey(), qvo.getPublishedUserName());
+			integrationService.getEntityDetails(qvo.getOrginalModuleItemKey());
 
 		} catch (JsonProcessingException e) {
 			log.error("JSON parsing error while processing message from queue: {}", e.getMessage(), e);

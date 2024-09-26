@@ -88,9 +88,11 @@ public class EntityIntegrationDao {
 								.lobbyingRegistrant(rset.getString("LOBBYING_REGISTRANT"))
 								.lobbyingIndividual(rset.getString("LOBBYING_INDIVIDUAL"))
 								.samExpirationDate(rset.getDate("SAM_EXPIRATION_DATE"))
-								.incorporationDate(rset.getDate("INCORPORATION_DATE"))
+								.incorporationDate(rset.getString("INCORPORATION_DATE"))
 								.incorporatedIn(rset.getString("INCORPORATED_IN"))
 								.riskLevel(rset.getString("RISK_LEVEL"))
+								.createdBy(rset.getString("CREATED_BY"))
+								.updatedBy(rset.getString("UPDATED_BY"))
 								.build());
 						}
 						log.info("Stored procedure executed successfully, {} records found", results.size());
