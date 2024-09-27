@@ -102,10 +102,7 @@ export class RiskEditHistorySlider implements OnInit {
     private fetchRiskLevels(riskTypeCode: string): Promise<any> {
         return new Promise((resolve, reject) => {
             if (riskTypeCode) {
-                this.$subscriptions.push(
-                    this._entityRiskSectionService.fetchRiskLevels(riskTypeCode)
-                        .subscribe(
-                            (riskLevelList: RiskLevel[]) => {
+                this.$subscriptions.push(this._entityRiskSectionService.fetchRiskLevels(riskTypeCode).subscribe((riskLevelList: RiskLevel[]) => {
                                 this.entityRiskLevelList = riskLevelList;
                                 resolve(this.entityRiskLevelList);
                             },

@@ -133,6 +133,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         this.entityRiskModalDetails.entityRisk.entityRiskId = entityRiskId;
         const NEW_ENTITY_RISK = deepCloneObject(this.entityRiskModalDetails.entityRisk);
         this.entityRiskList.push(NEW_ENTITY_RISK);
+        this.riskUpdated.emit(this.entityRiskList);
     }
 
     private getProxyController(): EntityRiskProxyController {
