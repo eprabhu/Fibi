@@ -1,7 +1,6 @@
 package com.polus.integration.exception.service;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 import com.polus.integration.dao.IntegrationDao;
@@ -15,9 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MQRouterException  extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-
-	@Autowired
-	private IntegrationDao integrationDao;
 
     private String queueMessage;
     private String sourceQueueName;
@@ -103,7 +99,7 @@ public class MQRouterException  extends RuntimeException {
             exceptionsLog.setDestinationQueueName(destinationQueueName);
             exceptionsLog.setQueueExchange(queueExchange);
             exceptionsLog.setQueueMessage(queueMessage);
-            exceptionsLog.setUpdateTimestamp(integrationDao.getCurrentTimestamp());
+            exceptionsLog.setUpdateTimestamp(getIntegrationDao().getCurrentTimestamp());
             exceptionsLog.setStackTrace(cause != null ? ExceptionUtils.getStackTrace(cause) : null);
             MQExceptionLogRepository exceptionsRepository = getMqExceptionsService();
             exceptionsRepository.save(exceptionsLog);
@@ -111,6 +107,10 @@ public class MQRouterException  extends RuntimeException {
         } catch (Exception e) {
             log.error("Unable to save exception log : {}", e.getMessage());
         }
+    }
+
+    private static IntegrationDao getIntegrationDao() {
+    	return ApplicationContextProvider.getApplicationContext().getBean(IntegrationDao.class);
     }
 
     private static MQExceptionLogRepository getMqExceptionsService() {
