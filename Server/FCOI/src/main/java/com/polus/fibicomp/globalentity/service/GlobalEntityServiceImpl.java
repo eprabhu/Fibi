@@ -86,6 +86,8 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	private static final String ORGANIZATION_FEED_ACTION_LOG_CODE = "11";
 	private static final String FEED_STATUS_NOT_READY_TO_FEED = "Not Ready to Feed";
 	private static final String FEED_STATUS_READY_TO_FEED = "Ready to Feed";
+	private static final String ENTITY_SPONSOR_INFO_TAB = "entity_sponsor_info";
+	private static final String ENTITY_SUB_ORG_INFO_TAB = "entity_sub_org_info";
 
 	@Override
 	public ResponseEntity<Boolean> isDunsNumberExists(String dunsNumber) {
@@ -110,34 +112,43 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	@Override
 	public ResponseEntity<Map<String, Object>> verifyEntityDetails(Integer entityId) {
 		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
-		Set<String> requiredKeys = Set.of("entity_sponsor_info", "entity_sub_org_info");
-		boolean allRequiredTabsComplete = requiredKeys.stream()
-				.allMatch(key -> Boolean.TRUE.equals(entityTabStatus.get(key)));
 		entityDetailsDAO.updateEntity(
 				EntityRequestDTO.builder().entityId(entityId).approvedBy(AuthenticatedUser.getLoginPersonId())
 						.approvedTimestamp(commonDao.getCurrentTimestamp()).entityStatusTypeCode("1").build());
-		if (allRequiredTabsComplete) {
+		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SPONSOR_INFO_TAB))) {
 			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
+		}
+		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SUB_ORG_INFO_TAB))) {
 			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
 		}
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(entityId);
 			Timestamp updateTimestamp = commonDao.getCurrentTimestamp();
 			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId)
-					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).updateTimestamp(updateTimestamp).build();
+					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy())
+					.updateTimestamp(updateTimestamp).build();
 			actionLogService.saveEntityActionLog(VERIFY_ACTION_LOG_CODE, logDTO, null);
-			if (allRequiredTabsComplete) {
+			if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SPONSOR_INFO_TAB))) {
 				logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityName(entityDetails.getEntityName())
 						.updatedBy(entityDetails.getUpdatedBy()).oldFeedStatus(FEED_STATUS_NOT_READY_TO_FEED)
 						.newFeedStatus(FEED_STATUS_READY_TO_FEED).updateTimestamp(updateTimestamp).build();
 				actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
+			}
+			if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SUB_ORG_INFO_TAB))) {
+				logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityName(entityDetails.getEntityName())
+						.updatedBy(entityDetails.getUpdatedBy()).oldFeedStatus(FEED_STATUS_NOT_READY_TO_FEED)
+						.newFeedStatus(FEED_STATUS_READY_TO_FEED).updateTimestamp(updateTimestamp).build();
 				actionLogService.saveEntityActionLog(ORGANIZATION_FEED_ACTION_LOG_CODE, logDTO, null);
 			}
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
 		}
-		processEntityMessageToQ(null, entityId, null, null);
 		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
+	}
+
+	@Override
+	public void processEntityMessageToQ(Integer entityId) {
+		processEntityMessageToQ(null, entityId, null, null);
 	}
 
 	public void processEntityMessageToQ(String actionType, Integer moduleItemKey, Integer moduleSubItemKey, Map<String, String> additionDetails) {
