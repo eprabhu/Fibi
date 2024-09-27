@@ -18,6 +18,7 @@ import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-u
 import { HeaderService } from '../../common/header/header.service';
 import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
 import { COICountModal, COICountModalViewSlider } from '../../shared-components/shared-interface';
+import { CoiDisclosureCount } from '../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -43,7 +44,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         property2: ''
     };
     completeDisclosureList: UserDisclosure[] = [];
-    dashboardCount: any;
+    dashboardCount = new CoiDisclosureCount();
     isActiveDisclosureAvailable = false;
     coiList: [];
     isHover: [] = [];
@@ -109,6 +110,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
                     this.completeDisclosureList = this.getDashboardList();
                     this.completeDisclosureListCopy = this.paginationArray = JSON.parse(JSON.stringify(this.completeDisclosureList));
                     this.isCurrentTabTravelOrConsulting() ? this.pageCountFromAPI = this.result.totalServiceRequest : this.getArrayListForPagination();
+                    this.updateTabCount(this.isCurrentTabTravelOrConsulting() ? this.pageCountFromAPI : this.paginationArray.length);
                     this.loadingComplete();
                 }
             }), (err) => {
@@ -510,6 +512,25 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     readMorePurpose(id: number, flag: boolean): void {
         this.isPurposeRead[id] = !flag;
+    }
+
+    private updateTabCount(totalCount: number): void {
+        switch (this.currentSelected.tab) {
+            case 'IN_PROGRESS_DISCLOSURES':
+                this.dashboardCount.inProgressDisclosureCount = this.currentSelected.filter === 'ALL' ? totalCount : this.dashboardCount.inProgressDisclosureCount;
+                break;
+            case 'APPROVED_DISCLOSURES':
+                this.dashboardCount.approvedDisclosureCount = this.currentSelected.filter === 'ALL' ? totalCount : this.dashboardCount.approvedDisclosureCount;
+                break;
+            case 'TRAVEL_DISCLOSURES':
+                this.dashboardCount.travelDisclosureCount = this.searchText === '' ? totalCount : this.dashboardCount.travelDisclosureCount;
+                break;
+            case 'CONSULTING_DISCLOSURES':
+                this.dashboardCount.consultDisclCount = this.searchText === '' ? totalCount : this.dashboardCount.consultDisclCount;
+                break;
+            default:
+                break;
+        }
     }
 
 }

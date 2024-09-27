@@ -5,6 +5,34 @@ export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | 'COI_
 export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 export type LoginPersonDetailsKey = keyof LoginPersonDetails;
 
+export class COIAppConfig {
+    baseUrl: string = "";
+    fibiUrl: string = "";
+    authUrl: string = "";
+    opaUrl: string = "";
+    formUrl: string = "";
+    fibiCOIConnectUrl: string = "";
+    entityURL: string = "";
+    enableSSO: boolean = false;
+    enableGraph: boolean = true;
+    isElasticAuthentiaction: boolean = false;
+    elasticUserName: string = "";
+    elasticDelimiter: string = "";
+    elasticPassword: string = "";
+    elasticAuthScheme: string = "";
+    elasticIndexUrl: string = "";
+    indexValue: string = "";
+    fibiApplicationUrl: string = "";
+    EXTERNAL_APPLICATION_BASE_URL: string = "";
+    EXTERNAL_DEV_PROPOSAL_URL: string = "";
+    EXTERNAL_AWARD_URL: string = "";
+    EXTERNAL_IP_URL: string = "";
+
+    constructor(init?: Partial<COIAppConfig>) {
+        Object.assign(this, init);
+    }
+}
+
 export class LoginPersonDetails {
     personID: any;
     userName: any;
@@ -55,4 +83,13 @@ export interface AttachmentReplaceRO {
     versionNumber: number;
     comment?: string;
     attaTypeCode?: string | number;
+}
+
+export class CoiDisclosureCount {
+    inProgressDisclosureCount?: number = 0;
+    approvedDisclosureCount?: number = 0;
+    travelDisclosureCount?: number = 0;
+    consultDisclCount?: number = 0;
+    disclosureHistoryCount?: number = 0;
+    commentCount?: number = 0;
 }

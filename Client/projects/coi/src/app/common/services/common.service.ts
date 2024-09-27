@@ -9,7 +9,7 @@ import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
 import { DisclosureProjectData, DisclosureProjectModalData } from '../../shared-components/shared-interface';
-import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method, CoiAttachmentModalInfo } from './coi-common.interface';
+import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method, CoiAttachmentModalInfo, COIAppConfig } from './coi-common.interface';
 import { AttachmentInputType, COIAttachment } from '../../attachments/attachment-interface';
 import { hideModal } from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ProjectHierarchySliderPayload } from '../../shared-components/project-hierarchy-slider/services/project-hierarchy-slider.interface';
@@ -25,8 +25,9 @@ export class CommonService {
     formUrl = '';
     fibiCOIConnectUrl = '';
     EXTERNAL_APPLICATION_BASE_URL = '';
-    EXTERNAL_PROPOSAL_URL = '';
+    EXTERNAL_DEV_PROPOSAL_URL = '';
     EXTERNAL_AWARD_URL = '';
+    EXTERNAL_IP_URL = '';
     currencyFormat = '$';
     forbiddenModule = '';
     isEvaluation: boolean;
@@ -95,7 +96,7 @@ export class CommonService {
      */
     async getAppConfig() {
         return new Promise(async (resolve, reject) => {
-            const CONFIG_DATA: any = await this.readConfigFile();
+            const CONFIG_DATA: COIAppConfig = await this.readConfigFile();
             this.assignConfigurationValues(CONFIG_DATA);
             try {
                 const loginUserDetails: any = await this.authLogin();
@@ -110,7 +111,7 @@ export class CommonService {
         });
     }
 
-    readConfigFile() {
+    readConfigFile(): Promise<any> {
         let headers: HttpHeaders = new HttpHeaders();
         headers = headers.append('Cache-Control', 'no-store');
         headers = headers.append('Pragma', 'no-cache');
@@ -121,7 +122,7 @@ export class CommonService {
      * @param  {} configurationData
      * assign system configurations to global variables
      */
-    assignConfigurationValues(configurationData) {
+    assignConfigurationValues(configurationData: COIAppConfig) {
         this.baseUrl = configurationData.baseUrl;
         this.fibiUrl = configurationData.fibiUrl;
         this.authUrl = configurationData.authUrl;
@@ -139,8 +140,9 @@ export class CommonService {
         this.fibiApplicationUrl = configurationData.fibiApplicationUrl;
         this.enableGraph = configurationData.enableGraph;
         this.EXTERNAL_APPLICATION_BASE_URL = configurationData.EXTERNAL_APPLICATION_BASE_URL;
-        this.EXTERNAL_PROPOSAL_URL = configurationData.EXTERNAL_PROPOSAL_URL;
+        this.EXTERNAL_DEV_PROPOSAL_URL = configurationData.EXTERNAL_DEV_PROPOSAL_URL;
         this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
+        this.EXTERNAL_IP_URL = configurationData.EXTERNAL_IP_URL;
         this.entityURL = configurationData.entityURL;
     }
 
@@ -474,11 +476,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         this.refreshAfterLogin();
     }
 
+    /**
+     * 
+     * @param projectId  
+     * @param projectTypeCode 
+     * 
+     * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration
+     * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
+     */
     redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
         const RESOURCE_URLS = {
             1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
-            2: IP_EXTERNAL_RESOURCE_URL.replace('{projectId}', projectId),
-            3: (this.EXTERNAL_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
+            2: (this.EXTERNAL_IP_URL || IP_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
+            3: (this.EXTERNAL_DEV_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
         };
         const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
         if (RESOURCE_URLS[projectTypeCode]) {
