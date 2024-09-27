@@ -123,7 +123,7 @@
                     <tr id="coi-count-modal-table-thead-row">
                         <th>Entity Name</th>
                         <th>Country</th>
-                        <th>Entity Type</th>
+                        <th>Ownership Type</th>
                         <th>Start Date of Involvement</th>
                         <th>End Date of Involvement</th>
                         <th class="text-center">Actions</th>
@@ -147,11 +147,11 @@
                                 </app-no-data-label>
                             </div>
                         </td>
-                        <!-- Entity Type -->
+                        <!-- Ownership Type -->
                         <td>
                             <div class="text-slice">
-                                <app-no-data-label [valueToShow]="sfiDetails?.coiEntity?.entityType?.description">
-                                    <span [title]="sfiDetails?.coiEntity?.entityType?.description">{{sfiDetails?.coiEntity?.entityType?.description}}</span>
+                                <app-no-data-label [valueToShow]="sfiDetails?.coiEntity?.entityOwnershipType?.description">
+                                    <span [title]="sfiDetails?.coiEntity?.entityOwnershipType?.description">{{sfiDetails?.coiEntity?.entityOwnershipType?.description}}</span>
                                 </app-no-data-label>
                             </div>
                         </td>
