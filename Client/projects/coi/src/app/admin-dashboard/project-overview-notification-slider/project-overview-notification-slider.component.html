@@ -147,18 +147,15 @@
                 <div class="form-row pb-0 mr-0">
                     <div class="col-lg-12">
                         <div class="row gap-1 align-items-center">
-                            <label for="coi-entity-sponsor-code" title='Subject' class="col-12 ms-1"><span class="mandatory">*</span>To</label>
+                            <label for="coi-entity-sponsor-code" class="d-block coi-text-dark"><span class="mandatory me-1">*</span>To</label>
                             <div class="col-6 align-items-baseline justify-content-center pe-0">
                                 <app-elastic [options]="elasticSearchOptionsForTo" [clearField]="clearField"
                                     (click)="send = 'TO'" [placeHolder]="'Search person'"
                                     [isError]="validationMap.get('recipients')"
                                     (selectedResult)="selectedRecipient($event)">
                                 </app-elastic>
-                                <div *ngIf="validationMap?.get('recipients')" class="invalid-feedback d-block">
-                                    <p class="warning-style m-0"><span
-                                            class="mandatory">{{validationMap?.get('recipients')}}</span>
-                                    </p>
-                                </div>
+                                <!-- recipients error -->
+                                <span *ngIf="validationMap?.has('recipients')" class="invalid-feedback d-block fs-13">{{validationMap?.get('recipients')}}</span>
                             </div>
 
                             <!-- commenting the code of CC and BCC it will be enable form the next commit -->
@@ -171,17 +168,19 @@
                                 (click)="isBccViewable = true">
                                 <i aria-hidden="true"></i>Add Bcc</a> -->
                         </div>
-                        <div class="d-inline-flex flex-wrap mb-2 mt-1">
+                        <div class="d-inline-flex flex-wrap mt-1">
                             <ng-container *ngFor="let recipients of notificationObject?.recipients">
                                 <div *ngIf="(recipients.recipientType == 'TO')"
                                     class="badge rounded-pill bg-recipient-user-fileChips mt-1 ms-2">
-                                    <span class="text-color d-flex align-items-center">
-                                        <i class="mr-2 fa fa-user-o" aria-hidden="true"></i>
-                                        {{recipients.recipientName}}
-                                        <span class="fs-15" (click)="removeRecipient(recipients)">
-                                            <mat-icon>close</mat-icon>
-                                        </span>
-                                    </span>
+                                    <div class="d-flex align-items-center">
+                                        <mat-icon aria-hidden="true" class="flex-shrink-0 coi-scale-9">person</mat-icon>
+                                        <span>{{recipients.recipientName}}</span>
+                                        <button class="d-flex align-items-center jusitfy-content-center fs-15 btn-none" (click)="removeRecipient(recipients)"
+                                            title="Click here to remove {{recipients.recipientName}}"
+                                            attr.aria-label="Click here to remove {{recipients.recipientName}}">
+                                            <mat-icon aria-hidden="true" class="flex-shrink-0 coi-scale-9">close</mat-icon>
+                                        </button>
+                                    </div>
                                 </div>
                             </ng-container>
                         </div>
@@ -238,7 +237,7 @@
                 </div>
                 <div class="form-row pb-0 mr-0">
                     <div class="mt-1 px-1">
-                        <label title="close" class="d-block">Notification Template</label>
+                        <label for="notification-template-lookup" class="d-block coi-text-dark mb-1">Notification Template</label>
                         <app-look-up [options]='templateOptions' (selectedResult)="onTemplateSelect($event)"
                             [defaultValue]="defaultTemplateLabel" [isExternalArray]="true"
                             [externalArray]="notificationTemplates" [uniqueId]="'notification-template-lookup'">
@@ -247,25 +246,20 @@
                 </div>
                 <div class="form-row pb-0 mr-0">
                     <div class="col-lg-12">
-                        <label title='Subject' class="d-block">
-                            <span class="mandatory">*</span>Subject</label>
+                        <label for="notification-msg-subject" class="d-block coi-text-dark mb-1"><span class="mandatory me-1">*</span>Subject</label>
                         <input id="notification-msg-subject" class="form-control committeeBox dateBox"
                             [ngClass]="validationMap.get('subject') ? 'coi-invalid-FieldBorder' : ''"
-                            [(ngModel)]="notificationObject.subject" placeholder="Please provide Subject">
-                        <div *ngIf="validationMap?.get('subject')" class="invalid-feedback d-block">
-                            <p class="warning-style m-0"><span
-                                    class="mandatory">{{validationMap?.get('subject')}}</span>
-                            </p>
-                        </div>
+                            [(ngModel)]="notificationObject.subject" placeholder="Please provide a subject">
+                            <!-- subject error -->
+                        <span *ngIf="validationMap?.has('subject')" class="invalid-feedback d-block fs-13">{{validationMap?.get('subject')}}</span>
                     </div>
                 </div>
                 <div class="form-row mr-0">
                     <div class="form-row mr-0">
                         <div class="col-lg-12">
-                            <label title='Message Body' class="d-block">
-                                <span class="mandatory">*</span>Message Body</label>
+                            <label for="more-option-notify-msg-bdy" class="d-block coi-text-dark mb-1"><span class="mandatory me-1">*</span>Message Body</label>
                             <ng-container>
-                                <div class="alert alert-warning p-1 f-15 mb-2 d-flex align-items-center"
+                                <div class="alert alert-warning p-1 f-14 mb-2 d-flex align-items-center"
                                     id="more-option-notify-msg-bdy">
                                     <i class="fa fa-info-circle info-icon mx-2 mt-1" aria-hidden="true"></i>
                                     <em>The editor does not support images.</em>
@@ -281,13 +275,11 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="validationMap?.get('message')">
-                    <p class="warning-style"><span class="mandatory">{{validationMap?.get('message')}}</span>
-                    </p>
-                </div>
+                <!-- body error -->
+                <span *ngIf="validationMap?.has('message')" class="invalid-feedback d-block fs-13">{{validationMap?.get('message')}}</span>
             </div>
             <div class="modal-footer">
-                <button title="Click here to close" type="button" aria-label="Click here to close the popup"
+                <button title="Click here to clear" type="button" aria-label="Click here to clear message body"
                     id="coi-notification-modal-close-btn" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal"
                     (click)="clearNotifyFields()">
                     Clear

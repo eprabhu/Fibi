@@ -92,9 +92,9 @@
                         </td>
                         <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]">{{reviewer?.startDate | dateFormatter }}
                         </td>
-                        <td class="coi-text-light text-center" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]" *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
-                        <td class="text-center coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]" *ngIf="!reviewer?.endDate">  </td>
-                        <td class="coi-text-light text-center" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]">{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
+                        <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]" *ngIf="reviewer?.endDate">{{reviewer?.endDate | dateFormatter }}</td>
+                        <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]" *ngIf="!reviewer?.endDate">  </td>
+                        <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]">{{getDaysAtLocation(reviewer.startDate, reviewer.endDate)}}</td>
                         <td class="coi-text-light" [class.align-middle]="!collapseViewMore[reviewer?.coiReviewId]">
                         <app-no-data-label *ngIf="!reviewer?.reviewStatusTypeCode"[valueToShow]="reviewer?.reviewStatusTypeCode"></app-no-data-label>
                         <span *ngIf="reviewer?.reviewStatusTypeCode" [class.text-black]="reviewer?.reviewStatusTypeCode == '1'" class="fw-medium badge bg-{{getReviewStatusBadge(reviewer?.reviewerStatusType?.reviewStatusCode)}} fs-14 rounded-5">
