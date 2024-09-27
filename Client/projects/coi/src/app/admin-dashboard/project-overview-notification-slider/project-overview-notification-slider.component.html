@@ -249,7 +249,7 @@
                         <label for="notification-msg-subject" class="d-block coi-text-dark mb-1"><span class="mandatory me-1">*</span>Subject</label>
                         <input id="notification-msg-subject" class="form-control committeeBox dateBox"
                             [ngClass]="validationMap.get('subject') ? 'coi-invalid-FieldBorder' : ''"
-                            [(ngModel)]="notificationObject.subject" placeholder="Please provide Subject">
+                            [(ngModel)]="notificationObject.subject" placeholder="Please provide a subject">
                             <!-- subject error -->
                         <span *ngIf="validationMap?.has('subject')" class="invalid-feedback d-block fs-13">{{validationMap?.get('subject')}}</span>
                     </div>
