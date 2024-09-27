@@ -30,7 +30,6 @@ import com.polus.integration.instituteProposal.vo.DisclosureSyncVO;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
-@Transactional
 @Service
 @Slf4j
 public class AwardIntegrationServiceImpl implements AwardIntegrationService {
@@ -59,33 +58,38 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 	@Override
 	public ResponseEntity<AwardDTO> feedAward(AwardDTO awardDTO) {
 		try {
-			COIIntegrationAward award = awardRepository.findProjectByProjectNumber(awardDTO.getProjectNumber());
 			Boolean canUpdateProjectDisclosureFlag = awardDao.canUpdateProjectDisclosureFlag(awardDTO);
-			if (award != null) {
-				saveOrUpdateCOIAward(awardDTO, award);
-			} else {
-				COIIntegrationAward coiIntAward = new COIIntegrationAward();
-				coiIntAward.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
-				saveOrUpdateCOIAward(awardDTO, coiIntAward);
-			}
-			prepareProjectPersonDetail(awardDTO);
+			integrationProcess(awardDTO);
 			if (Boolean.TRUE.equals(canUpdateProjectDisclosureFlag)) {
 				updateDisclSyncFlag(awardDTO.getProjectNumber());
 			}
-			linkOrUnlinkIPFromAward(awardDTO.getLinkedInstProposalNumbers(), awardDTO.getProjectNumber());
 		} catch (Exception e) {
-	        log.error("General exception occurred in feedInstituteProposal for project: {}", awardDTO.getProjectNumber(), e.getMessage());
+	        log.error("General exception occurred in feedAward for project: {}", awardDTO.getProjectNumber(), e.getMessage());
 	        throw new MQRouterException(Constant.ERROR_CODE, "Exception in feed award integration", e, e.getMessage(),
 	        		awardIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
+	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE, Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
-		postIntegrationProcess(awardDTO.getProjectNumber());
+		awardDao.postIntegrationProcess(awardDTO.getProjectNumber());
 	    return new ResponseEntity<>(awardDTO, HttpStatus.OK);
 	}
 
-	private void postIntegrationProcess(String projectNumber) {
-		awardRepository.COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(Constant.AWARD_MODULE_CODE, projectNumber);
+	@Transactional
+	private void integrationProcess(AwardDTO awardDTO) {
+		try {
+			COIIntegrationAward award = awardRepository.findProjectByProjectNumber(awardDTO.getProjectNumber());
+			COIIntegrationAward coiIntAward = (award != null) ? award : new COIIntegrationAward();
+			if (award == null) {
+			    coiIntAward.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
+			}
+			saveOrUpdateCOIAward(awardDTO, coiIntAward);
+			prepareProjectPersonDetail(awardDTO);
+			linkOrUnlinkIPFromAward(awardDTO.getLinkedInstProposalNumbers(), awardDTO.getProjectNumber());
+		} catch (Exception e) {
+			log.error("Error in saving award details", awardDTO.getProjectNumber(), e.getMessage());
+			throw new MQRouterException(Constant.ERROR_CODE, "Exception in feed award integration", e, e.getMessage(),
+	        		awardIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
+	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE, Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
+		}
 	}
 
 	private void prepareProjectPersonDetail(AwardDTO awardDTO) {
@@ -98,7 +102,7 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 	                    .findFirst()
 	                    .orElse(new COIIntegrationAwardPerson());
 	            prepareProjectPersonDetail(projectPerson, projectPersonDTO);
-	            projectPersonRepository.save(projectPerson);
+	            awardDao.saveAwardPerson(projectPerson);
 	        });
 
 	        // Mark as inactive if any existing person is removed 
@@ -107,7 +111,7 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 	        projectPersons.stream().filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 	                .forEach(existingPerson -> {
 	                    existingPerson.setStatus(Constant.INACTIVE);
-	                    projectPersonRepository.save(existingPerson);
+	                    awardDao.saveAwardPerson(existingPerson);
 	                });
 
 	    } catch (DataAccessException e) {
@@ -135,7 +139,7 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
         projectPerson.setKeyPersonName(projectPersonDTO.getKeyPersonName());
         projectPerson.setStatus(Constant.ACTIVE);
         projectPerson.setPercentOfEffort(projectPersonDTO.getPercentOfEffort());
-        projectPersonRepository.save(projectPerson);
+        awardDao.saveAwardPerson(projectPerson);
 	}
 
 	private void saveOrUpdateCOIAward(AwardDTO awardDTO, COIIntegrationAward award) {
@@ -175,7 +179,7 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 		award.setAttribute4Value(awardDTO.getAttribute4Value());
 		award.setAttribute5Label(awardDTO.getAttribute5Label());
 		award.setAttribute5Value(awardDTO.getAttribute5Value());
-		awardRepository.save(award);
+		awardDao.saveAward(award);
 	}
 
 	private void updateDisclSyncFlag(String projectNumber) {
@@ -193,16 +197,8 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 			}
 	    } catch (FeignException e) {
 	        log.error("Feign client exception occurred during disclosure sync for project: {}", projectNumber, e.getMessage());
-	        throw new MQRouterException(Constant.ERROR_CODE, "Feign client exception in disclosure sync", e, e.getMessage(),
-	        		awardIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    } catch (DataAccessException e) {
 	        log.error("Database exception occurred during disclosure sync for project: {}", projectNumber, e.getMessage());
-	        throw new MQRouterException(Constant.ERROR_CODE, "Database exception in disclosure sync", e, e.getMessage(),
-	        		awardIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 
 	}
