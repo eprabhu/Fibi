@@ -272,7 +272,9 @@ public class GlobalEntityController {
 	@PatchMapping(value = "/verify/{entityId}")
 	public ResponseEntity<Map<String, Object>> verifyEntityDetails(@PathVariable(value = "entityId", required = true) final Integer entityId) {
 		log.info("Requesting for verifyEntityDetails");
-		return globalEntityService.verifyEntityDetails(entityId);
+		ResponseEntity<Map<String, Object>> response = globalEntityService.verifyEntityDetails(entityId);
+		globalEntityService.processEntityMessageToQ(entityId);
+		return response;
 	}
 
 	@GetMapping(value = "/fetchEntityTabStatus/{entityId}")
