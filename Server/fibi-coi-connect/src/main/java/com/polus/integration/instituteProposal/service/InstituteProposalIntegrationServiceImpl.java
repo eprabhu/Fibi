@@ -30,7 +30,6 @@ import com.polus.integration.proposal.repository.ProposalIntegrationRepository;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
-@Transactional
 @Service
 @Slf4j
 public class InstituteProposalIntegrationServiceImpl implements InstituteProposalIntegrationService {
@@ -59,33 +58,39 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 	@Override
 	public ResponseEntity<Object> feedInstituteProposal(InstituteProposalDTO instituteProposalDTO) {
 	    try {
-	        COIIntInstituteProposal instituteProposal = instituteProposalRepository.findProposalByProposalNumber(instituteProposalDTO.getProjectNumber());
-	        Boolean canUpdateProjectDisclosureFlag = instituteProposalDao.canUpdateProjectDisclosureFlag(instituteProposalDTO);
-	        if (instituteProposal != null) {
-	            saveOrUpdateCOIInstituteProposal(instituteProposalDTO, instituteProposal);
-	        } else {
-	            COIIntInstituteProposal coiIntInstituteProposal = new COIIntInstituteProposal();
-	            coiIntInstituteProposal.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
-	            saveOrUpdateCOIInstituteProposal(instituteProposalDTO, coiIntInstituteProposal);
-	        }
-	        prepareProjectPersonDetail(instituteProposalDTO);
+	    	Boolean canUpdateProjectDisclosureFlag = instituteProposalDao.canUpdateProjectDisclosureFlag(instituteProposalDTO);
+	        integrationProcess(instituteProposalDTO);
 	        if (Boolean.TRUE.equals(canUpdateProjectDisclosureFlag)) {
 				updateDisclSyncFlag(instituteProposalDTO.getProjectNumber());
 			}
-			linkOrUnlinkIpNumberInDevProposal(instituteProposalDTO.getLinkedDevProposalNumbers(), instituteProposalDTO.getProjectNumber());
 	    } catch (Exception e) {
 	        log.error("General exception occurred in feedInstituteProposal for project: {}", instituteProposalDTO.getProjectNumber(), e.getMessage());
 	        throw new MQRouterException(Constant.ERROR_CODE, "Exception in feed institute proposal integration", e, e.getMessage(),
 	                instProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.INST_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
+	                Constant.INST_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE, Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
-	    postIntegrationProcess(instituteProposalDTO.getProjectNumber());
+	    instituteProposalDao.postIntegrationProcess(instituteProposalDTO.getProjectNumber());
 	    return new ResponseEntity<>(instituteProposalDTO, HttpStatus.OK);
 	}
 
-	private void postIntegrationProcess(String projectNumber) {
-		instituteProposalRepository.COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(Constant.INST_PROPOSAL_MODULE_CODE, projectNumber);
+	@Transactional
+	private void integrationProcess(InstituteProposalDTO instituteProposalDTO) {
+		try {
+			COIIntInstituteProposal instituteProposal = instituteProposalRepository.findProposalByProposalNumber(instituteProposalDTO.getProjectNumber());
+			COIIntInstituteProposal coiIntInstituteProposal = instituteProposal != null ? instituteProposal : new COIIntInstituteProposal();
+			if (instituteProposal == null) {
+			    coiIntInstituteProposal.setFirstFedTimestamp(integrationDao.getCurrentTimestamp());
+			}
+			saveOrUpdateCOIInstituteProposal(instituteProposalDTO, coiIntInstituteProposal);
+	        prepareProjectPersonDetail(instituteProposalDTO);
+	        linkOrUnlinkIpNumberInDevProposal(instituteProposalDTO.getLinkedDevProposalNumbers(), instituteProposalDTO.getProjectNumber());
+		} catch (Exception e) {
+			log.error("Error in saving institute proposal details", instituteProposalDTO.getProjectNumber(), e.getMessage());
+			throw new MQRouterException(Constant.ERROR_CODE, "Error in saving institute proposal details", e, e.getMessage(),
+	                instProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
+	                Constant.INST_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE,
+	                Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
+		}
 	}
 
 	private void prepareProjectPersonDetail(InstituteProposalDTO instituteProposalDTO) {
@@ -99,7 +104,7 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 	                    .orElse(new COIIntInstituteProposalPerson());
 
 	            prepareProjectPersonDetail(proposalPerson, proposalPersonDTO);
-	            projectPersonRepository.save(proposalPerson);
+	            instituteProposalDao.saveInstituteProposalPerson(proposalPerson);
 	        });
 
 	        // Mark as inactive if any existing person is removed 
@@ -108,7 +113,7 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 	        proposalPersons.stream().filter(existingPerson -> !incomingKeyPersonIds.contains(existingPerson.getKeyPersonId()))
 	                .forEach(existingPerson -> {
 	                    existingPerson.setStatus(Constant.INACTIVE);
-	                    projectPersonRepository.save(existingPerson);
+	                    instituteProposalDao.saveInstituteProposalPerson(existingPerson);
 	                });
 	    } catch (DataAccessException e) {
 	        log.error("Database exception occurred while preparing project person details for project: {}", instituteProposalDTO.getProjectNumber(), e.getMessage());
@@ -135,7 +140,7 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
         proposalPerson.setKeyPersonName(proposalPersonDTO.getKeyPersonName());
         proposalPerson.setStatus(Constant.ACTIVE);
         proposalPerson.setPercentOfEffort(proposalPersonDTO.getPercentOfEffort());
-        projectPersonRepository.save(proposalPerson);
+        instituteProposalDao.saveInstituteProposalPerson(proposalPerson);
 	}
 
 	private void saveOrUpdateCOIInstituteProposal(InstituteProposalDTO instituteProposalDTO, COIIntInstituteProposal coiIntInstituteProposal) {
@@ -171,7 +176,7 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 		coiIntInstituteProposal.setAttribute4Value(instituteProposalDTO.getAttribute4Value());
 		coiIntInstituteProposal.setAttribute5Label(instituteProposalDTO.getAttribute5Label());
 		coiIntInstituteProposal.setAttribute5Value(instituteProposalDTO.getAttribute5Value());
-		instituteProposalRepository.save(coiIntInstituteProposal);
+		instituteProposalDao.saveInstituteProposal(coiIntInstituteProposal);
 	}
 
 	private void updateDisclSyncFlag(String projectNumber) {
@@ -189,16 +194,8 @@ public class InstituteProposalIntegrationServiceImpl implements InstituteProposa
 			}
 		} catch (FeignException e) {
 	        log.error("Feign client exception occurred during disclosure sync for project: {}", projectNumber, e.getMessage());
-	        throw new MQRouterException(Constant.ERROR_CODE, "Feign client exception in disclosure sync", e, e.getMessage(),
-	                instProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.INST_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    } catch (DataAccessException e) {
 	        log.error("Database exception occurred during disclosure sync for project: {}", projectNumber, e.getMessage());
-	        throw new MQRouterException(Constant.ERROR_CODE, "Database exception in disclosure sync", e, e.getMessage(),
-	                instProposalIntegrationQueue, null, Constant.FIBI_DIRECT_EXCHANGE,
-	                Constant.INST_PROPOSAL_MODULE_CODE, Constant.SUB_MODULE_CODE,
-	                Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 	}
 

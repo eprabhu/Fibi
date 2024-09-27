@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.polus.integration.instituteProposal.pojo.COIIntInstituteProposal;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Repository
 public interface InstituteProposalRepository extends JpaRepository<COIIntInstituteProposal, Integer> {
 
