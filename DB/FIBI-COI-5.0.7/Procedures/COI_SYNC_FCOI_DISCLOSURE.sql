@@ -40,25 +40,31 @@ CREATE PROCEDURE `COI_SYNC_FCOI_DISCLOSURE`(
             -- LI_FCOI_TYPE_CODE 2 is Project Disclosure we need FCOI type here
 
     		IF LI_FCOI_TYPE_CODE != 2 THEN
-    			START TRANSACTION;
-    			-- The below script updates an IP to award, if IP becomes funded.
-    			    WITH excluded_module_item_keys AS (
-                        SELECT MODULE_ITEM_KEY
-                        FROM COI_DISCL_PROJECTS
-                        WHERE DISCLOSURE_ID = AV_DISCLOSURE_ID
-                        AND MODULE_CODE = 1
-                    )
-                    UPDATE COI_DISCL_PROJECTS T1
-                    INNER JOIN COI_PROJECT_INSTITUTE_PROPOSAL_V T2 ON T2.PROPOSAL_NUMBER = T1.MODULE_ITEM_KEY AND T1.MODULE_CODE = 2
-                    INNER JOIN COI_DISCLOSURE T3 ON T3.DISCLOSURE_ID = T1.DISCLOSURE_ID
-                    SET T1.MODULE_ITEM_KEY = T2.LINKED_AWARD_PROJECT_NUMBER, T1.MODULE_CODE = 1
-                    WHERE T1.MODULE_CODE = 2 AND T3.PERSON_ID = T2.KEY_PERSON_ID
-                    AND T2.LINKED_AWARD_PROJECT_NUMBER IS NOT NUll
+    			/*	START TRANSACTION;
+                    			-- The below script updates an IP to award, if IP becomes funded.
+                WITH excluded_module_item_keys AS (
+                    SELECT MODULE_ITEM_KEY
+                    FROM COI_DISCL_PROJECTS
+                    WHERE DISCLOSURE_ID = AV_DISCLOSURE_ID
+                    AND MODULE_CODE = 1
+                )
+                UPDATE COI_DISCL_PROJECTS T1
+                INNER JOIN (
+                    SELECT t1.LINKED_AWARD_PROJECT_NUMBER, t1.KEY_PERSON_ID, MAX(t1.PROPOSAL_NUMBER) AS PROPOSAL_NUMBER
+                    FROM COI_PROJECT_INSTITUTE_PROPOSAL_V t1
+                    inner join COI_DISCL_PROJECTS t2 on (t1.PROPOSAL_NUMBER = t2.MODULE_ITEM_KEY and t2.MODULE_CODE = 2)
+                    WHERE t1.LINKED_AWARD_PROJECT_NUMBER IS NOT null and t2.DISCLOSURE_ID = AV_DISCLOSURE_ID
+                    GROUP BY t1.LINKED_AWARD_PROJECT_NUMBER
+                ) T2 ON T2.PROPOSAL_NUMBER = T1.MODULE_ITEM_KEY AND T1.MODULE_CODE = 2
+                INNER JOIN COI_DISCLOSURE T3 ON T3.DISCLOSURE_ID = T1.DISCLOSURE_ID
+                SET T1.MODULE_ITEM_KEY = T2.LINKED_AWARD_PROJECT_NUMBER, T1.MODULE_CODE = 1
+                WHERE T1.MODULE_CODE = 2
+                    AND T3.PERSON_ID = T2.KEY_PERSON_ID
                     AND T1.DISCLOSURE_ID = AV_DISCLOSURE_ID
                     AND T2.LINKED_AWARD_PROJECT_NUMBER NOT IN (
                         SELECT MODULE_ITEM_KEY FROM excluded_module_item_keys
                     );
-    			COMMIT;
+                COMMIT; */
     			START TRANSACTION;
     			    -- Inserting not added projects, works only in the case of FCOI disclosure.
     				CALL COI_SYNC_INSERT_DISCL_PROJECTS(AV_DISCLOSURE_ID, AV_DISCLOSURE_NUMBER, AV_PERSON_ID);
