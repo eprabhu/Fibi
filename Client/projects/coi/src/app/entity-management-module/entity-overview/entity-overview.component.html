@@ -32,7 +32,7 @@
     <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
         [sectionId]="attachmentSectionDetails.sectionId"
         [subSectionId]="attachmentSectionDetails.subSectionId" [entityAttachmentsList]="entityAttachmentList"
-        [riskCategoryCode]="'EN'">
+        [riskCategoryCode]="'EN'" (emitUpdatedAttachmentList)="attachemntUpdated($event)">
     </app-entity-attachment-section>
 </div>
 </div>

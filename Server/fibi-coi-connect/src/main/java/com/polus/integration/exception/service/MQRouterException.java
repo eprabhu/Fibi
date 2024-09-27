@@ -1,19 +1,19 @@
 package com.polus.integration.exception.service;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Async;
 
+import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.config.ApplicationContextProvider;
 import com.polus.integration.exception.dao.MQExceptionLogRepository;
 import com.polus.integration.exception.pojo.MQExceptionsLog;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MQRouterException  extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger LOGGER = LogManager.getLogger(MQRouterException.class.getName());
 
     private String queueMessage;
     private String sourceQueueName;
@@ -87,7 +87,7 @@ public class MQRouterException  extends RuntimeException {
     @Async
     public void saveMQRouterException() {
         try {
-            LOGGER.error(toString());
+            log.error(toString());
             MQExceptionsLog exceptionsLog = new MQExceptionsLog();
             exceptionsLog.setActionType(actionType);
             exceptionsLog.setModuleCode(moduleCode);
@@ -99,13 +99,18 @@ public class MQRouterException  extends RuntimeException {
             exceptionsLog.setDestinationQueueName(destinationQueueName);
             exceptionsLog.setQueueExchange(queueExchange);
             exceptionsLog.setQueueMessage(queueMessage);
+            exceptionsLog.setUpdateTimestamp(getIntegrationDao().getCurrentTimestamp());
             exceptionsLog.setStackTrace(cause != null ? ExceptionUtils.getStackTrace(cause) : null);
             MQExceptionLogRepository exceptionsRepository = getMqExceptionsService();
             exceptionsRepository.save(exceptionsLog);
-            LOGGER.info("Exception log error id : {}", exceptionsLog.getId());
+            log.info("Exception log error id : {}", exceptionsLog.getId());
         } catch (Exception e) {
-            LOGGER.error("Unable to save exception log : {}", e.getMessage());
+            log.error("Unable to save exception log : {}", e.getMessage());
         }
+    }
+
+    private static IntegrationDao getIntegrationDao() {
+    	return ApplicationContextProvider.getApplicationContext().getBean(IntegrationDao.class);
     }
 
     private static MQExceptionLogRepository getMqExceptionsService() {

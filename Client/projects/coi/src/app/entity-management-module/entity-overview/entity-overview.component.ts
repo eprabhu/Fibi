@@ -76,4 +76,9 @@ export class EntityOverviewComponent {
         this._dataStoreService.updateStore(['entityRisks'], {'entityRisks': this.entityRisksList});
     }
 
+    attachemntUpdated(attachmentList: EntityAttachment[]): void{
+        const UPDATED_ATTACHMENT_LIST = deepCloneObject(attachmentList);
+        this._dataStoreService.updateStore(['attachments'], {'attachments':  UPDATED_ATTACHMENT_LIST});
+    } 
+
 }

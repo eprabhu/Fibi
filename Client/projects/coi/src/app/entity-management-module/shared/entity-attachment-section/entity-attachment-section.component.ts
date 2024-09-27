@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode } from '../entity-interface';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { Subscription } from 'rxjs';
@@ -23,6 +23,8 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
     @Input() subSectionId: any;
     @Input() riskCategoryCode: EntityRiskCategoryCode;
     @Input() entityAttachmentsList: EntityAttachment[] = [];
+
+    @Output() emitUpdatedAttachmentList: EventEmitter<EntityAttachment[]> = new EventEmitter<EntityAttachment[]>();
 
     updateIndex: number = null;
     entityAttachmentHelpText = '';
@@ -110,7 +112,9 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
             this.filterLatestVersions()
         } else if (event) {
             this.filteredEntityAttachmentsList[this.updateIndex] = deepCloneObject(event);
+            this.entityAttachmentsList[this.updateIndex] = deepCloneObject(event);
         }
+        this.emitUpdatedAttachmentList.emit(this.entityAttachmentsList);
         this.isOpenAttachmentModal = false;
         this.currentAttachment = null;
         this.updateIndex = null;
@@ -183,6 +187,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
                 attachment => attachment.attachmentNumber !== attachmentNumber
             );
         }
+        this.emitUpdatedAttachmentList.emit(this.entityAttachmentsList);
         this.closeConfirmationModal();
     }
 
