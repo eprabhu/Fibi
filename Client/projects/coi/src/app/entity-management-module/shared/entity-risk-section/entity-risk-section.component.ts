@@ -38,8 +38,10 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     entityRiskModalDetails = new EntityRiskModalDetails();
     entityRiskTypeOptions = 'ENTITY_RISK_TYPE#RISK_TYPE_CODE#false#false';
     entityRiskLevelOption = 'ENTITY_RISK_LEVEL#RISK_LEVEL_CODE#false#false'
-    ENTITY_RISK_ADD_UPDATE_MODAL_ID: string = 'entity-risk-add-update-modal';
-    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID, 'Add Risk', 'Cancel', 'lg');
+    ENTITY_RISK_ADD_MODAL_ID: string = 'entity-risk-add-modal';
+    entityRiskModalConfig = new COIModalConfig(this.ENTITY_RISK_ADD_MODAL_ID, 'Add Risk', 'Cancel', 'lg');
+    showSlider = false;
+    currentRiskDetails : any;
 
     constructor(private _dataStoreService: EntityDataStoreService,
         private _commonService: CommonService, private _entityRiskSectionService: EntityRiskSectionService) { }
@@ -104,50 +106,33 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     }
 
     private clearRiskDetails(): void {
-        closeCommonModal(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID);
+        closeCommonModal(this.ENTITY_RISK_ADD_MODAL_ID);
         setTimeout(() => {
             this.mandatoryList.clear();
             this.entityRiskLevelList = [];
             this.entityRiskModalDetails = new EntityRiskModalDetails();
-            this.riskUpdated.emit(this.entityRiskList);
         }, 200);
     }
 
-    private addOrUpdateRisk(): void {
-        if (this.entityMandatoryValidation()) {
-            this.isEditRisk ? this.updateEntityRisk() : this.saveEntityRisk();
-        }
-    }
-
     private saveEntityRisk(): void {
-        this.entityRiskModalDetails.entityRisk.entityId = this.entityDetails.entityId;
-        this.$subscriptions.push(this._entityRiskSectionService.saveEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk added successfully.');
-            this._dataStoreService.enableModificationHistoryTracking();
-            this.addNewRiskDetails(data.entityRiskId);
-            this.clearRiskDetails();
-        }))
+        if (this.entityMandatoryValidation()){
+            this.entityRiskModalDetails.entityRisk.entityId = this.entityDetails.entityId;
+            this.$subscriptions.push(this._entityRiskSectionService.saveEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
+                this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk added successfully.');
+                this._dataStoreService.enableModificationHistoryTracking();
+                this.addNewRiskDetails(data.entityRiskId);
+                this.clearRiskDetails();
+            },
+            (_err) => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Save Risk. Please try again.');
+            }));
+        }
     }
 
     private addNewRiskDetails(entityRiskId: number): void {
         this.entityRiskModalDetails.entityRisk.entityRiskId = entityRiskId;
         const NEW_ENTITY_RISK = deepCloneObject(this.entityRiskModalDetails.entityRisk);
         this.entityRiskList.push(NEW_ENTITY_RISK);
-    }
-
-    private updateExistingRiskDetails(): void {
-        if (this.editIndex > -1) {
-            this.entityRiskList[this.editIndex] = deepCloneObject(this.entityRiskModalDetails.entityRisk);
-        }
-    }
-
-    private updateEntityRisk(): void {
-        this.$subscriptions.push(this._entityRiskSectionService.updateEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
-            this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully.');
-            this._dataStoreService.enableModificationHistoryTracking();
-            this.updateExistingRiskDetails()
-            this.clearRiskDetails();
-        }))
     }
 
     private getProxyController(): EntityRiskProxyController {
@@ -165,9 +150,11 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             description: this.entityRiskModalDetails.entityRisk.description,
             entityId: this.entityRiskModalDetails.entityRisk.entityId,
             riskTypeCode: this.entityRiskModalDetails.entityRisk.riskTypeCode,
-            riskLevelCode: this.entityRiskModalDetails.entityRisk.riskLevelCode,
-            entityRiskId: this.entityRiskModalDetails.entityRisk.entityRiskId
-        }
+            entityRiskId: this.entityRiskModalDetails.entityRisk.entityRiskId,
+            riskType: this.entityRiskModalDetails.entityRisk.riskType.description,
+            riskLevel: this.entityRiskModalDetails.entityRisk.riskLevel.description,
+            riskLevelCode: this.entityRiskModalDetails.entityRisk.riskLevelCode
+        };
     }
 
     private entityMandatoryValidation(): boolean {
@@ -192,14 +179,6 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         return this.entityRiskList?.some((risk: EntityRisk) => risk?.riskTypeCode === riskTypeCode && risk?.entityRiskId !== entityRiskId);
     }
 
-    private setSponsorRiskDetails(entityRisk: EntityRisk): void {
-        this.entityRiskModalDetails.entityRisk = deepCloneObject(entityRisk);
-        const SELECTED_RISK_TYPE = this.entityRiskTypeList.find((risk: RiskType) => entityRisk?.riskTypeCode === risk.riskTypeCode);
-        const SELECTED_RISK_LEVEL = this.entityRiskLevelList.find((risk: RiskLevel) => entityRisk?.riskLevelCode === risk.riskLevelCode);
-        this.entityRiskModalDetails.selectedRiskTypeLookUpList = [deepCloneObject(SELECTED_RISK_TYPE)];
-        this.entityRiskModalDetails.selectedRiskLevelLookUpList = [deepCloneObject(SELECTED_RISK_LEVEL)];
-    }
-
     onRiskTypeSelected(event: any[] | null): void {
         this.entityRiskModalDetails.entityRisk.riskLevel = null;
         this.entityRiskModalDetails.entityRisk.riskLevelCode = null;
@@ -220,25 +199,24 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             case 'SECONDARY_BTN':
                 return this.clearRiskDetails();
             case 'PRIMARY_BTN':
-                return this.addOrUpdateRisk();
+                return this.saveEntityRisk();
             default: break;
         }
     }
 
-    openAddEntityRiskModal(isEditRisk: boolean): void {
+    openAddEntityRiskModal(): void {
         this.isOpenRiskModal = true;
-        this.isEditRisk = isEditRisk
-        this.entityRiskModalConfig.namings.primaryBtnName = isEditRisk ? 'Update Risk' : 'Add Risk';
+        this.entityRiskModalConfig.namings.primaryBtnName =  'Add Risk';
         setTimeout(() => {
-            openCommonModal(this.ENTITY_RISK_ADD_UPDATE_MODAL_ID);
+            openCommonModal(this.ENTITY_RISK_ADD_MODAL_ID);
         }, 100);
     }
 
-    async editEntityRisk(risk: EntityRisk, editIndex: number): Promise<any> {
+    async editOrHistorySlider(risk: EntityRisk, editIndex: number , isEditRisk: boolean): Promise<any>{
         this.editIndex = editIndex;
-        await this.fetchRiskLevels(risk?.riskTypeCode);
-        this.setSponsorRiskDetails(risk);
-        this.openAddEntityRiskModal(true);
+        this.isEditRisk = isEditRisk;
+        this.currentRiskDetails = deepCloneObject(risk);
+        this.showSlider = true;
     }
 
     checkUserHasRight(): void {
@@ -249,6 +227,17 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
         if (!CAN_MANAGE_ENTITY_SPONSOR && !CAN_MANAGE_ENTITY_ORGANIZATION && !CAN_MANAGE_ENTITY_COMPLIANCE && !CAN_MANAGE_ENTITY_RISK) {
             this.isEditMode = false;
         }
+    }
+
+    closeHeaderSlider(): void {
+        this.showSlider = false;
+    }
+
+    onRiskUpdated(updatedRisk: any): void {
+        if (this.editIndex > -1) {
+            this.entityRiskList[this.editIndex] = updatedRisk;
+            this.riskUpdated.emit(this.entityRiskList);
+        }    
     }
 
 }

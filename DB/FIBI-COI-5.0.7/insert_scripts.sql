@@ -10,7 +10,7 @@ INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_T
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('5', 'Entity marked as <b>active</b> by <b>{ADMIN_NAME}</b>', 'Activation', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('6', 'Entity marked as <b>inactive</b> by <b>{ADMIN_NAME}</b>', 'Inactivation', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('7', 'Entity marked as <b>duplicate</b> by <b>{ADMIN_NAME}</b>', 'Duplicate', now(), '10000000001');
-INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('8', '{TAB_NAME} section of Entity <b>Modified</b> by <b>{ADMIN_NAME}</b>', 'Modification', now(), '10000000001');
+INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('8', '{TAB_NAME} section of Entity <b>Updated</b> by <b>{ADMIN_NAME}</b>', 'Update', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('9', 'Entity <b>updated</b> based on DUNS', 'Auto Update', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('10', 'Sponsor feed status of Entity <b>updated</b> from <b>{OLD_STATUS}</b> to <b>{NEW_STATUS}</b>', 'Sponsor Feed', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('11', 'Organization feed status of Entity <b>updated</b> from <b>{OLD_STATUS}</b> to <b>{NEW_STATUS}</b>', 'Organization Feed', now(), '10000000001');
@@ -48,3 +48,5 @@ INSERT INTO dyn_element_config (UI_REFERENCE_ID, DESCRIPTION, SUB_SECTION_CODE, 
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('12', '<b>{RISK_TYPE}</b> risk with level <b>{NEW_RISK_LEVEL}</b> added by <b>{ADMIN_NAME}</b>', 'Add Risk', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('13', '<b>{RISK_TYPE}</b> risk description <b>changed</b> by <b>{ADMIN_NAME}</b>', 'Risk Description Modify', now(), '10000000001');
 INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('14', '<b>{RISK_TYPE}</b> risk level <b>changed</b> from <b>{OLD_RISK_LEVEL}</b> to <b>{NEW_RISK_LEVEL}</b> by <b>{ADMIN_NAME}</b>', 'Risk Level Modify', now(), '10000000001');
+
+INSERT INTO entity_action_type (ACTION_TYPE_CODE, MESSAGE, DESCRIPTION, UPDATE_TIMESTAMP, UPDATE_USER) VALUES ('15', 'Entity <b>modified</b> by <b>{ADMIN_NAME}</b>', 'Modification', now(), '10000000001');

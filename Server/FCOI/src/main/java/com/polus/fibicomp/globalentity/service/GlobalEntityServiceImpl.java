@@ -126,11 +126,13 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(entityId)
 					.entityName(entityDetails.getEntityName()).updatedBy(entityDetails.getUpdatedBy()).updateTimestamp(updateTimestamp).build();
 			actionLogService.saveEntityActionLog(VERIFY_ACTION_LOG_CODE, logDTO, null);
-			logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityName(entityDetails.getEntityName())
-					.updatedBy(entityDetails.getUpdatedBy()).oldFeedStatus(FEED_STATUS_NOT_READY_TO_FEED)
-					.newFeedStatus(FEED_STATUS_READY_TO_FEED).updateTimestamp(updateTimestamp).build();
-			actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
-			actionLogService.saveEntityActionLog(ORGANIZATION_FEED_ACTION_LOG_CODE, logDTO, null);
+			if (allRequiredTabsComplete) {
+				logDTO = ActionLogRequestDTO.builder().entityId(entityId).entityName(entityDetails.getEntityName())
+						.updatedBy(entityDetails.getUpdatedBy()).oldFeedStatus(FEED_STATUS_NOT_READY_TO_FEED)
+						.newFeedStatus(FEED_STATUS_READY_TO_FEED).updateTimestamp(updateTimestamp).build();
+				actionLogService.saveEntityActionLog(SPONSOR_FEED_ACTION_LOG_CODE, logDTO, null);
+				actionLogService.saveEntityActionLog(ORGANIZATION_FEED_ACTION_LOG_CODE, logDTO, null);
+			}
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
 		}

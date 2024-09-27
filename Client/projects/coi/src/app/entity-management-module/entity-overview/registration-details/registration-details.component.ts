@@ -18,7 +18,7 @@ import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utiliti
 export class RegistrationDetailsComponent implements OnInit, OnDestroy {
 
     registrationDetails: RegistrationDetails = new RegistrationDetails();
-    entityRegistrationTypeOption = 'ENTITY_REGISTRATION_TYPE#REG_TYPE_CODE#false#false';
+    entityRegistrationTypeOption = 'ENTITY_REGISTRATION_TYPE#REG_TYPE_CODE#false#true';
     mandatoryList = new Map();
     $subscriptions: Subscription[] = [];
     entityId: any;
@@ -40,7 +40,11 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
 
     addRegistrationDetails(event) {
         if (event) {
-            openModal('addRegistrationDetails');
+            openModal('addRegistrationDetails', {
+                backdrop: 'static',
+                keyboard: true,
+                focus: false
+            });
         }
     }
 

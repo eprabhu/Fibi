@@ -33,6 +33,7 @@ import { ProjectHierarchySliderComponent } from './project-hierarchy-slider/proj
 import { ProjectHierarchyComponent } from './project-hierarchy-slider/project-hierarchy/project-hierarchy.component';
 import { SharedProjectDetailsCardComponent } from './shared-project-details-card/shared-project-details-card.component';
 import { DisclosureProjectKeypersonComponent } from './disclosure-project-keyperson/disclosure-project-keyperson.component';
+import { SharedRiskHistoryComponent } from './shared-risk-history/shared-risk-history.component';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { DisclosureProjectKeypersonComponent } from './disclosure-project-keyper
     ProjectHierarchySliderComponent,
     ProjectHierarchyComponent,
     SharedProjectDetailsCardComponent,
-    DisclosureProjectKeypersonComponent
+    DisclosureProjectKeypersonComponent,
+    SharedRiskHistoryComponent
   ],
   exports: [
     NoInformationComponent,
@@ -100,7 +102,8 @@ import { DisclosureProjectKeypersonComponent } from './disclosure-project-keyper
     ProjectHierarchySliderComponent,
     ProjectHierarchyComponent,
     SharedProjectDetailsCardComponent,
-    DisclosureProjectKeypersonComponent
+    DisclosureProjectKeypersonComponent,
+    SharedRiskHistoryComponent
   ]
 })
 export class SharedComponentModule { }

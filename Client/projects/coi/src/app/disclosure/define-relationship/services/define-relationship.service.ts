@@ -90,19 +90,16 @@ export class DefineRelationshipService {
     getFormattedConflictData(coiDisclEntProjDetails: CoiDisclEntProjDetail[]): FormattedConflictData {
         const RESULT = coiDisclEntProjDetails?.reduce((acc, item) => {
             const CONFLICT_TYPE: RelationshipConflictType = deepCloneObject(this.relationshipConflictType.find(type => type.projectConflictStatusCode === item.projectConflictStatusCode));
-            const {statusCode, projectConflictStatus} = CONFLICT_TYPE || {};
-    
+            const { statusCode, projectConflictStatus } = CONFLICT_TYPE || {};
             if (statusCode) {
                 acc.conflictCount[statusCode] = (acc.conflictCount[statusCode] || 0) + 1;
                 acc.totalCount++;
-    
                 // Update the worst conflict status code if this statusCode is higher
                 if (acc.conflictStatusCode === null || Number(statusCode) > Number(acc.conflictStatusCode)) {
                     acc.conflictStatusCode = statusCode;
                     acc.conflictStatus = projectConflictStatus;
                 }
             }
-    
             return acc;
         }, { 
             totalCount: 0,

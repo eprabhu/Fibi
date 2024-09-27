@@ -204,7 +204,6 @@ export class LocationComponent implements OnInit, OnDestroy {
         this.reviewerList.push(review);
         this.coiDisclosure.coiReviewStatusType = review.coiDisclosure.coiReviewStatusType;
         this.updateReviewDetails();
-        this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
     }
 
     updateReviewDetails() {
@@ -229,7 +228,7 @@ export class LocationComponent implements OnInit, OnDestroy {
             else if (nextAssignedReview.reviewStatusTypeCode == 3)
                 this.coiService.isCompleteReview = true;
         }
-
+        this.coiService.isReviewActionCompleted = this.coiService.isAllReviewsCompleted(this.reviewerList);
     }
 
     private clearActionData() {
