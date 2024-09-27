@@ -102,13 +102,13 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
         this.validationMap.clear();
         const TO_RECIPIENTS = this.notificationObject.recipients.map(e => e.recipientType === 'TO')
         if (TO_RECIPIENTS.length === 0) {
-            this.validationMap.set('recipients', '* Please add Recipient');
+            this.validationMap.set('recipients', 'Please add atleast one recipient.');
         }
         if (!this.notificationObject.subject) {
-            this.validationMap.set('subject', ' * Please select Subject  ');
+            this.validationMap.set('subject', 'Please provide a subject.');
         }
         if (!this.notificationObject.message) {
-            this.validationMap.set('message', '* Please add Message');
+            this.validationMap.set('message', 'Please provide the content for the message.');
         }
     }
 

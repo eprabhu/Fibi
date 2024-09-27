@@ -24,10 +24,10 @@
     font-size: 1.2rem;
 }
 
-.text-color {
-    color: #fff;
-}
-
 .bg-recipient-user-fileChips {
+    color: #fff;
     background: #9D6589 !important;
+    mat-icon {
+        color: #fff;
+    }
 }
