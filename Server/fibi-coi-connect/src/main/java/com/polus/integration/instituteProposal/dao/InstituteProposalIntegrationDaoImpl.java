@@ -9,7 +9,10 @@ import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.instituteProposal.dto.InstituteProposalDTO;
-
+import com.polus.integration.instituteProposal.pojo.COIIntInstituteProposal;
+import com.polus.integration.instituteProposal.pojo.COIIntInstituteProposalPerson;
+import com.polus.integration.instituteProposal.repository.InstituteProposalPersonRepository;
+import com.polus.integration.instituteProposal.repository.InstituteProposalRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,12 @@ public class InstituteProposalIntegrationDaoImpl implements InstituteProposalInt
 
 	@Autowired
 	private IntegrationDao integrationDao;
+
+	@Autowired
+	private InstituteProposalRepository instituteProposalRepository;
+
+	@Autowired
+	private InstituteProposalPersonRepository  projectPersonRepository;
 
 	@Value("${fibi.messageq.queues.instProposalIntegration}")
 	private String instProposalIntegrationQueue;
@@ -56,6 +65,25 @@ public class InstituteProposalIntegrationDaoImpl implements InstituteProposalInt
 	                Constant.INST_PROPOSAL_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 	    return false;
+	}
+
+	@Override
+	public void postIntegrationProcess(String projectNumber) {
+		try {
+			instituteProposalRepository.COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(Constant.INST_PROPOSAL_MODULE_CODE, projectNumber);
+		} catch (Exception e) {
+			log.error("Exception in postIntegrationProccess", e.getMessage());
+		}
+	}
+
+	@Override
+	public void saveInstituteProposal(COIIntInstituteProposal coiIntInstituteProposal) {
+		instituteProposalRepository.save(coiIntInstituteProposal);
+	}
+
+	@Override
+	public void saveInstituteProposalPerson(COIIntInstituteProposalPerson proposalPerson) {
+		projectPersonRepository.save(proposalPerson);
 	}
 
 }

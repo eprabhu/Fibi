@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.integration.award.dto.AwardDTO;
+import com.polus.integration.award.pojo.COIIntegrationAward;
+import com.polus.integration.award.pojo.COIIntegrationAwardPerson;
+import com.polus.integration.award.repository.AwardPersonRepository;
+import com.polus.integration.award.repository.AwardRepository;
 import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
@@ -23,6 +27,12 @@ public class AwardIntegrationDaoImpl implements AwardIntegrationDao {
 
 	@Autowired
 	private IntegrationDao integrationDao;
+
+	@Autowired
+	private AwardRepository awardRepository;
+
+	@Autowired
+	private AwardPersonRepository  projectPersonRepository;
 
 	@Value("${fibi.messageq.queues.awardIntegration}")
 	private String awardIntegrationQueue;
@@ -54,6 +64,25 @@ public class AwardIntegrationDaoImpl implements AwardIntegrationDao {
 	                Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
 	    return false;
+	}
+
+	@Override
+	public void postIntegrationProcess(String projectNumber) {
+		try {
+			awardRepository.COI_SYNC_REMOVE_DEACTIVATED_PROJECTS(Constant.AWARD_MODULE_CODE, projectNumber);
+		} catch (Exception e) {
+			log.error("Exception in postIntegrationProcess", e.getMessage());
+		}
+	}
+
+	@Override
+	public void saveAward(COIIntegrationAward award) {
+		awardRepository.save(award);		
+	}
+
+	@Override
+	public void saveAwardPerson(COIIntegrationAwardPerson projectPerson) {
+		projectPersonRepository.save(projectPerson);
 	}
 
 }
