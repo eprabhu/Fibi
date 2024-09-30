@@ -338,7 +338,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     }
 
     private DisclComment getDisclProjectConflictComment(Integer moduleItemKey, Integer submoduleItemKey) {
-        List<DisclComment> reviewComment = reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder().componentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE).moduleCode(Constants.COI_MODULE_CODE).subModuleItemKey(submoduleItemKey).moduleItemKey(moduleItemKey).build());
+        List<DisclComment> reviewComment = reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder().componentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE).moduleCode(Constants.COI_MODULE_CODE).subModuleItemKey(String.valueOf(submoduleItemKey)).moduleItemKey(moduleItemKey).build());
         return reviewComment != null && !reviewComment.isEmpty() ? reviewComment.get(0) : null;
     }
 
@@ -585,7 +585,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         disclComment.setIsPrivate(false);
         disclComment.setModuleItemKey(entityProjectRelation.getDisclosureId());
         disclComment.setModuleItemNumber(String.valueOf(entityProjectRelation.getDisclosureNumber()));
-        disclComment.setSubModuleItemKey(entityProjectRelation.getCoiDisclProjectEntityRelId());
+        disclComment.setSubModuleItemKey(String.valueOf(entityProjectRelation.getCoiDisclProjectEntityRelId()));
         disclComment.setModuleCode(Constants.COI_MODULE_CODE);
         disclComment.setUpdateUser(AuthenticatedUser.getLoginUserName());
         disclComment.setUpdateTimestamp(commonDao.getCurrentTimestamp());
