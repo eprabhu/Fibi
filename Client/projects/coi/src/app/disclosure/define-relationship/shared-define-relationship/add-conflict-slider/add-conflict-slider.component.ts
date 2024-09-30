@@ -158,4 +158,9 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
         return !!((this.projectConflictStatusCode || this.comment));
     }
 
+    redirectToProjectDetails(): void {
+        const { documentNumber, projectId, projectTypeCode } = this.addConflictSlider?.projectSfiRelations || {};
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
+    }
+
 }

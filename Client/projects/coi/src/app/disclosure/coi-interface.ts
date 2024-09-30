@@ -1,3 +1,5 @@
+import { DisclosureProjectData } from "../shared-components/shared-interface";
+
 export class COI {
     coiDisclosure: CoiDisclosure;
     person: Person | null;
@@ -9,7 +11,7 @@ export class COI {
     adminGroup: AdminGroup[];
     coiSections: any[];
     proposalIdlinkedInDisclosure: any;
-    projectDetail: any;
+    projectDetail: DisclosureProjectData;
     coiReviewerList: ReviewerList[];
     documentOwnerPersonId: string;
 }
@@ -455,8 +457,6 @@ export interface ProjectRelationshipDetails {
     projectBadgeColour: string;
 }
 
-// define
-
 export class ApplyToAllModal {
     projectConflictStatusCode = '';
     coiDisclProjectId = null;
@@ -494,6 +494,8 @@ export class ProjectSfiRelations {
     conflictCount? = new ConflictCount();
     completeCount?: number | null = null;
     proposalCount?: number | null = null;
+    accountNumber?: string | null = null;
+    documentNumber?: string | null = null;
     keyPersonCount?: number | null = null;
     projectEndDate?: number | null = null;
     homeUnitNumber?: string | null = null;

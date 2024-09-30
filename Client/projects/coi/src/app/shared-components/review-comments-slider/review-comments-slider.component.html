@@ -86,9 +86,7 @@
                                 <a tabindex="0" class="fs-6 text-decoration-underline link-primary fw-600 coi-text-dark" id="link-{{selectedProjectDetails?.projectId}}"
                                                         title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                         attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                        (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
+                                                        (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
                                                         <span class="text-slice">#{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}</span>
                                                     </a>
                             </div>
@@ -154,9 +152,7 @@
                                                     <a tabindex="0" class="fs-6 text-decoration-underline link-primary fw-600 text-slice coi-text-dark coi-text-decoration-underline" id="link-{{selectedProjectDetails?.projectId}}"
                                                         title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                         attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                        (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
+                                                        (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
                                                         #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
                                                     </a>
                                                 </span>
@@ -299,9 +295,7 @@
                                                 <a tabindex="0" class="fs-14 link-primary fw-600 text-slice" id="link-{{selectedProjectDetails?.projectId}}"
                                                     title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                     attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                    (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                    (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                    (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
+                                                    (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
                                                     #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
                                                 </a>
                                             </span>

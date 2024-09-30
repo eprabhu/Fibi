@@ -606,4 +606,9 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         this.showAddComment = !this.showAddComment;
     }
 
+    
+    redirectToProjectDetails(): void {
+        const { documentNumber, projectId, projectTypeCode } = this.selectedProjectDetails || {};
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
+    }
 }

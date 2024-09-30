@@ -93,3 +93,25 @@ export class CoiDisclosureCount {
     disclosureHistoryCount?: number = 0;
     commentCount?: number = 0;
 }
+
+export class SharedProjectDetails {
+    projectNumber?: string = null;
+    sponsorCode?: string = null;
+    primeSponsorCode?: string = null;
+    sponsorName?: string = null;
+    homeUnitName?: string = null;
+    homeUnitNumber?: string = null;
+    primeSponsorName?: string = null;
+    projectStatus?: string = null;
+    piName?: string = null;
+    projectStartDate?: number = null;
+    projectEndDate?: number = null;
+    projectBadgeColour?: string = null;
+    projectIcon?: string = null;
+    projectType?: string = null;
+    projectTypeCode?: string = null;
+    projectTitle?: string = null;
+    documentNumber?: string = null;
+    accountNumber?: string = null;
+    projectId?: string = null;
+}

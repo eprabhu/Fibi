@@ -8,6 +8,7 @@ import { GetNotificationsRO, NotificationObject } from '../admin-dashboard.inter
 import { Subscription } from 'rxjs';
 import { removeUnwantedTags } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
+import { SharedProjectDetails } from '../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-project-overview-notification-slider',
@@ -42,6 +43,7 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     isBccViewable: boolean;
     isEditorFocused = false;
     elasticSearchOptionsForTo: any = {};
+    projectDetails = new SharedProjectDetails();
 
     /**
      *  commenting the code of CC and BCC it will be enable form the next commit 
@@ -76,6 +78,31 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
         this.notificationObject.projectTypeCode = this.dataForNotificationSlider.projectDetails.projectTypeCode;
         this.notificationObject.projectId = this.dataForNotificationSlider.projectDetails.projectId;
         this.notificationObject.disclosureId = this.dataForNotificationSlider.keyPersonDetails[this.keypersonIndex].disclosureId;
+        this.setProjectCardDetails();
+    }
+
+    private setProjectCardDetails(): void {
+        this.projectDetails = {
+            projectNumber: this.dataForNotificationSlider?.projectDetails?.projectNumber,
+            sponsorCode: this.dataForNotificationSlider?.projectDetails?.sponsorCode,
+            primeSponsorCode: this.dataForNotificationSlider?.projectDetails?.primeSponsorCode,
+            sponsorName: this.dataForNotificationSlider?.projectDetails?.sponsorName,
+            homeUnitName: this.dataForNotificationSlider?.projectDetails?.leadUnitName,
+            homeUnitNumber: this.dataForNotificationSlider?.projectDetails?.leadUnitNumber,
+            primeSponsorName: this.dataForNotificationSlider?.projectDetails?.primeSponsorName,
+            projectStatus: this.dataForNotificationSlider?.projectDetails?.projectStatus,
+            piName: this.dataForNotificationSlider?.projectDetails?.piName,
+            projectStartDate: this.dataForNotificationSlider?.projectDetails?.projectStartDate,
+            projectEndDate: this.dataForNotificationSlider?.projectDetails?.projectEndDate,
+            projectBadgeColour: this.dataForNotificationSlider?.projectDetails?.projectBadgeColour,
+            projectIcon: this.dataForNotificationSlider?.projectDetails?.projectIcon,
+            projectType: this.dataForNotificationSlider?.projectDetails?.projectType,
+            projectTypeCode: this.dataForNotificationSlider?.projectDetails?.projectTypeCode,
+            projectTitle: this.dataForNotificationSlider?.projectDetails?.title,
+            documentNumber: this.dataForNotificationSlider?.projectDetails?.documentNumber,
+            accountNumber: this.dataForNotificationSlider?.projectDetails?.accountNumber,
+            projectId: this.dataForNotificationSlider?.projectDetails?.projectId
+        };
     }
 
     setDefaultKeypersonDetails() {
@@ -108,7 +135,7 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
             this.validationMap.set('subject', 'Please provide a subject.');
         }
         if (!this.notificationObject.message) {
-            this.validationMap.set('message', 'Please provide the content for the message.');
+            this.validationMap.set('message', 'Please provide the message.');
         }
     }
 
@@ -261,6 +288,7 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     }
 
     redirectToProjectDetails(): void {
-        this.commonService.redirectToProjectDetails(this.dataForNotificationSlider?.projectDetails?.projectId, this.dataForNotificationSlider?.projectDetails?.projectTypeCode);
+        const { documentNumber, projectId, projectTypeCode } = this.dataForNotificationSlider?.projectDetails || {};
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
     }
 }
