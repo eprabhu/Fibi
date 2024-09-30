@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dto.ComplianceResponseDTO;
-import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 
 @Service
@@ -28,7 +28,7 @@ public class ComplianceServiceImpl implements ComplianceService {
 	@Override
 	public ResponseEntity<ComplianceResponseDTO> fetchDetails(Integer entityId) {
 		List<EntityRisk> entityRisks = entityRiskDAO.findComplianceRiskByEntityId(entityId);
-		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(COMPLAINCE_SECTION_CODE, entityId);
+		List<EntityAttachmentResponseDTO> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(COMPLAINCE_SECTION_CODE, entityId);
 		return new ResponseEntity<>(ComplianceResponseDTO.builder().entityRisks(entityRisks).attachments(attachments)
 				.build(), HttpStatus.OK);
 	}

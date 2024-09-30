@@ -13,10 +13,10 @@ import com.polus.core.common.dao.CommonDao;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
-import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.EntitySponsorInfo;
 import com.polus.fibicomp.globalentity.repository.EntityFeedStatusTypeRepository;
@@ -99,7 +99,7 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	public ResponseEntity<SponsorResponseDTO> fetchDetails(Integer entityId) {
 		SponsorDetailsResponseDTO sponsorDetailsResponseDTO = mapEntityToDTO(entitySponsorInfoRepository.findByEntityId(entityId));
 		List<EntityRisk> entityRisks = entityRiskDAO.findSponsorRiskByEntityId(entityId);
-		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(SPONSOR_SECTION_CODE, entityId);
+		List<EntityAttachmentResponseDTO> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(SPONSOR_SECTION_CODE, entityId);
 		return new ResponseEntity<>(
 				SponsorResponseDTO.builder().sponsorDetailsResponseDTO(sponsorDetailsResponseDTO).entityRisks(entityRisks).attachments(attachments)
 				.build(),

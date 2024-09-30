@@ -2,12 +2,14 @@ package com.polus.fibicomp.globalentity.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
@@ -24,9 +26,9 @@ public interface EntityFileAttachmentService {
 
 	ResponseEntity<String> updateEntityAttachmentDetails(EntityFileRequestDto request);
 
-	List<EntityAttachment> getAttachmentsBySectionCode(String sectionCode, Integer entityId);
+	List<EntityAttachmentResponseDTO> getAttachmentsBySectionCode(String sectionCode, Integer entityId);
 
-	List<EntityAttachment> getAttachmentsByEntityId(Integer entityId);
+	Map<String, List<EntityAttachmentResponseDTO>> getAttachmentsByEntityId(Integer entityId);
 
 	ResponseEntity<List<EntityAttachmentType>> fetchAttachmentTypes(String sectionCode);
 

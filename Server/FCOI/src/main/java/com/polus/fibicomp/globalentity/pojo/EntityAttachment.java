@@ -82,7 +82,4 @@ public class EntityAttachment implements Serializable {
 	    @Column(name = "UPDATED_BY")
 	    private String updatedBy;
 
-	    @Transient
-	    private String updateUserFullame;
-
 }
