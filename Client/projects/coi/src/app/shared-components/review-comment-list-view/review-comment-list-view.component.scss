@@ -179,3 +179,32 @@ select option {
 ::ng-deep .no-margin p {
     margin-bottom: 0;
 }
+
+.down-line {
+    z-index: 1;
+    position: relative;
+
+    &:after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        border-left: 2px solid #cbcbcb;
+        left: 3px;
+        bottom: 2px;
+        z-index: -1;
+    }
+}
+
+.left-spacing {
+    padding-left: 2.3rem;
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: 32px;
+        top: 80%;
+        left: 3px;
+        border-top: 2px solid #cbcbcb;
+    }
+}
