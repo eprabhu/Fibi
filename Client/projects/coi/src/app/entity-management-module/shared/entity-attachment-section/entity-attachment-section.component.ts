@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRiskCategoryCode } from '../entity-interface';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ import { AttachmentInputType } from '../../../attachments/attachment-interface';
     templateUrl: './entity-attachment-section.component.html',
     styleUrls: ['./entity-attachment-section.component.scss'],
 })
-export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
+export class EntityAttachmentSectionComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() sectionId: any;
     @Input() sectionName: any;
@@ -57,6 +57,14 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes['entityAttachmentsList'] && !changes['entityAttachmentsList'].isFirstChange()) {
+            const PREVIOUS_LIST = changes['entityAttachmentsList'].previousValue;
+            const CURRENT_VALUE = changes['entityAttachmentsList'].currentValue;
+            (JSON.stringify(PREVIOUS_LIST) !== JSON.stringify(CURRENT_VALUE)) && this.filterLatestVersions();
+        }
+    }
+
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
         if (isEmptyObject(ENTITY_DATA)) { return; }
@@ -67,7 +75,7 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(this._dataStoreService.dataEvent
-            .subscribe((dependencies: string[]) => {
+            .subscribe(() => {
                 this.getDataFromStore();
             }));
     }

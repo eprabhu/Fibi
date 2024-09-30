@@ -1,20 +1,22 @@
-<div *ngIf="!isLoading" class="card rounded-0">
-    <div class="mb-2">
-        <app-entity-subaward-details [SubAwardOrganizationDetails]="entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO"
-            [sectionName]="orgDetailsSubSectionName"
-            [sectionId]="orgDetailsSubSectionId"></app-entity-subaward-details>
-    </div>
-    <div class="mb-2">
-        <app-entity-risk-section [sectionName]="riskSectionDetails.sectionName"
-            [sectionId]="riskSectionDetails.sectionId" (riskUpdated)="riskUpdated($event)"
-            [subSectionId]="riskSectionDetails.subSectionId"
-            [entityRiskList]="entitySubAwarRisksList" [riskCategoryCode]="'OR'">
-        </app-entity-risk-section>
-    </div>
-    <div class="mb-2">
-        <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
-            [sectionId]="attachmentSectionDetails.sectionId" [subSectionId]="attachmentSectionDetails.subSectionId"
-            [entityAttachmentsList]="entitySubAwarAttachmentList" [riskCategoryCode]="'OR'">
-        </app-entity-attachment-section>
+<div *ngIf="!isLoading" class="card rounded-0 p-3">
+    <div class="row gap-3">
+        <div class="col-12">
+            <app-entity-subaward-details [SubAwardOrganizationDetails]="entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO"
+                [sectionName]="orgDetailsSubSectionName"
+                [sectionId]="orgDetailsSubSectionId"></app-entity-subaward-details>
+        </div>
+        <div class="col-12">
+            <app-entity-risk-section [sectionName]="riskSectionDetails.sectionName"
+                [sectionId]="riskSectionDetails.sectionId" (riskUpdated)="riskUpdated($event)"
+                [subSectionId]="riskSectionDetails.subSectionId"
+                [entityRiskList]="entitySubAwarRisksList" [riskCategoryCode]="'OR'">
+            </app-entity-risk-section>
+        </div>
+        <div class="col-12">
+            <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
+                [sectionId]="attachmentSectionDetails.sectionId" [subSectionId]="attachmentSectionDetails.subSectionId"
+                [entityAttachmentsList]="entitySubAwarAttachmentList" [riskCategoryCode]="'OR'">
+            </app-entity-attachment-section>
+        </div>
     </div>
 </div>

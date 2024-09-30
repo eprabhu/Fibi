@@ -47,6 +47,7 @@ export class RiskEditHistorySlider implements OnInit {
     ngOnInit() {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
+        this.loadRiskHistory();
         this.setValuesForHeader();
         this.setDefaultValues();
         this.setRiskTypeCode();
@@ -60,7 +61,6 @@ export class RiskEditHistorySlider implements OnInit {
             return;
         }
         this.coiEntityDetails = ENTITY_DATA.entityDetails;
-        this.loadRiskHistory();
     }
 
     private listenDataChangeFromStore(): void {
