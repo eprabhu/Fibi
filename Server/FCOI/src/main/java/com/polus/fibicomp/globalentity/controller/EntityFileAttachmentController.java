@@ -2,6 +2,7 @@ package com.polus.fibicomp.globalentity.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
@@ -32,7 +34,7 @@ public class EntityFileAttachmentController {
 	EntityFileAttachmentService entityFileAttachmentService;
 
 	@PostMapping(value = "saveFile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<EntityAttachment>> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
+	public ResponseEntity<List<EntityAttachmentResponseDTO>> saveOrUpdateAttachments(@RequestParam(value = "files", required = false) MultipartFile[] files, @RequestParam("formDataJson") String formDataJson) {
 		EntityFileRequestDto dto = entityFileAttachmentService.saveFileAttachment(files, formDataJson);
 		return new ResponseEntity<>(entityFileAttachmentService.getAttachmentsBySectionCode(dto.getSectionCode(), dto.getEntityId()), HttpStatus.OK);
 	}
@@ -58,12 +60,12 @@ public class EntityFileAttachmentController {
 	}
 
 	@GetMapping("/getAttachmentsBySectionCode/{sectionCode}/{entityId}")
-   	public List<EntityAttachment> getAttachmentsBySectionCode(@PathVariable("sectionCode") String sectionCode, @PathVariable("entityId") Integer entityId) {
+   	public List<EntityAttachmentResponseDTO> getAttachmentsBySectionCode(@PathVariable("sectionCode") String sectionCode, @PathVariable("entityId") Integer entityId) {
    		return entityFileAttachmentService.getAttachmentsBySectionCode(sectionCode, entityId);
    	}
 
 	@GetMapping("/getAttachmentsByEntityId/{entityId}")
-   	public List<EntityAttachment> getAttachmentsByEntityId(@PathVariable("entityId") Integer entityId) {
+	public Map<String, List<EntityAttachmentResponseDTO>> getAttachmentsByEntityId(@PathVariable("entityId") Integer entityId) {
    		return entityFileAttachmentService.getAttachmentsByEntityId(entityId);
    	}
 
