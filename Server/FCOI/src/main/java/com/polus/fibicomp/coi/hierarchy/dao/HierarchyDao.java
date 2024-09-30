@@ -124,6 +124,8 @@ public class HierarchyDao {
     	        	dto.setProjectType(rset.getString("PROJECT_TYPE"));
     	        	dto.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
     	        	dto.setProjectTitle(rset.getString("TITLE"));
+    	        	dto.setDocumentNumber(rset.getString("DOCUMENT_NUMBER"));
+    	        	dto.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
                 }
 	        }
 	        dto.setProjectPersons(projectPersons);
