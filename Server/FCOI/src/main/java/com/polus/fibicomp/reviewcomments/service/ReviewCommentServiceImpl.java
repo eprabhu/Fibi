@@ -194,7 +194,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
                 } else if (commentObj.getModuleCode() == Constants.OPA_MODULE_CODE) {
                     getCommentsFormDetails(commentObj, formResponse, builderSectionsDTOMap);
                     if (commentObj.getComponentTypeCode().equals("11") && commentObj.getSubModuleItemKey() != null) {
-                        OPAReview opaReview = opaReviewDao.getOPAReview(commentObj.getSubModuleItemKey());
+                    	OPAReview opaReview = opaReviewDao.getOPAReview(Integer.parseInt(commentObj.getSubModuleItemKey()));
                         ModuleSectionDetailsDto sectionDetails = new ModuleSectionDetailsDto();
                         Map<String, String> otherDetails = new HashMap<>();
                         otherDetails.put("location", opaReview.getReviewLocationType().getDescription());
@@ -249,7 +249,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
         }
 
         if (reviewComments.getComponentTypeCode().equals("8") && reviewComments.getSubModuleItemKey() != null) {
-            CoiReview coiReview = conflictOfInterestDao.loadCoiReview(reviewComments.getSubModuleItemKey());
+        	CoiReview coiReview = conflictOfInterestDao.loadCoiReview(Integer.parseInt(reviewComments.getSubModuleItemKey()));
             ModuleSectionDetailsDto sectionDetails = new ModuleSectionDetailsDto();
             Map<String, String> otherDetails = new HashMap<>();
             otherDetails.put("location", coiReview.getReviewLocationType().getDescription());
@@ -277,7 +277,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     private void getAwardDetail(DisclComment reviewComments, HashMap<String, String> awardTitles, CoiDisclProjectEntityRel relationDetail) {
         if (!awardTitles.containsKey(relationDetail.getCoiDisclProject().getModuleItemKey())) {
             List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, null,
-                    null, Integer.valueOf(relationDetail.getCoiDisclProject().getModuleItemKey()));
+            		null, relationDetail.getCoiDisclProject().getModuleItemKey());
 
             awardTitles.put(relationDetail.getCoiDisclProject().getModuleItemKey(), awardDetails.get(0).getTitle());
         }
@@ -289,7 +289,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles, CoiDisclProjectEntityRel relationDetail) {
         if (!proposalTitles.containsKey(relationDetail.getCoiDisclProject().getModuleItemKey())) {
             List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, null,
-                    null,  Integer.valueOf(relationDetail.getCoiDisclProject().getModuleItemKey()));
+                    null, relationDetail.getCoiDisclProject().getModuleItemKey());
             proposalTitles.put(relationDetail.getCoiDisclProject().getModuleItemKey(), proposalDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
@@ -300,7 +300,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     private void getAwardDetail(DisclComment reviewComments, HashMap<String, String> awardTitles) {
         if (!awardTitles.containsKey(reviewComments.getSubModuleItemKey())) {
             List<DisclosureDetailDto> awardDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.AWARD_MODULE_CODE, null,
-                    null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
+                    null, reviewComments.getSubModuleItemKey());
             awardTitles.put(String.valueOf(reviewComments.getSubModuleItemKey()), awardDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
@@ -311,7 +311,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles) {
         if (proposalTitles.containsKey(reviewComments.getSubModuleItemKey())) {
             List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, null,
-                    null, Integer.valueOf(reviewComments.getSubModuleItemKey()));
+                    null, reviewComments.getSubModuleItemKey());
             proposalTitles.put(String.valueOf(reviewComments.getSubModuleItemKey()), proposalDetails.get(0).getTitle());
         }
         reviewComments.setModuleSectionDetails(ModuleSectionDetailsDto.builder()
