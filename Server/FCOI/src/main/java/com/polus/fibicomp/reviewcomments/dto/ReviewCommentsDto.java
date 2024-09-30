@@ -34,7 +34,7 @@ public class ReviewCommentsDto {
 	private String comment;
 	private Integer moduleItemKey;
 	private String moduleItemNumber;
-	private Integer subModuleItemKey;
+	private String subModuleItemKey;
 	private String subModuleItemNumber;
 	private Integer moduleCode;
 	private Integer subModuleCode;

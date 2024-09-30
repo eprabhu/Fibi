@@ -1510,7 +1510,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Override
 	public List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId,
-															  String searchString, Integer moduleItemKey) {
+			  String searchString, String moduleItemKey) {
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 		List<DisclosureDetailDto> awardDetails = new ArrayList<>();
 		SessionImpl sessionImpl = (SessionImpl) session;
@@ -1530,7 +1530,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				if (moduleItemKey == null) {
 					statement.setNull(4, Types.INTEGER);
 				} else {
-					statement.setInt(4, moduleItemKey);
+					statement.setString(4, moduleItemKey);
 				}
 				statement.execute();
 				rset = statement.getResultSet();
@@ -1549,7 +1549,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 				if (moduleItemKey == null) {
 					statement.setNull(5, Types.INTEGER);
 				} else {
-					statement.setInt(5, moduleItemKey);
+					statement.setString(5, moduleItemKey);
 				}
 				statement.execute();
 				rset = (ResultSet) statement.getObject(1);
