@@ -242,7 +242,7 @@ public class OPAReviewServiceImpl implements OPAReviewService {
         reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
                 .componentTypeCode(Constants.COI_DISCL_REVIEW_COMPONENT_TYPE)
                 .moduleCode(Constants.COI_MODULE_CODE)
-                .subModuleItemKey(String.valueOf(opaReviewId))
+                .subModuleItemKey(opaReviewId)
                 .moduleItemKey(opaReview.getOpaDisclosureId()).build()).forEach(reviewComment -> {
             reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
         });

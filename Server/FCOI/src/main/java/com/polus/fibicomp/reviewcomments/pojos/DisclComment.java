@@ -97,7 +97,7 @@ public class DisclComment implements Serializable {
 	private String moduleItemNumber;
 
 	@Column(name = "SUB_MODULE_ITEM_KEY")
-	private String subModuleItemKey;
+	private Integer subModuleItemKey;
 
 	@Column(name = "SUB_MODULE_ITEM_NUMBER")
 	private String subModuleItemNumber;

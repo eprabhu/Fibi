@@ -504,7 +504,7 @@ public interface ConflictOfInterestDao {
 	 */
 //	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, Integer disclosureId, String searchString, Integer moduleItemKey);
 
-	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, String searchString, String moduleItemKey);
+	List<DisclosureDetailDto> getProjectsBasedOnParams(Integer moduleCode, String personId, String searchString, Integer moduleItemKey);
 
 	public CoiTravelDisclosure saveOrUpdateCoiTravelDisclosure(CoiTravelDisclosure coiTravelDisclosure);
 

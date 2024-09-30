@@ -491,7 +491,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
 					.componentTypeCode(Constants.COI_DISCL_REVIEW_COMPONENT_TYPE)
 					.moduleCode(Constants.COI_MODULE_CODE)
-					.subModuleItemKey(String.valueOf(coiReviewId))
+					.subModuleItemKey(coiReviewId)
 					.moduleItemKey(coiReview.getDisclosureId()).build()).forEach(reviewComment -> {
 				reviewCommentService.deleteReviewComment(reviewComment.getCommentId());
 			});
@@ -1396,6 +1396,15 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		return new ResponseEntity<>(conflictOfInterestDao.fetchAllRelationshipTypes(), HttpStatus.OK);
 	}
 
+	private DisclComment getDisclProjectConflictComment(Integer moduleItemKey, Integer submoduleItemKey) {
+		List<DisclComment> reviewComment = reviewCommentDao.fetchReviewComments(ReviewCommentsDto.builder()
+				.componentTypeCode(Constants.COI_DISCL_CONFLICT_RELATION_COMPONENT_TYPE)
+				.moduleCode(Constants.COI_MODULE_CODE)
+				.subModuleItemKey(submoduleItemKey)
+				.moduleItemKey(moduleItemKey).build());
+		return reviewComment != null && !reviewComment.isEmpty()? reviewComment.get(0) : null;
+	}
+
 	@Override
 	public ResponseEntity<Object> approveEntity(EntityRelationship entityRelationship) {
 //		if(conflictOfInterestDao.isEntityApproved(entityRelationship.getEntityId())) {
@@ -2015,7 +2024,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				.map(NotificationRecipient::getRecipientPersonId).map(String::valueOf).collect(Collectors.joining(","));
 		additionalDetails.put(NOTIFICATION_RECIPIENTS, recipientPersonIds);
 		List<DisclosureDetailDto> projectDetails = conflictOfInterestDao.getProjectsBasedOnParams(
-				notificationDto.getProjectTypeCode(), null, null, String.valueOf(notificationDto.getProjectId()));
+				notificationDto.getProjectTypeCode(), null, null, notificationDto.getProjectId());
 		DisclosureDetailDto disclProjectDetail = projectDetails.get(0);
 		additionalDetails.put("notificationTypeId", notificationDto.getNotificationTypeId());
 		additionalDetails.put("PROJECT_ID", disclProjectDetail.getModuleItemKey());
