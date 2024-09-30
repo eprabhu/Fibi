@@ -103,8 +103,10 @@ export class DisclosureProjectData {
     projectBadgeColour?: string = '';
     projectEndDate?: number | null = null;
     projectStartDate?: number | null = null;
-    primeSponsorCode?: any;
-    sponsorCode?: any;
+    sponsorCode?: string = '';
+    accountNumber?: string = '';
+    documentNumber?: string = '';
+    primeSponsorCode?: string = '';
     entityCount?: any;
     leadUnitName?: any;
     disclosureId?: any;
@@ -125,6 +127,8 @@ export class DisclosureProjectData {
     relationShipExists?: boolean;
     questionnaireCompleted?: any;
     disclosureReviewStatus?: any;
+    projectConflictStatus?: string;
+    projectConflictStatusCode?: string;
     disclosureStatusCount?: any[] = [];
 }
 
@@ -210,7 +214,6 @@ export class COICountModal {
     personId: string | null = null;
     isOpenCountModal = false;
 }
-
 
 export interface COICountModalProjectUpdate {
     projectCountList: DashboardProjectCount[];

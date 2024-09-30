@@ -4,7 +4,7 @@ import { CoiCountModalService } from './coi-count-modal.service';
 import { CommonService } from '../../common/services/common.service';
 import { DashboardProjectCount } from '../../common/services/coi-common.interface';
 import { COIModalConfig, ModalActionEvent } from '../coi-modal/coi-modal.interface';
-import { DISCLOSURE_CONFLICT_STATUS_BADGE, HTTP_ERROR_STATUS } from '../../app-constants';
+import { PROJECT_CONFLICT_STATUS_BADGE, HTTP_ERROR_STATUS, PROJECT_TYPE } from '../../app-constants';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { closeCommonModal, getFormattedSponsor, openCommonModal } from '../../common/utilities/custom-utilities';
@@ -20,6 +20,7 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
 
     slicedHeaderPart = '';
     SfiDetailsList: any[] = [];
+    PROJECT_TYPE = PROJECT_TYPE;
     currentActiveModuleCode: number;
     $subscriptions: Subscription[] = [];
     COI_COUNT_MODAL_ID = 'coi-count-modal';
@@ -99,14 +100,14 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
     private getUpdatedProjectsList(projectsList: CountModalDisclosureProjectData[]): COICountModalProjectUpdate {
         const PROJECT_COUNT_MAP = new Map<number, DashboardProjectCount>();
         const UPDATED_PROJECT_LIST = projectsList.map((project: CountModalDisclosureProjectData) => {
-            const { moduleCode, projectType, sponsorCode, sponsorName, primeSponsorCode, primeSponsorName, conflictStatusCode } = project;
+            const { moduleCode, projectType, sponsorCode, sponsorName, primeSponsorCode, primeSponsorName, projectConflictStatusCode } = project;
             // Update the project with formatted fields
             const UPDATED_PROJECT = {
                 ...project,
                 formattedSponsor: getFormattedSponsor(sponsorCode, sponsorName),
                 formattedProjectHeader: this.getFormattedProjectHeader(project),
                 formattedLeadUnit: this.commonService.getPersonLeadUnitDetails(project),
-                disclosureConflictBadge: DISCLOSURE_CONFLICT_STATUS_BADGE[conflictStatusCode],
+                disclosureConflictBadge: PROJECT_CONFLICT_STATUS_BADGE[projectConflictStatusCode],
                 formattedPrimeSponsor: getFormattedSponsor(primeSponsorCode, primeSponsorName)
             };
             // Update project count map
@@ -181,6 +182,11 @@ export class CoiCountModalComponent implements OnInit, OnDestroy {
 
     viewSliderEmit(isOpenSlider: boolean, entityId: number | string): void {
         this.viewSlider.emit({ isOpenSlider, entityId });
+    }
+
+    redirectToProjectDetails(projectDetails: CountModalDisclosureProjectData): void {
+        const { documentNumber, projectId, projectTypeCode } = projectDetails;
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
     }
 
 }

@@ -757,7 +757,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     }
 
     openProjectHierarchySlider(): void {
-        this.commonService.openProjectHierarchySlider(this.coiData?.projectDetail?.moduleCode, this.coiData?.projectDetail?.projectNumber);
+        this.commonService.openProjectHierarchySlider(this.coiData?.projectDetail?.projectTypeCode, this.coiData?.projectDetail?.projectNumber);
     }
 
 }

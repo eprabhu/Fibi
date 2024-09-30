@@ -257,7 +257,7 @@ $gap: 0.875rem;
 //boxes
 
 .coi-box-red {
-    background-color: var(--theme-box-red-bg-color);
+    background-color: var(--theme-box-red-bg-color) !important;
     border-style: dashed !important;
     border-width: 1px;
     border-radius: 0.5rem;
@@ -271,6 +271,13 @@ $gap: 0.875rem;
         border-radius: 5px;
         left: 10px;
         border-style: dashed !important;
+    }
+
+    .card-header, 
+    .card-body {
+        background-color: var(--theme-box-red-bg-color) !important;
+        border-radius: 0.5rem;
+        border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
     }
   }
 
