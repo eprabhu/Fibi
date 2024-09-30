@@ -225,6 +225,14 @@ export class ReviewCommentListViewComponent implements OnInit, OnDestroy, OnChan
 		}
 	}
 
+	getSubSectionName(valueArray: any): string {
+		const COMMENTS = valueArray.find((ele: any) => (ele.moduleSectionDetails && ele.moduleSectionDetails.subsectionName != null ));
+		if (COMMENTS && COMMENTS?.moduleSectionDetails?.subsectionName) {
+			return COMMENTS.moduleSectionDetails.subsectionName;
+		}
+		return '';
+	}
+
 	viewMoreReplies(index) {
 		this.showReplyArray.push(index);
 	}

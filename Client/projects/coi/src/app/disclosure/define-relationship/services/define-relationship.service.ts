@@ -75,8 +75,8 @@ export class DefineRelationshipService {
         const disclosureDetails: coiReviewComment = {
             documentOwnerPersonId: COI_DATA.coiDisclosure.person.personId,
             componentTypeCode: '6',
-            subModuleItemKey: section === 'SFI' ? childSubSection?.coiDisclProjectEntityRelId : projectSfiRelation?.moduleCode,
-            subModuleItemNumber: section === 'RELATIONSHIP' ? projectSfiRelation?.moduleCode : null,
+            subModuleItemKey: section === 'SFI' ? childSubSection?.coiDisclProjectEntityRelId : projectSfiRelation?.projectNumber,
+            subModuleItemNumber: section === 'RELATIONSHIP' ? projectSfiRelation?.projectTypeCode : null,
             coiSubSectionsTitle: `#${projectSfiRelation?.projectNumber}: ${projectSfiRelation?.title}`,
             selectedProject: projectSfiRelation,
             sfiStatus: childSubSection?.coiProjConflictStatusType,
