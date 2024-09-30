@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.hierarchy.dao.HierarchyDao;
@@ -20,7 +19,6 @@ import com.polus.fibicomp.constants.Constants;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiProjectType;
 
 @Service
-@Transactional
 public class HierarchyService {
 	
 	@Autowired
@@ -30,40 +28,42 @@ public class HierarchyService {
 	private ConflictOfInterestDao conflictOfInterestDao;
 
 	public ResponseEntity<Object> fetchProjectTree(Integer moduleCode, String projectNumber) {
-	    List<ProjectHierarchyDto> hierarchyData = hierarchyDao.fetchProjectTree(moduleCode, projectNumber);
-	    Map<String, HierarchyResponseDto> treeRoot = new HashMap<>();
-	    prepareProjectTree(treeRoot, hierarchyData);
-	    HierarchyResponseDto root = treeRoot.values().stream().findFirst().orElse(new HierarchyResponseDto());
-	    return new ResponseEntity<>(root, HttpStatus.OK);
+	    List<ProjectHierarchyDto> hierarchyData = hierarchyDao.getProjectRelations(moduleCode, projectNumber);
+	    return new ResponseEntity<>(prepareProjectTree(hierarchyData), HttpStatus.OK);
 	}
 
-	private void prepareProjectTree(Map<String, HierarchyResponseDto> rootMap, List<ProjectHierarchyDto> hierarchyData) {
-		for (ProjectHierarchyDto data : hierarchyData) {
-	        String awardNumber = data.getAwardNumber();
-	        String ipNumber = data.getIpNumber();
-	        String proposalNumber = data.getProposalNumber();
-	        List<CoiProjectType> coiProjectTypes = conflictOfInterestDao.getCoiProjectTypes();
-	        HierarchyResponseDto rootNode = handleRootNode(rootMap, awardNumber, Constants.AWARD_MODULE_CODE.toString(), coiProjectTypes);
-	        if (rootNode != null) {
-	            handleIpNode(rootNode, ipNumber, proposalNumber, coiProjectTypes);
-	        } else {
-	            // Handle IP Node when there's no award number
-	            rootNode = handleRootNode(rootMap, ipNumber, Constants.INST_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
-	            if (rootNode != null) {
-	                handleProposalNode(rootNode, proposalNumber, coiProjectTypes);
-	            } else {
-	                // Handle Proposal Node when there's no award or IP number
-	                rootNode = handleRootNode(rootMap, proposalNumber, Constants.DEV_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
-	            }
-	        }
-	    }
+	private HierarchyResponseDto prepareProjectTree(List<ProjectHierarchyDto> hierarchyData) {
+		HierarchyResponseDto rootNode = new HierarchyResponseDto();
+		if (!hierarchyData.isEmpty()) {
+			List<CoiProjectType> coiProjectTypes = conflictOfInterestDao.getCoiProjectTypes();
+			Map<String, HierarchyResponseDto> treeRoot = new HashMap<>();
+			for (ProjectHierarchyDto data : hierarchyData) {
+		        String awardNumber = data.getAwardNumber();
+		        String ipNumber = data.getIpNumber();
+		        String proposalNumber = data.getProposalNumber();
+		        rootNode = prepareRootNode(treeRoot, awardNumber, Constants.AWARD_MODULE_CODE.toString(), coiProjectTypes);
+		        if (rootNode != null) {
+		            prepareChildNode(rootNode, ipNumber, proposalNumber, coiProjectTypes);
+		        } else {
+		            // Handle IP Node when there's no award number
+		            rootNode = prepareRootNode(treeRoot, ipNumber, Constants.INST_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
+		            if (rootNode != null) {
+		                prepareInnerChildNode(rootNode, proposalNumber, coiProjectTypes);
+		            } else {
+		                // Handle Proposal Node when there's no award or IP number
+		                rootNode = prepareRootNode(treeRoot, proposalNumber, Constants.DEV_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
+		            }
+		        }
+		    }
+		}
+		return rootNode;
 	}
 
-	private HierarchyResponseDto handleRootNode(Map<String, HierarchyResponseDto> rootMap, String projectNumber, String moduleCode, List<CoiProjectType> coiProjectTypes) {
+	private HierarchyResponseDto prepareRootNode(Map<String, HierarchyResponseDto> rootMap, String projectNumber, String moduleCode, List<CoiProjectType> coiProjectTypes) {
 		return (projectNumber != null) ? rootMap.computeIfAbsent(projectNumber, key -> {
 	        HierarchyResponseDto dto = new HierarchyResponseDto();
 	        dto.setProjectTypeCode(moduleCode.toString());
-	        coiProjectTypes.parallelStream().filter(projectType -> moduleCode.equals(projectType.getCoiProjectTypeCode()))
+	        coiProjectTypes.stream().filter(projectType -> moduleCode.equals(projectType.getCoiProjectTypeCode()))
 	        .findFirst().ifPresent(projectType -> {
 	        	dto.setProjectIcon(projectType.getProjectIcon());
         		dto.setProjectType(projectType.getDescription());
@@ -74,44 +74,35 @@ public class HierarchyService {
 	    }) : null;
 	}
 
-	private void handleIpNode(HierarchyResponseDto rootNode, String ipNumber, String proposalNumber, List<CoiProjectType> coiProjectTypes) {
-	    if (ipNumber != null) {
+	private void prepareChildNode(HierarchyResponseDto rootNode, String ipNumber, String proposalNumber, List<CoiProjectType> coiProjectTypes) {
+		if (ipNumber != null) {
 	        HierarchyResponseDto ipNode = rootNode.getLinkedModule().stream()
-	                .filter(child -> child.getProjectNumber().equals(ipNumber))
-	                .findFirst()
+	                .filter(child -> child.getProjectNumber().equals(ipNumber)).findFirst()
 	                .orElseGet(() -> {
-	                    HierarchyResponseDto child = new HierarchyResponseDto();
-	                    child.setProjectTypeCode(Constants.INST_PROPOSAL_MODULE_CODE.toString());
-	                    child.setProjectNumber(ipNumber);
-	                    coiProjectTypes.parallelStream().filter(projectType -> Constants.INST_PROPOSAL_MODULE_CODE.toString().equals(projectType.getCoiProjectTypeCode()))
-	        	        .findFirst().ifPresent(projectType -> {
-	        	        	child.setProjectIcon(projectType.getProjectIcon());
-	                		child.setProjectType(projectType.getDescription());
-	        	        });
-	                    child.setLinkedModule(new ArrayList<>());
-	                    rootNode.getLinkedModule().add(child);
-	                    return child;
+	                    return setChildDetail(Constants.INST_PROPOSAL_MODULE_CODE.toString(), rootNode, ipNumber, coiProjectTypes);
 	                });
-
-	        if (proposalNumber != null) {
-	            handleProposalNode(ipNode, proposalNumber, coiProjectTypes);
-	        }
-	    }
+	        prepareInnerChildNode(ipNode, proposalNumber, coiProjectTypes);
+		}
 	}
 
-	private void handleProposalNode(HierarchyResponseDto parentNode, String proposalNumber, List<CoiProjectType> coiProjectTypes) {
-	    if (proposalNumber != null) {
-	        HierarchyResponseDto proposalNode = new HierarchyResponseDto();
-	        proposalNode.setProjectTypeCode(Constants.DEV_PROPOSAL_MODULE_CODE.toString());
-	        proposalNode.setProjectNumber(proposalNumber);
-	        coiProjectTypes.parallelStream().filter(projectType -> Constants.DEV_PROPOSAL_MODULE_CODE.toString().equals(projectType.getCoiProjectTypeCode()))
-	        .findFirst().ifPresent(projectType -> {
-	        	proposalNode.setProjectIcon(projectType.getProjectIcon());
-	        	proposalNode.setProjectType(projectType.getDescription());
-	        });
-	        proposalNode.setLinkedModule(new ArrayList<>());
-	        parentNode.getLinkedModule().add(proposalNode);
-	    }
+	private HierarchyResponseDto setChildDetail(String moduleCode, HierarchyResponseDto rootNode, String projectNumber, List<CoiProjectType> coiProjectTypes) {
+		HierarchyResponseDto child = new HierarchyResponseDto();
+        child.setProjectTypeCode(moduleCode);
+        child.setProjectNumber(projectNumber);
+        coiProjectTypes.stream().filter(projectType -> moduleCode.equals(projectType.getCoiProjectTypeCode()))
+				        .findFirst().ifPresent(projectType -> {
+				        	child.setProjectIcon(projectType.getProjectIcon());
+				    		child.setProjectType(projectType.getDescription());
+				        });
+        child.setLinkedModule(new ArrayList<>());
+        rootNode.getLinkedModule().add(child);
+        return child;
+	}
+
+	private void prepareInnerChildNode(HierarchyResponseDto rootNode, String projectNumber, List<CoiProjectType> coiProjectTypes) {
+		if (projectNumber != null) {
+        	setChildDetail(Constants.DEV_PROPOSAL_MODULE_CODE.toString(), rootNode, projectNumber, coiProjectTypes);
+        }
 	}
 
 	public ResponseEntity<Object> fetchProjectDetails(Integer moduleCode, String projectNumber) {
@@ -122,6 +113,5 @@ public class HierarchyService {
 		});
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 
 }
