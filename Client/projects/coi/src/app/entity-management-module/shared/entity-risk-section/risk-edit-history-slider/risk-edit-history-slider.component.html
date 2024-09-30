@@ -3,8 +3,7 @@
         [isHeaderNeeded]="true" [overlay_z_index]="1056" [slider_z_index]="1057" [sliderWidth]="'w-50'">
         <ng-container header id="coi-risk-slider-header">
             <span>{{isEditRisk ? 'Update ' + sectionName : sectionName + ' History'}}</span>
-            <app-common-help-text
-                                    [helpTextHardCoded]="'Yor are about to Edit the Risk'"></app-common-help-text>
+            <app-common-help-text [helpTextHardCoded]="'Yor are about to ' + (isEditRisk ?  'Edit the Risk' : 'View Risk History')"></app-common-help-text>
         </ng-container>
         <ng-container content>
             <div class="position-sticky z-2 custom-stickytop">
