@@ -18,7 +18,7 @@ import {
 } from '../../app-constants';
 import {CommonService} from '../../common/services/common.service';
 import {DisclosureCreateModalService} from './disclosure-create-modal.service';
-import { RevisionObject, Disclosure, FCOIDisclosureCreateRO } from '../shared-interface';
+import { RevisionObject, Disclosure, FCOIDisclosureCreateRO, CoiProjectType } from '../shared-interface';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
 import { checkForVowelInFirstLetter } from '../../common/utilities/custom-utilities';
 
@@ -54,7 +54,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     unitHttpOptions: any = {};
     primeSponsorSearchOptions: any = {};
     sponsorSearchOptions: any = {};
-    projectTypes = [];
+    projectTypes: CoiProjectType[] = [];
     selectedProjectType = null;
     existingDisclosureDetails: Disclosure = new Disclosure();
     isShowExistingDisclosure = false;
@@ -505,7 +505,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         return RO;
     }
 
-    private getCoiProjectTypeFromCode(description = this.selectedProjectType): void {
+    private getCoiProjectTypeFromCode(description = this.selectedProjectType): string {
         return this.projectTypes.find(type => type.description === description).coiProjectTypeCode;
     }
 

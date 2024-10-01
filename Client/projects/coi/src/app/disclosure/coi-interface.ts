@@ -1,4 +1,4 @@
-import { DisclosureProjectData } from "../shared-components/shared-interface";
+import { CoiProjectType, DisclosureProjectData } from "../shared-components/shared-interface";
 
 export class COI {
     coiDisclosure: CoiDisclosure;
@@ -14,15 +14,6 @@ export class COI {
     projectDetail: DisclosureProjectData;
     coiReviewerList: ReviewerList[];
     documentOwnerPersonId: string;
-}
-
-export class CoiProjectType {
-    coiProjectTypeCode: string
-    description: string
-    badgeColor: string
-    updateTimestamp: number
-    updateUser: string
-    isActive: boolean
 }
 
 export interface CoiConflictStatusType {
