@@ -50,8 +50,4 @@ public class CoiProjectType implements Serializable {
 	@Column(name = "UPDATE_USER")
 	private String updateUser;
 
-	@Column(name = "IS_ACTIVE")
-	@Convert(converter = JpaCharBooleanConversion.class)
-	private Boolean isActive;
-
 }
