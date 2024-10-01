@@ -149,7 +149,10 @@ public class ProjectDaoImpl implements ProjectDao {
 						.projectBadgeColour(rset.getString("BADGE_COLOR"))
 						.projectIcon(rset.getString("PROJECT_ICON"))
 						.updateTimestamp(rset.getTimestamp("UPDATE_TIMESTAMP"))
-						.commentCount(rset.getInt("COMMENT_COUNT")).build();
+						.commentCount(rset.getInt("COMMENT_COUNT"))
+						.documentNumber(rset.getString("DOCUMENT_NUMBER"))
+						.accountNumber(rset.getString("ACCOUNT_NUMBER"))
+						.build();
 				projectOverviewList.add(projectOverview);
 			}
 		} catch (Exception e) {

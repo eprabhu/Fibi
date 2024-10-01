@@ -1,21 +1,23 @@
-<div *ngIf="!isLoading" class="card rounded-0">
-    <div class="mb-2">
-        <app-entity-sponsor-details [sectionName]="sponsorDetails.sectionName"
-            [sectionId]="sponsorDetails.sectionId">
-        </app-entity-sponsor-details>
-    </div>
-    <div class="mb-2">
-        <app-entity-risk-section [sectionName]="riskSectionDetails.sectionName"
-            [sectionId]="riskSectionDetails.sectionId"
-            [subSectionId]="riskSectionDetails.subSectionId"
-            [entityRiskList]="entitySponsorRiskList" [riskCategoryCode]="'SP'">
-        </app-entity-risk-section>
-    </div>
-    <div class="mb-2">
-        <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
-            [sectionId]="attachmentSectionDetails.sectionId"
-            [subSectionId]="attachmentSectionDetails.subSectionId"
-            [entityAttachmentsList]="entitySponsorAttachmentList" [riskCategoryCode]="'SP'">
-        </app-entity-attachment-section>
+<div *ngIf="!isLoading" class="card rounded-0 p-3">
+    <div class="row gap-3">
+        <div class="col-12">
+            <app-entity-sponsor-details [sectionName]="sponsorDetails.sectionName"
+                [sectionId]="sponsorDetails.sectionId">
+            </app-entity-sponsor-details>
+        </div>
+        <div class="col-12">
+            <app-entity-risk-section [sectionName]="riskSectionDetails.sectionName"
+                [sectionId]="riskSectionDetails.sectionId"
+                [subSectionId]="riskSectionDetails.subSectionId"
+                [entityRiskList]="entitySponsorRiskList" [riskCategoryCode]="'SP'">
+            </app-entity-risk-section>
+        </div>
+        <div class="col-12">
+            <app-entity-attachment-section [sectionName]="attachmentSectionDetails.sectionName"
+                [sectionId]="attachmentSectionDetails.sectionId"
+                [subSectionId]="attachmentSectionDetails.subSectionId"
+                [entityAttachmentsList]="entitySponsorAttachmentList" [riskCategoryCode]="'SP'">
+            </app-entity-attachment-section>
+        </div>
     </div>
 </div>

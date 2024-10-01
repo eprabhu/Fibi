@@ -447,6 +447,13 @@ export class NewAttachments {
     versionNumber?: number;
 }
 
+export class OverallAttachmentList {
+    General: EntityAttachment[];
+    Sponsor: EntityAttachment[];
+    Organization: EntityAttachment[];
+    Compliance: EntityAttachment[];
+}
+
 export interface EntityAttachment {
     entityAttachmentId?: number;
     attachmentNumber?: number;

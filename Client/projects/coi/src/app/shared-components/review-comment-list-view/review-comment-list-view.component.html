@@ -1,6 +1,15 @@
 <!-- new comment section -->
 <div *ngFor="let subsection of groupedCommentsList | keyvalue;" class="pb-3 mt-3">
-    <label class="fs-16 fw-bold label-text px-4" *ngIf="isHeaderNeeded">{{getSectionName(subsection.value)}}</label>
+    <h4 *ngIf="isHeaderNeeded" class="fs-16 fw-bold label-text m-0 text-slice" [title]="getSectionName(subsection.value)">{{getSectionName(subsection.value)}}</h4>
+    <div *ngIf="getSubSectionName(subsection.value)" class="col-12 col-xl-6 position-relative">
+        <div class="down-line">
+            <div class="col-12 left-spacing d-flex">
+                <div class="d-flex top-5px position-relative">
+                    <span class="text-slice coi-text-dark" [title]="getSubSectionName(subsection.value)">{{getSubSectionName(subsection.value)}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <ng-container *ngFor="let list of subsection.value;let subSectionIndex=index;let last = last">
     <div class="coi-border-grey coi-card-regular p-3">
         <div class="row position-relative">

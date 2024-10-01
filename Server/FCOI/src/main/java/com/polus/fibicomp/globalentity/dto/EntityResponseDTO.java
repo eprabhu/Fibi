@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.polus.fibicomp.globalentity.pojo.Entity;
-import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityExternalIdMapping;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
 import com.polus.fibicomp.globalentity.pojo.EntityMailingAddress;
@@ -30,7 +29,7 @@ public class EntityResponseDTO {
 	private List<EntityExternalIdMapping> entityExternalIdMappings;
 	private List<PriorNameResponseDTO> priorNames;
 	private List<ForeignNameResponseDTO> foreignNames;
-	private List<EntityAttachment> attachments;
+	private List<EntityAttachmentResponseDTO> attachments;
 	private Map<String, Object> entityTabStatus;
 	private String originalName;
 

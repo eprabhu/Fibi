@@ -80,18 +80,16 @@
                             </h2>
                         </div>
                         <div class="col-12" *ngIf="isReviewComment('6')">
-                            <h2 class="d-flex justify-content-between mb-0">
-                                <span class="d-flex">
+                            <h2 class="d-flex justify-content-between mb-0 gap-2">
+                                <div class="d-flex">
                                 <mat-icon aria-hidden="true" class="ms-2 coi-text-light flex-shrink-0 coi-scale-9">{{selectedProjectDetails?.projectIcon}}</mat-icon>
-                                <a tabindex="0" class="fs-6 text-decoration-underline link-primary fw-600 text-slice coi-text-dark" id="link-{{selectedProjectDetails?.projectId}}"
+                                <a tabindex="0" class="fs-6 text-decoration-underline link-primary fw-600 coi-text-dark" id="link-{{selectedProjectDetails?.projectId}}"
                                                         title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                         attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                        (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
-                                                        #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
+                                                        (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
+                                                        <span class="text-slice">#{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}</span>
                                                     </a>
-                            </span>
+                            </div>
                             <button *ngIf="(commentList.length) && !showAddComment && !isViewMode"
                                     class="btn btn-sm btn-tertiary d-inline-flex align-self-end text-nowrap flex-shrink-0" id="coi-add-comment-btn"
                                     (click)="showAddComment = !showAddComment" title="Click here to add new comments"
@@ -117,7 +115,7 @@
                                     <div class="col-12 col-xl-6 position-relative">
                                         <div class="" [class.down-line]="isReviewComment('6') && subSectionId">
                                             <div class="col-12 left-spacing d-flex" (click)="openSFI(subSectionId)">
-                                                <div class="d-flex top1 position-relative">
+                                                <div class="d-flex top-5px position-relative">
                                                     <mat-icon class="coi-scale-9 grey-text flex-shrink-0 overflow-visible">apartment</mat-icon>
                                                     <span class="link-primary text-slice coi-text-dark"
                                                         [title]="subSectionTitle">{{subSectionTitle}}</span>
@@ -132,7 +130,7 @@
                                         <app-no-data-label [valueToShow]="disclosureDetails?.coiConflictStatusType?.description">
                                             <span
                                                 class="{{commonService.getProjectDisclosureConflictStatusBadge(sfiStatus?.projectConflictStatusCode)}}"></span>
-                                            <span class="badgeFont">
+                                            <span class="badgeFont p-0">
                                                 {{sfiStatus?.description}}
                                             </span>
                                         </app-no-data-label>
@@ -154,9 +152,7 @@
                                                     <a tabindex="0" class="fs-6 text-decoration-underline link-primary fw-600 text-slice coi-text-dark coi-text-decoration-underline" id="link-{{selectedProjectDetails?.projectId}}"
                                                         title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                         attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                        (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                        (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
+                                                        (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
                                                         #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
                                                     </a>
                                                 </span>
@@ -197,7 +193,7 @@
                                 </div>
                                 <div class="col-12 left-spacing d-flex" *ngIf="isReviewComment('6') && subSectionId"
                                     (click)="openSFI(subSectionId)">
-                                    <div class="d-flex top1 position-relative">
+                                    <div class="d-flex top-5px position-relative">
                                         <mat-icon class="coi-scale-9 grey-text flex-shrink-0 overflow-visible">apartment</mat-icon>
                                         <span class="link-primary text-slice" [title]="subSectionTitle">{{subSectionTitle}}</span>
                                     </div>
@@ -299,9 +295,7 @@
                                                 <a tabindex="0" class="fs-14 link-primary fw-600 text-slice" id="link-{{selectedProjectDetails?.projectId}}"
                                                     title="Click here to navigate to project details of #{{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
                                                     attr.aria-label="Click here to navigate to project details of {{selectedProjectDetails?.projectNumber}} - {{selectedProjectDetails?.title}}"
-                                                    (click)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                    (keyup.enter)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)"
-                                                    (keyup.space)="commonService.redirectToProjectDetails(selectedProjectDetails?.projectId,selectedProjectDetails?.moduleCode)">
+                                                    (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()">
                                                     #{{selectedProjectDetails?.projectNumber}}- {{selectedProjectDetails?.title}}
                                                 </a>
                                             </span>
@@ -342,7 +336,7 @@
                             </div>
                             <div class="col-12 left-spacing d-flex" *ngIf="isReviewComment('6') && subSectionId"
                                 (click)="openSFI(subSectionId)">
-                                <div class="d-flex top1 position-relative">
+                                <div class="d-flex top-5px position-relative">
                                     <mat-icon class="coi-scale-9 grey-text flex-shrink-0">apartment</mat-icon>
                                     <span class="link-primary text-slice" [title]="subSectionTitle">{{subSectionTitle}}</span>
                                 </div>

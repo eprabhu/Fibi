@@ -5,9 +5,9 @@ import { focusElementById, openCommonModal } from '../../../../common/utilities/
 import { deepCloneObject, isEmptyObject } from '../../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { DefineRelationshipService } from '../../services/define-relationship.service';
 import { COI, CoiDisclEntProjDetail, CoiProjConflictStatusType, DefineRelationshipDataStore, ProjectSfiRelationConflictRO, ProjectSfiRelations, SaveProjectSfiConflict } from '../../../coi-interface';
-import { subscriptionHandler } from '../../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
-import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
+import { subscriptionHandler } from '../../../../common/utilities/subscription-handler';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from '../../../../app-constants';
 import { DefineRelationshipDataStoreService } from '../../services/define-relationship-data-store.service';
 import { GlobalEventNotifier } from '../../../../common/services/coi-common.interface';
 import { CoiService } from '../../../services/coi.service';
@@ -127,6 +127,7 @@ export class ProjectSfiConflictComponent implements OnInit, OnDestroy {
                 this.defineRelationshipService.saveProjectSfiConflict(this.getProjectSfiRelationConflictRO(sfiDetails))
                     .subscribe((res: SaveProjectSfiConflict) => {
                         this.updateSfiDetails(sfiDetails, res.conflictDetails[0]);
+                        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Conflict status saved successfully.');
                         this.defineRelationshipService.updateDisclosureConflictStatus(res.disclConflictStatusType);
                     }, (error: any) => {
                         if (error.status === 405) {

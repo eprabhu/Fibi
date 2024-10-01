@@ -14,6 +14,10 @@ public class HierarchyProjResponseDto {
 
 	private String projectNumber;
 
+	private String documentNumber;
+
+	private String accountNumber;
+
 	private String sponsorCode;
 
 	private String primeSponsorCode;

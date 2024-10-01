@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
 import { CoiProjectOverviewComment, projectOverviewCommentFetch } from '../admin-dashboard.interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { SharedProjectDetails } from '../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-project-overview-comments-slider',
@@ -34,6 +35,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     currentUserId: any;
     isEditorFocused = false;
     getFormattedSponsor = getFormattedSponsor;
+    projectDetails = new SharedProjectDetails();
 
     constructor(public projectOverviewService: ProjectOverviewService, public commonService: CommonService) { }
 
@@ -61,7 +63,33 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
         this.commentFetchRequestPayload.moduleCode = '3';
         this.commentFetchRequestPayload.moduleItemKey = this.dataForCommentSlider?.projectDetails?.projectId;
         this.getProjectOverviewComments(this.commentFetchRequestPayload);
+        this.setProjectCardDetails();
     }
+
+    private setProjectCardDetails(): void {
+        this.projectDetails = {
+            projectNumber: this.dataForCommentSlider?.projectDetails?.projectNumber,
+            sponsorCode: this.dataForCommentSlider?.projectDetails?.sponsorCode,
+            primeSponsorCode: this.dataForCommentSlider?.projectDetails?.primeSponsorCode,
+            sponsorName: this.dataForCommentSlider?.projectDetails?.sponsorName,
+            homeUnitName: this.dataForCommentSlider?.projectDetails?.leadUnitName,
+            homeUnitNumber: this.dataForCommentSlider?.projectDetails?.leadUnitNumber,
+            primeSponsorName: this.dataForCommentSlider?.projectDetails?.primeSponsorName,
+            projectStatus: this.dataForCommentSlider?.projectDetails?.projectStatus,
+            piName: this.dataForCommentSlider?.projectDetails?.piName,
+            projectStartDate: this.dataForCommentSlider?.projectDetails?.projectStartDate,
+            projectEndDate: this.dataForCommentSlider?.projectDetails?.projectEndDate,
+            projectBadgeColour: this.dataForCommentSlider?.projectDetails?.projectBadgeColour,
+            projectIcon: this.dataForCommentSlider?.projectDetails?.projectIcon,
+            projectType: this.dataForCommentSlider?.projectDetails?.projectType,
+            projectTypeCode: this.dataForCommentSlider?.projectDetails?.projectTypeCode,
+            projectTitle: this.dataForCommentSlider?.projectDetails?.title,
+            documentNumber: this.dataForCommentSlider?.projectDetails?.documentNumber,
+            accountNumber: this.dataForCommentSlider?.projectDetails?.accountNumber,
+            projectId: this.dataForCommentSlider?.projectDetails?.projectId
+        };
+    }
+
 
     getProjectOverviewComments(commentFetchRequestPayload: any): void {
         this.$subscriptions.push(this.projectOverviewService.getProjectOverviewComments(commentFetchRequestPayload).subscribe((res: any) => {
@@ -244,6 +272,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
     }
 
     redirectToProjectDetails(): void {
-        this.commonService.redirectToProjectDetails(this.dataForCommentSlider?.projectDetails?.projectId, this.dataForCommentSlider?.projectDetails?.projectTypeCode);
+        const { documentNumber, projectId, projectTypeCode } = this.dataForCommentSlider?.projectDetails || {};
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
     }
 }

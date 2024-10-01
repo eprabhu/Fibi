@@ -1,3 +1,5 @@
+import { SharedProjectDetails } from "../../../common/services/coi-common.interface";
+
 export class ProjectHierarchySliderPayload {
     isOpenSlider: boolean = false;
     projectNumber: string = null;
@@ -12,23 +14,7 @@ export class HierarchyProjectTree {
     linkedModule: HierarchyProjectTree[] = []; // Recursive relationship for nested modules
 }
 
-export class HierarchyProjectDetails {
-    projectNumber?: string = null;
-    sponsorCode?: string = null;
-    primeSponsorCode?: string = null;
-    sponsorName?: string = null;
-    homeUnitName?: string = null;
-    homeUnitNumber?: string = null;
-    primeSponsorName?: string = null;
-    projectStatus?: string = null;
-    piName?: string = null;
-    projectStartDate?: number = null;
-    projectEndDate?: number = null;
-    projectBadgeColour?: string = null;
-    projectIcon?: string = null;
-    projectType?: string = null;
-    projectTypeCode?: string = null;
-    projectTitle?: string = null;
+export class HierarchyProjectDetails extends SharedProjectDetails {
     projectPersons?: ProjectKeyPerson[] = [];
 }
 

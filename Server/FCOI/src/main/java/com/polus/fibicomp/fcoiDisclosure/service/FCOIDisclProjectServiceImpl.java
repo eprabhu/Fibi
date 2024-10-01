@@ -38,6 +38,7 @@ public class FCOIDisclProjectServiceImpl implements FCOIDisclProjectService {
                 projectDto.setProjectNumber(jsonNode.get("PROJECT_NUMBER").asText());
                 projectDto.setTitle(jsonNode.get("PROJECT_TITLE").asText());
                 projectDto.setProjectStatus(jsonNode.get("PROJECT_STATUS").asText());
+                projectDto.setDocumentNumber(jsonNode.get("DOCUMENT_NUMBER").asText());
                 if (jsonNode.has("PROJECT_START_DATE") && !jsonNode.get("PROJECT_START_DATE").isNull())
                     projectDto.setProjectStartDate(convertToTimestamp(jsonNode.get("PROJECT_START_DATE").asText()));
                 if (jsonNode.has("PROJECT_END_DATE") && !jsonNode.get("PROJECT_END_DATE").isNull())

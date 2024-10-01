@@ -3,7 +3,7 @@ import { ProjectOverviewService } from '../project-overview.service';
 import { fadeInOutHeight, heightAnimation, leftSlideInOut, listAnimation, scaleOutAnimation, slideInAnimation, topSlideInOut } from '../../common/utilities/animations';
 import { CommonService } from '../../common/services/common.service';
 import { CoiProjectOverviewRequest, NotificationObject, ProjectDetails, ProjectOverview } from '../admin-dashboard.interface';
-import { POST_CREATE_DISCLOSURE_ROUTE_URL } from '../../app-constants';
+import { POST_CREATE_DISCLOSURE_ROUTE_URL, PROJECT_DETAILS_ORDER_WITHOUT_ROLE  } from '../../app-constants';
 import { Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -13,11 +13,7 @@ import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
     templateUrl: './project-overview.component.html',
     styleUrls: ['./project-overview.component.scss'],
     providers: [ProjectOverviewService],
-    animations: [fadeInOutHeight, listAnimation, topSlideInOut, leftSlideInOut, heightAnimation('0', '*', 300, 'heightAnimation'),
-        slideInAnimation('0', '12px', 400, 'slideUp'),
-        slideInAnimation('0', '-12px', 400, 'slideDown'),
-        scaleOutAnimation('-2px', '0', 200, 'scaleOut'),
-    ]
+    animations: [listAnimation, heightAnimation('0', '*', 300, 'heightAnimation')]
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
@@ -39,7 +35,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     projectDetailsForSlider: any;
     currentSortStateKey: string | null = null;
     getFormattedSponsor = getFormattedSponsor;
-
+    PROJECT_DETAILS_ORDER_WITHOUT_ROLE  = PROJECT_DETAILS_ORDER_WITHOUT_ROLE ;
 
     constructor(private projectOverviewService: ProjectOverviewService, public commonService: CommonService, private _router: Router) { }
 

@@ -40,7 +40,8 @@ CREATE VIEW `coi_project_proposal_v` AS
         `coi_int_stage_dev_proposal`.`PROPOSAL_TYPE_CODE` AS `PROPOSAL_TYPE_CODE`,
         `coi_int_stage_dev_proposal`.`SRC_SYS_UPDATE_TIMESTAMP` AS `UPDATE_TIMESTAMP`,
         `coi_int_stage_dev_proposal`.`IP_NUMBER` AS `LINKED_IP_NUMBER`,
-        `coi_int_stage_dev_proposal_person`.`STATUS` as `PERSON_STATUS`
+        `coi_int_stage_dev_proposal_person`.`STATUS` as `PERSON_STATUS`,
+		`coi_int_stage_dev_proposal`.`ATTRIBUTE_2_VALUE` AS `DOCUMENT_NUMBER`
     FROM
         (`coi_int_stage_dev_proposal`
         JOIN `coi_int_stage_dev_proposal_person` ON ((`coi_int_stage_dev_proposal`.`PROPOSAL_NUMBER` = `coi_int_stage_dev_proposal_person`.`PROPOSAL_NUMBER`)))

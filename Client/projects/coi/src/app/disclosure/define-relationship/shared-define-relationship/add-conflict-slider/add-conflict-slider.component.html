@@ -45,10 +45,15 @@
                                                 [title]="coiData?.coiDisclosure?.person?.emailAddress">{{coiData?.coiDisclosure?.person?.emailAddress}}</span>
                                         </div>
                                     </div>
-                                    <span class="title-text text-slice mt-2" title="#{{ addConflictSlider?.projectSfiRelations?.projectNumber }} - {{ addConflictSlider?.projectSfiRelations?.title }}">
-                                        <span><mat-icon aria-hidden="true" class="coi-text-light">{{addConflictSlider?.projectSfiRelations?.projectIcon}}</mat-icon></span>
-                                        #{{ addConflictSlider?.projectSfiRelations?.projectNumber }} - {{ addConflictSlider?.projectSfiRelations?.title }}
-                                    </span>
+                                    <div class="d-flex align-items-center mt-2" title="#{{ addConflictSlider?.projectSfiRelations?.projectNumber }} - {{ addConflictSlider?.projectSfiRelations?.title }}">
+                                        <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{addConflictSlider?.projectSfiRelations?.projectIcon}}</mat-icon>
+                                        <a class="link-primary fs-6 text-slice fw-600 lh-1" id="coi-diclosure-conflict-slider"
+                                            (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()" tabindex="0"
+                                            [title]="'Click here to view details of #'+  addConflictSlider?.projectSfiRelations?.projectNumber + ' - ' +  addConflictSlider?.projectSfiRelations?.title"
+                                            [attr.aria-label]="'Click here to view details of '+  addConflictSlider?.projectSfiRelations?.projectNumber + ' - ' +  addConflictSlider?.projectSfiRelations?.title">
+                                            <span>#{{ addConflictSlider?.projectSfiRelations?.projectNumber + ' - ' +  addConflictSlider?.projectSfiRelations?.title}}</span>
+                                        </a>
+                                    </div>
                                 </h4>
                             </div>
                             <div class="mb-2 left-spacing">

@@ -66,4 +66,7 @@ public class DisclosureProjectDto {
 	private String disclosureRequiredFlag;
 	private List<CoiDisclEntProjDetailsDto> coiDisclEntProjDetails;
 	private String accountNumber;
+	private String documentNumber;
+	private String projectConflictStatus;
+	private String projectConflictStatusCode;
 }

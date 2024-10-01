@@ -170,6 +170,9 @@ public interface GlobalEntityService {
 		return null;
 	}
 
+	public default void processEntityMessageToQ(Integer entityId) {
+	}
+
 	public default ResponseEntity<String> deleteIndustryDetailsByCatCode(String industryCatCode) {
 		return null;
 	}
