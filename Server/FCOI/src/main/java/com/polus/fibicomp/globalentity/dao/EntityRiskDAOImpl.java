@@ -87,7 +87,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "SP");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
-	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
+	    query.orderBy(builder.desc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -100,7 +100,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "EN");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
-	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
+	    query.orderBy(builder.desc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 
@@ -113,7 +113,7 @@ public class EntityRiskDAOImpl implements EntityRiskDAO {
 		Predicate riskCategoryCodePredicate = builder.equal(rootEntityRisk.get("riskType").get("riskCategoryCode"), "CO");
 	    Predicate entityIdPredicate = builder.equal(rootEntityRisk.get("entityId"), entityId);
 	    query.where(builder.and(riskCategoryCodePredicate, entityIdPredicate));
-	    query.orderBy(builder.asc(rootEntityRisk.get("updateTimestamp")));
+	    query.orderBy(builder.desc(rootEntityRisk.get("updateTimestamp")));
 		return session.createQuery(query).getResultList();
 	}
 

@@ -42,8 +42,6 @@ public class EntityOutboundIntegrationService {
 			}
 
 			for (EntityDTO entityDTO : entityDTOs) {
-				entityDTO.setIsCreateSponsor(Boolean.TRUE);
-				entityDTO.setIsCreateOrganization(Boolean.TRUE);
 				String incorporationDate = entityDTO.getIncorporationDate();
 				log.info("incorporationDate : {}", incorporationDate);
 

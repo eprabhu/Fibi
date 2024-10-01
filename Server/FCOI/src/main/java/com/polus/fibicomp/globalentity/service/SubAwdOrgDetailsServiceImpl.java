@@ -74,12 +74,22 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 
 		subAwardOrgFields.forEach((field, value) -> {
 			switch (field) {
-				case organizationId -> entitySubOrgInfo.organizationId(castToInteger(value));
-				case organizationTypeCode -> entitySubOrgInfo.organizationTypeCode(castToString(value));
-				case samExpirationDate -> entitySubOrgInfo.samExpirationDate(dto.getDateFromMap(field));
-				case subAwdRiskAssmtDate -> entitySubOrgInfo.subAwdRiskAssmtDate(dto.getDateFromMap(field));
-				case feedStatusCode -> entitySubOrgInfo.feedStatusCode(castToString(value));
-			}
+				case organizationId:
+					entitySubOrgInfo.organizationId(castToInteger(value));
+					break;
+				case organizationTypeCode:
+					entitySubOrgInfo.organizationTypeCode(castToString(value));
+					break;
+				case samExpirationDate:
+					entitySubOrgInfo.samExpirationDate(dto.getDateFromMap(field));
+					break;
+				case subAwdRiskAssmtDate:
+					entitySubOrgInfo.subAwdRiskAssmtDate(dto.getDateFromMap(field));
+					break;
+				case feedStatusCode:
+					entitySubOrgInfo.feedStatusCode(castToString(value));
+					break;
+				}
 		});
 
 		return entitySubOrgInfo.build();
