@@ -9,6 +9,8 @@ DROP PROCEDURE IF EXISTS COI_DISCL_GENERATE_JSON_PROJECT_DETAILS;
 DROP VIEW IF EXISTS coi_project_award_v;
 DROP VIEW IF EXISTS coi_project_institute_proposal_v;
 DROP VIEW IF EXISTS coi_project_proposal_v;
+DROP PROCEDURE IF EXISTS GET_COI_PROJECTS;
+DROP PROCEDURE IF EXISTS COI_INT_KC_SPON_ORG_RESPONSE;
 
 \. ./Procedures/COI_INT_GET_ENTITY_DETAILS.sql
 \. ./Procedures/GET_PROJECT_OVERVIEW.sql
@@ -20,4 +22,5 @@ DROP VIEW IF EXISTS coi_project_proposal_v;
 \. ./Views/coi_project_award_v.sql
 \. ./Views/coi_project_institute_proposal_v.sql
 \. ./Views/coi_project_proposal_v.sql
-
+\. ./Procedures/GET_COI_PROJECTS.sql
+\. ./Procedures/COI_INT_KC_SPON_ORG_RESPONSE.sql
