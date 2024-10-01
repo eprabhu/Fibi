@@ -1,0 +1,1 @@
+UPDATE `coi_disclosure_fcoi_type` SET `DESCRIPTION` = 'Initial' WHERE (`FCOI_TYPE_CODE` = '1');
