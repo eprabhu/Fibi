@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
+import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgDetailsResponseDTO;
@@ -22,8 +24,11 @@ import com.polus.fibicomp.globalentity.pojo.EntitySubOrgInfo;
 import com.polus.fibicomp.globalentity.repository.EntityFeedStatusTypeRepository;
 import com.polus.fibicomp.globalentity.repository.EntitySubOrgInfoRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service(value = "subAwardOrganizationService")
 @Transactional
+@Slf4j
 public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 
 	@Autowired
@@ -55,13 +60,37 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	@Override
 	public ResponseEntity<Map<String, Integer>> saveDetails(SubAwdOrgRequestDTO dto) {
 		EntitySubOrgInfo entity = mapDTOToEntity(dto);
-		return new ResponseEntity<>(Map.of("id", subAwdOrgDAO.saveDetails(entity)), HttpStatus.OK);
+		int id = subAwdOrgDAO.saveDetails(entity);
+		log.info("entitySubOrgInfoId : {}", id);
+		return ResponseEntity.ok(Map.of("id", id));
 	}
 
 	private EntitySubOrgInfo mapDTOToEntity(SubAwdOrgRequestDTO dto) {
-		return EntitySubOrgInfo.builder().entityId(dto.getEntityId()).samExpirationDate(dto.getSamExpirationDate())
-				.subAwdRiskAssmtDate(dto.getSubAwdRiskAssmtDate()).organizationId(dto.getOrganizationId())
-				.organizationTypeCode(dto.getOrganizationTypeCode()).feedStatusCode(dto.getFeedStatusCode()).build();
+		Map<SubAwardOrgField, Object> subAwardOrgFields = dto.getSubAwardOrgFields();
+		EntitySubOrgInfo.EntitySubOrgInfoBuilder entitySubOrgInfo = EntitySubOrgInfo.builder()
+				.entityId(dto.getEntityId())
+				.updateTimestamp(commonDao.getCurrentTimestamp())
+				.updatedBy(AuthenticatedUser.getLoginPersonId());
+
+		subAwardOrgFields.forEach((field, value) -> {
+			switch (field) {
+				case organizationId -> entitySubOrgInfo.organizationId(castToInteger(value));
+				case organizationTypeCode -> entitySubOrgInfo.organizationTypeCode(castToString(value));
+				case samExpirationDate -> entitySubOrgInfo.samExpirationDate(dto.getDateFromMap(field));
+				case subAwdRiskAssmtDate -> entitySubOrgInfo.subAwdRiskAssmtDate(dto.getDateFromMap(field));
+				case feedStatusCode -> entitySubOrgInfo.feedStatusCode(castToString(value));
+			}
+		});
+
+		return entitySubOrgInfo.build();
+	}
+
+	private Integer castToInteger(Object value) {
+		return value instanceof Integer ? (Integer) value : null;
+	}
+
+	private String castToString(Object value) {
+		return value instanceof String ? (String) value : null;
 	}
 
 	@Override
