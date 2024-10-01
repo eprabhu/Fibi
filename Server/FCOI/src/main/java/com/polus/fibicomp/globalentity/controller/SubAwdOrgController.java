@@ -2,8 +2,6 @@ package com.polus.fibicomp.globalentity.controller;
 
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +20,12 @@ import com.polus.fibicomp.globalentity.dto.SubAwdOrgResponseDTO;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
 import com.polus.fibicomp.globalentity.service.SubAwdOrgService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/coi/entity/organization")
+@Slf4j
 public class SubAwdOrgController {
-
-	protected static Logger logger = LogManager.getLogger(SubAwdOrgController.class.getName());
 
 	@Autowired
 	@Qualifier(value = "subAwardOrganizationService")
@@ -38,43 +37,47 @@ public class SubAwdOrgController {
 
 	@PostMapping(value = "/save")
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SubAwdOrgRequestDTO dto) {
-		logger.info("Requesting for saveDetails");
+		log.info("Requesting for saveDetails");
+		log.info("entityId : {}", dto.getEntityId());
+		log.info("subAwardOrgFields : {}", dto.getSubAwardOrgFields());
 		return subAwardOrganizationService.saveDetails(dto);
 	}
 
 	@PatchMapping(value = "/update")
 	public ResponseEntity<String> updateDetails(@RequestBody SubAwdOrgRequestDTO dto) {
-		logger.info("Requesting for updateDetails");
+		log.info("Requesting for updateDetails");
+		log.info("entityId : {}", dto.getEntityId());
+		log.info("subAwardOrgFields : {}", dto.getSubAwardOrgFields());
 		return subAwardOrganizationService.updateDetails(dto);
 	}
 
 	@GetMapping(value = "/fetch/{entityId}")
 	public ResponseEntity<SubAwdOrgResponseDTO> fetchDetails(@PathVariable(value = "entityId", required = true) final Integer entityId) {
-		logger.info("Requesting for fetchDetails");
+		log.info("Requesting for fetchDetails");
 		return subAwardOrganizationService.fetchDetails(entityId);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
 	public ResponseEntity<String> deleteDetails(@PathVariable(value = "id", required = true) final Integer id) {
-		logger.info("Requesting for deleteDetails");
+		log.info("Requesting for deleteDetails");
 		return subAwardOrganizationService.deleteDetails(id);
 	}
 
 	@PostMapping(value = "/saveRisk")
 	public ResponseEntity<Map<String, Integer>> saveRisk(@RequestBody EntityRiskRequestDTO dto) {
-		logger.info("Requesting for SubAwardOrganization/saveRisk");
+		log.info("Requesting for SubAwardOrganization/saveRisk");
 		return entityRiskService.saveRisk(dto);
 	}
 
 	@PatchMapping(value = "/updateRisk")
 	public ResponseEntity<String> updateRisk(@RequestBody EntityRiskRequestDTO dto) {
-		logger.info("Requesting forSubAwardOrganization/updateRisk");
+		log.info("Requesting forSubAwardOrganization/updateRisk");
 		return entityRiskService.updateRisk(dto);
 	}
 
 	@DeleteMapping(value = "/deleteRisk/{entityRiskId}")
 	public ResponseEntity<String> deleteRisk(@PathVariable(value = "entityRiskId", required = true) final Integer entityRiskId) {
-		logger.info("Requesting for SubAwardOrganization/deleteRisk");
+		log.info("Requesting for SubAwardOrganization/deleteRisk");
 		return entityRiskService.deleteRisk(entityRiskId);
 	}
 
