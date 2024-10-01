@@ -206,4 +206,7 @@ public interface Constants {
     String PROJECT_DISCL_FCOI_TYPE_CODE = "2";
     String COI_DISCL_DISPOSITION_STATUS_VOID = "2";
     String COI_DISCL_DISPOSITION_STATUS_APPROVED = "3";
+
+    String DATE_FORMAT = "yyyy-MM-dd";
+
 }
