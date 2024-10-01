@@ -219,3 +219,14 @@ export interface COICountModalProjectUpdate {
     projectCountList: DashboardProjectCount[];
     updatedProjectsList: CountModalDisclosureProjectData[];
 }
+
+export interface CoiProjectType {
+    coiProjectTypeCode?: string;
+    description?: string;
+    badgeColor?: string;
+    projectIcon?: string;
+    fcoiNeeded?: boolean;
+    projectDisclosureNeeded?: boolean;
+    updateTimestamp?: number;
+    updateUser?: string;
+}
