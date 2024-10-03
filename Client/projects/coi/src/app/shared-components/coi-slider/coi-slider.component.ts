@@ -1,15 +1,18 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { CommonService } from '../../common/services/common.service';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { closeCoiSlider } from '../../common/utilities/custom-utilities';
-import { openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
+import { NavigationEnd, Router } from '@angular/router';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-coi-slider',
     templateUrl: './coi-slider.component.html',
     styleUrls: ['./coi-slider.component.scss']
 })
-export class CoiSliderComponent implements OnInit {
+export class CoiSliderComponent implements OnInit, OnDestroy {
 
     isEnableSlider = false;
+    $subscriptions: Subscription[] = [];
 
     @Input() isHeaderNeeded = false;
     @Input() isStickyNeeded = true;
@@ -22,7 +25,7 @@ export class CoiSliderComponent implements OnInit {
     @ViewChild('SliderParentElement', { static: true }) sliderParentElement: ElementRef;
     @ViewChild('Backdrop', { static: false }) backdrop: ElementRef;
 
-    constructor(private _elementRef: ElementRef, private _commonService: CommonService) { }
+    constructor(private _router: Router) { }
 
     ngOnInit() {
         setTimeout(() => {
@@ -33,10 +36,29 @@ export class CoiSliderComponent implements OnInit {
             this.backdrop.nativeElement.classList.add('show');
             this.isEnableSlider = true;
         });
+        this.listenRouterChanges();
+    }
+
+    ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
+        this.closeModalAndSlider();
+    }
+
+    private listenRouterChanges(): void {
+        this.$subscriptions.push(this._router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd) {
+                this.closeModalAndSlider();
+            }
+        }));
+    }
+
+    private closeModalAndSlider(): void {
+        hideModal(`${this.elementId}-confirmation-modal`);
+        this.emitCloseSlider();
     }
 
     closeSliderWindow() {
-        !this.isChangedFieldValue ?  this.emitCloseSlider() : openModal(`${this.elementId}-confirmation-modal`);
+        !this.isChangedFieldValue ? this.emitCloseSlider() : openModal(`${this.elementId}-confirmation-modal`);
     }
 
     emitCloseSlider() {
