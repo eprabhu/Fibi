@@ -65,6 +65,7 @@ export function openInNewTab(path: string, queryParamKeys: Array<any>, queryPara
 }
 
 export function openSlider(sliderName: string = 'coi-slider'): void {
+    document.body.classList.add('overflow-hidden');
     document.getElementById(`${sliderName}-overlay`).style.display = 'block';
     document.getElementById(`${sliderName}-overlay`).classList.add('overlay');
 
@@ -77,6 +78,7 @@ export function closeSlider(sliderName: string = 'coi-slider'): void {
     document.getElementById(sliderName).classList.remove('slider-opened');
 
     setTimeout(() => {
+        document.body.classList.remove('overflow-hidden');
         document.getElementById(`${sliderName}-overlay`).style.display = 'none';
     }, 500);
 }
@@ -91,6 +93,7 @@ export function focusElementById(element_id: string): void {
 export function openCoiSlider(element_id: string): void {
     setTimeout(() => {
         if (element_id) {
+            document.body.classList.add('overflow-hidden');
             document.getElementById(`${element_id}-trigger-btn`)?.click();
         }
     });
@@ -99,6 +102,7 @@ export function openCoiSlider(element_id: string): void {
 export function closeCoiSlider(element_id: string): void {
     setTimeout(() => {
         if (element_id) {
+            document.body.classList.remove('overflow-hidden');
             document.getElementById(`${element_id}-close-btn`)?.click();
         }
     });
