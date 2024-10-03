@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, On
 import { closeCoiSlider } from '../../common/utilities/custom-utilities';
 import { hideModal, openModal } from '../../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationEnd, Router } from '@angular/router';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-coi-slider',
     templateUrl: './coi-slider.component.html',
@@ -10,6 +12,7 @@ import { NavigationEnd, Router } from '@angular/router';
 export class CoiSliderComponent implements OnInit, OnDestroy {
 
     isEnableSlider = false;
+    $subscriptions: Subscription[] = [];
 
     @Input() isHeaderNeeded = false;
     @Input() isStickyNeeded = true;
@@ -37,15 +40,16 @@ export class CoiSliderComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        subscriptionHandler(this.$subscriptions);
         this.closeModalAndSlider();
     }
-    
+
     private listenRouterChanges(): void {
-        this._router.events.subscribe((event: any) => {
+        this.$subscriptions.push(this._router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
                 this.closeModalAndSlider();
             }
-        });
+        }));
     }
 
     private closeModalAndSlider(): void {
