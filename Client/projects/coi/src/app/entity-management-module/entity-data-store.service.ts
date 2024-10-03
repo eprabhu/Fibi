@@ -103,8 +103,9 @@ export class EntityDataStoreService {
         if(canUpdateSponsorFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sponsor_info) {
             REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/sponsor/update`, REQ_OBJ));
         }
+        const SUBAWARD_REQ_OBJ: SubAwardOrgUpdateClass = { entityId, subAwardOrgFields: { feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED } };
         if(canUpdateOrgFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sub_org_info) {
-            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, REQ_OBJ));
+            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, SUBAWARD_REQ_OBJ));
         }
         return REQUEST;
     }

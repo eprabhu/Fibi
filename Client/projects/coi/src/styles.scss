@@ -508,6 +508,16 @@
     }
 }
 
+@keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+.coi-rotating {
+    animation: rotate 2s linear infinite;
+}
+
 .min-height-200px {
     min-height: 200px;
 }
