@@ -539,6 +539,18 @@ export class DuplicateMarkingAPIReq {
     description: string;
 }
 
+export class SubAwardOrgUpdateClass {
+    entityId: number;
+    subAwardOrgFields = new SubawardOrgFields();
+}
+
+export class SubawardOrgFields {
+    samExpirationDate?: any;
+    organizationTypeCode?: any;
+    subAwdRiskAssmtDate?: any;
+    feedStatusCode?: any;
+}
+
 
 //changes during modification in the following fields need to update feed status of sponsor
 export const SPONSOR_FIELDS = [
