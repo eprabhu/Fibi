@@ -160,9 +160,13 @@
     </ul>
     <div class="saved-toast invisible py-1 align-items-center badge d-inline-flex fw-normal fs-13 px-2 rounded-5 text-bg-light-success"
         id="success-toast">
-        <!-- {{getTimeInterval()}} -->
         <span class="me-1">Last saved at {{autoSaveService.lastSavedTime}}</span>
         <mat-icon aria-hidden="true" class="success-icon">cloud_done</mat-icon>
+    </div>
+    <div class="saved-toast py-1 align-items-center d-inline-flex fw-normal px-2 rounded-5"
+        id="inprogress-toast" *ngIf="commonService?.autoSaveSavingLoader !== 'HIDE'" >
+        <span class="me-1 fs-14">Saving...</span>
+        <mat-icon aria-hidden="true" class="text-success fw-600 coi-rotating">autorenew</mat-icon>
     </div>
     <div *ngIf="router.url.includes('/manage-entity/')" class="header-menu-icon px-3 py-2" (click)="onClickMenuBar()">
         <mat-icon class="cursor-pointer mt-2">menu</mat-icon>

@@ -5,9 +5,9 @@ import { SubawardOrganisationTab } from '../shared/entity-constants';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails, SubAwardOrgUpdateClass } from '../shared/entity-interface';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
-import { COMMON_ERROR_TOAST_MSG, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
     selector: 'app-entity-subaward',
@@ -17,7 +17,7 @@ import { COMMON_ERROR_TOAST_MSG, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS }
 })
 export class EntitySubawardComponent implements OnInit {
 
-    overViewTab: any;
+    SUB_AWARD_TAB = SubawardOrganisationTab;
     isLoading = true;
     orgDetailsSubSectionId = '';
     orgDetailsSubSectionName = '';
@@ -33,7 +33,6 @@ export class EntitySubawardComponent implements OnInit {
 
     ngOnInit() {
         window.scrollTo(0, 0);
-        this.overViewTab = SubawardOrganisationTab;
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.setSectionIdAndName();
@@ -46,12 +45,12 @@ export class EntitySubawardComponent implements OnInit {
     private setSectionIdAndName(): void {
         this.riskSectionDetails.subSectionId = 2613;
         this.attachmentSectionDetails.subSectionId = 2614;
-        this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_RISK');
-        this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_RISK');
-        this.orgDetailsSubSectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_ORGANISATION');
-        this.orgDetailsSubSectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_ORGANISATION');
-        this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
-        this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SUB_AWARD_ATTACHMENTS');
+        this.orgDetailsSubSectionId = this.commonService.getSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_ORGANISATION');
+        this.orgDetailsSubSectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_ORGANISATION');
+        this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_ATTACHMENTS');
+        this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_ATTACHMENTS');
+        this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_RISK');
+        this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_RISK');
     }
 
     private getDataFromStore(): void {
@@ -73,39 +72,39 @@ export class EntitySubawardComponent implements OnInit {
 
     private fetchEntityDetails(entityId: string | number): void {
         this.$subscriptions.push(this._entitySubAwardService.fetchEntityOrganizationDetails(entityId).subscribe((data: SubAwardOrganization) => {
-            this.entitySubAwarRisksList = data?.entityRisks ? data?.entityRisks : [];
-            this.entitySubAwarAttachmentList = data?.attachments ? data.attachments : [];
-            this._entitySubAwardService.entitySubAwardOrganization.entityRisks = data.entityRisks;
+            this.entitySubAwarRisksList = data?.entityRisks || [];
+            this.entitySubAwarAttachmentList = data?.attachments || [];
+            this._entitySubAwardService.entitySubAwardOrganization.entityRisks = data?.entityRisks || [];
+            this._entitySubAwardService.entitySubAwardOrganization.attachments = data.attachments || [];
             this._entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO = data?.subAwdOrgDetailsResponseDTO ?? new SubAwardOrganizationDetails();
             this.isLoading = false;
         }, (_error: any) => {
             this.isLoading = false;
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
         }));
     }
 
     riskUpdated(entitySubAwarRisksList: EntityRisk[]): void {
         this.entitySubAwarRisksList = deepCloneObject(entitySubAwarRisksList);
         this._entitySubAwardService.entitySubAwardOrganization.entityRisks = this.entitySubAwarRisksList;
-        this.updateHeaderStatus();
+        this.updateCompleteFlag();
         this.updateFeedStatus();
     }
 
     updateFeedStatus() {
-        if(this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
-            const REQ_OBJ = {feedStatusCode : '2', entityId : this.entityDetails?.entityId };
-            this.$subscriptions.push(this._entitySubAwardService.updateOrganizationDetails(REQ_OBJ).subscribe((data: string) => {
+        if (this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
+            const SUBAWARD_REQ_OBJ: SubAwardOrgUpdateClass = { entityId: this.entityDetails?.entityId, subAwardOrgFields: { feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED } };
+            this.$subscriptions.push(this._entitySubAwardService.updateOrganizationDetails(SUBAWARD_REQ_OBJ).subscribe((data: string) => {
                 this._dataStoreService.updateFeedStatus(this.entityTabStatus, 'ORG');
-            },
-                err => { this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG); }
+            }, err => { this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG); }
             ));
         }
     }
 
-    updateHeaderStatus() {
-        if(isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
-             this.entityTabStatus.entity_sub_org_info = true;
-             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus':  this.entityTabStatus });
+    updateCompleteFlag() {
+        if (isOrganizationConditionSatisfied(this._entitySubAwardService.entitySubAwardOrganization)) {
+            this.entityTabStatus.entity_sub_org_info = true;
+            this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus': this.entityTabStatus });
         }
-     }
+    }
 }

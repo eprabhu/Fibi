@@ -87,6 +87,8 @@ export class CommonService {
     CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
     isEntityModified = false;
     projectHierarchySliderInfo = new ProjectHierarchySliderPayload();
+    autoSaveSavingLoader: 'SHOW'|'HIDE' = 'HIDE';
+    loaderRestrictedUrls: any[] = [];
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }
@@ -477,10 +479,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     /**
-     * 
-     * @param projectId  
-     * @param projectTypeCode 
-     * 
+     *
+     * @param projectId
+     * @param projectTypeCode
+     *
      * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration
      * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
      */
