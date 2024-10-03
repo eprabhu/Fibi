@@ -309,7 +309,7 @@ public class ReviewCommentServiceImpl implements ReviewCommentService {
     }
 
     private void getProposalDetail(DisclComment reviewComments, HashMap<String, String> proposalTitles) {
-        if (proposalTitles.containsKey(reviewComments.getSubModuleItemKey())) {
+        if (!proposalTitles.containsKey(reviewComments.getSubModuleItemKey())) {
             List<DisclosureDetailDto> proposalDetails = conflictOfInterestDao.getProjectsBasedOnParams(Constants.DEV_PROPOSAL_MODULE_CODE, null,
                     null, reviewComments.getSubModuleItemKey());
             proposalTitles.put(String.valueOf(reviewComments.getSubModuleItemKey()), proposalDetails.get(0).getTitle());
