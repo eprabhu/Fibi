@@ -6,8 +6,8 @@
         </div>
         <div class="col-auto" *ngIf="entityIndustryClassifications.length && isEditMode">
             <button id="additional-address-add-button"
-                class="btn btn-primary fs-14 d-inline-flex" title="'Click here to industry details'"
-                aria-label="'Click here to industry details'" (click)="addIndustryDetails(true)">
+                class="btn btn-primary fs-14 d-inline-flex" title="Click here to industry details"
+                aria-label="Click here to industry details" (click)="addIndustryDetails(true)">
                 <mat-icon>add</mat-icon>Add Industry Details
             </button>
         </div>
@@ -31,8 +31,10 @@
                 <div class="col-md-3 col-lg-2 d-flex align-items-center">
                     <span class="d-flex  ms-auto" *ngIf="isEditMode">
                     <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                              (click)="editIndustry(subsection, i)">edit</mat-icon>
+                    title="Click here to edit industry details" aria-label="Click here to edit industry details" (keypress.enter)="editAddress(address, i)"
+                    (click)="editIndustry(subsection, i)">edit</mat-icon>
                     <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                    title="Click here to delete industry details" aria-label="Click here to delete industry details" (keypress.enter)="editAddress(address, i)"
                     (click)="confirmDeleteIndustry(subsection, i)">delete</mat-icon>
                 </span>
                 </div>

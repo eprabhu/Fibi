@@ -28,8 +28,10 @@
                     </div>
                     <div class="col-md-3 col-lg-2 d-flex align-items-center">
                         <span class="d-flex  ms-auto" *ngIf="isEditMode">
-                        <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRelationship(registration, i)">edit</mat-icon>
-                        <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDelete(registration, i)">delete</mat-icon>
+                        <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRelationship(registration, i)"
+                        title="Click here to edit registration details" aria-label="Click here to edit registration details" (keypress.enter)="editRelationship(registration, i)">edit</mat-icon>
+                        <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDelete(registration, i)"
+                        title="Click here to delete registration details" aria-label="Click here to delete registration details" (keypress.enter)="confirmDelete(registration, i)">delete</mat-icon>
                     </span>
                     </div>
                 </div>
