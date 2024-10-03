@@ -29,18 +29,17 @@ import { LoginPersonDetails } from './coi-common.interface';
  */
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-    
+
     currentActiveAPICount = 0;
-    loaderRestrictedUrls: any[] = [];
 
     constructor(private _router: Router, private _commonService: CommonService) { }
-    
+
     /**catches every request and adds the authentication token from local storage
      * creates new header with auth-key
     */
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (this._commonService.isPreventDefaultLoader) {
-            this.loaderRestrictedUrls.push(req.urlWithParams);
+            this._commonService.loaderRestrictedUrls.push(req.urlWithParams);
         } else {
             this.currentActiveAPICount++;
             this._commonService.isShowLoader.next(true);
@@ -70,11 +69,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
             }),
 
             finalize(() => {
-                if (this.loaderRestrictedUrls.includes(req.urlWithParams)){
-                    this.loaderRestrictedUrls = this.loaderRestrictedUrls.filter(url => url !== req.urlWithParams);
-                } else {
-                    this.currentActiveAPICount--;
-                }
+                const INDEX = this._commonService.loaderRestrictedUrls.indexOf(req.urlWithParams);
+                INDEX > -1 ? this._commonService.loaderRestrictedUrls.splice(INDEX, 1) : this.currentActiveAPICount--;
                 if (this.currentActiveAPICount <= 0) {
                     this._commonService.isShowLoader.next(false);
                     this._commonService.appLoaderContent = 'Loading...';
