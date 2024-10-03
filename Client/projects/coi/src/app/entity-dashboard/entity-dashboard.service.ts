@@ -5,9 +5,8 @@ import { HTTP_ERROR_STATUS } from '../app-constants';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+
 export class EntityDashboardService {
 
   constructor(private _commonService: CommonService, private _http: HttpClient) { }
@@ -28,12 +27,16 @@ export class EntityDashboardService {
   entitySearchRequestObject = new EntityDashboardSearchRequest();
   sortCountObj: any = {};
 
-  getAllSystemEntityList(params) {
-    return this._http.post(this._commonService.baseUrl + '/entity/getEntityDashboardData', params).pipe(catchError((err) => {
-        this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Entity List failed. Please try again.');
-        return of();
-      }));
-  }
+    getAllSystemEntityList(params) {
+        return this._http.post(this._commonService.baseUrl + '/entity/getEntityDashboardData', params).pipe(catchError((err) => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, 'Fetching Entity List failed. Please try again.');
+            return of();
+        }));
+    }
+
+    logFeedHistory(tabDetails) {
+        return this._http.post(this._commonService.baseUrl + '/entity/logAction', tabDetails);
+    }
 }
 
 export class EntityDashboardSearchRequest{
