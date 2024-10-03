@@ -26,13 +26,12 @@ class DNBReqObj {
     state: string;
     countryCode: string;
 }import { COIModalConfig, ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
-import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
-import { NavigationService } from '../../common/services/navigation.service';
+import { COMMON_ERROR_TOAST_MSG, ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
 
 @Component({
   selector: 'app-header-details',
   templateUrl: './header-details.component.html',
-  styleUrls: ['./header-details.component.scss']
+  styleUrls: ['./header-details.component.scss'],
 })
 export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
@@ -68,9 +67,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     constructor(public router: Router, public dataStore: EntityDataStoreService,
         public autoSaveService: AutoSaveService,
         private _entityManagementService: EntityManagementService,
-        private _commonService: CommonService,
-        private _route: ActivatedRoute,
-        private _navigationService: NavigationService
+        public commonService: CommonService,
     ) { }
     ngOnInit() {
         this.dunsMatchConfirmationModalConfig.dataBsOptions.focus = false;
@@ -191,13 +188,13 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     }
 
     checkUserHasRight(): void {
-        this.canVerifyEntity = this._commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
-        this.canManageEntity = this._commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
+        this.canVerifyEntity = this.commonService.getAvailableRight(['VERIFY_ENTITY'], 'SOME');
+        this.canManageEntity = this.commonService.getAvailableRight(['MANAGE_ENTITY'], 'SOME');
     }
 
     getCanModifyEntity(): boolean {
-        return this._commonService.getAvailableRight(['MANAGE_ENTITY', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE', 'MANAGE_ENTITY_SPONSOR'], 'SOME') &&
-        !this._commonService.isEntityModified && this.entityDetails?.entityStatusType?.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED && !this.isEditMode &&
+        return this.commonService.getAvailableRight(['MANAGE_ENTITY', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE', 'MANAGE_ENTITY_SPONSOR'], 'SOME') &&
+        !this.commonService.isEntityModified && this.entityDetails?.entityStatusType?.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED && !this.isEditMode &&
         this.entityDetails?.entityDocumentStatusType?.documentStatusTypeCode === ENTITY_DOCUMNET_STATUS_TYPE.ACTIVE;
     }
     openConfirmationModal(event: 'USE' | 'OPEN_MODAL',entity: EntityCardDetails) {
@@ -223,17 +220,17 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._entityManagementService.triggerEnrichAPI({
                 duns: this.selectedDUNSNumber,
                 entityId: this.entityDetails.entityId,
-                actionPersonId: this._commonService.getCurrentUserDetail('personID')
+                actionPersonId: this.commonService.getCurrentUserDetail('personID')
             }).subscribe((data: any) => {
                 if (data?.httpStatusCode == '200') {
                     this.updateEntityDetails();
                 } else {
                     this.isSaving = false;
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
                 }
             }, error => {
                 this.isSaving = false;
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
             }
             ));
         }
@@ -254,7 +251,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
         }, error => {
             this.isSaving = false;
-            this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
         }));
     }
 
@@ -271,16 +268,23 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     leaveSlider() {
         removeToast('ERROR');
         removeToast('SUCCESS');
-        this._commonService.setChangesAvailable(false);
+        this.commonService.setChangesAvailable(false);
     }
 
     resetNavigationStop() {
-        this._commonService.isNavigationStopped = false;
-        this._commonService.attemptedPath = '';
+        this.commonService.isNavigationStopped = false;
+        this.commonService.attemptedPath = '';
     }
 
     modifyEntity(): void {
-        this.dataStore.updateModifiedFlag(this.entityDetails, true);
+        const REQ_OBJ = { entityId: this.entityDetails.entityId, actionLogCode: 15 };
+        this.$subscriptions.push(this._entityManagementService.logFeedHistory(REQ_OBJ).subscribe((data: any) => {
+            if (data) {
+                this.dataStore.updateModifiedFlag(this.entityDetails, true);
+            }
+        }, err => {
+            this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+        }));
     }
 
     openEntity(): void{

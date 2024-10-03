@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus } from './shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityTabStatus, SubAwardOrgUpdateClass } from './shared/entity-interface';
 import { CommonService } from '../common/services/common.service';
 import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE } from '../app-constants';
 import { canUpdateSponsorFeed, canUpdateOrgFeed } from './entity-management.service';
@@ -94,7 +94,7 @@ export class EntityDataStoreService {
     }
 
     enableModificationHistoryTracking() {
-        this.canLogModificationHistory = this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED;
+        // this.canLogModificationHistory = this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED;
     }
 
     getApiCalls(entityId, reqObj): any[] {

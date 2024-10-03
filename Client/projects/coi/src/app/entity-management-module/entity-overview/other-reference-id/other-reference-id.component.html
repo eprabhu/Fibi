@@ -8,8 +8,8 @@
                 <span class="fs-16 fw-medium" id="coi-entity-other-ref-id">{{sectionName}}<app-common-help-text [subSectionId]="2608" [elementId]="'coi-entity-other-ref-id'"></app-common-help-text></span>
                 <div class="col-auto ms-auto" *ngIf="externalReferences.length && isEditMode">
                     <button id="additional-address-add-button"
-                            class="btn btn-primary fs-14 d-inline-flex" title="'Click here to Add Other Reference Id'"
-                            aria-label="'Click here to add Add Other Reference Id'" (click)="addOtherRefId(true)">
+                            class="btn btn-primary fs-14 d-inline-flex" title="Click here to Add Other Reference Id"
+                            aria-label="Click here to add Add Other Reference Id" (click)="addOtherRefId(true)">
                         <mat-icon>add</mat-icon>Add Other Reference Id
                     </button>
                 </div>
@@ -25,8 +25,10 @@
                        </div>
                        <div class="col-md-3 col-lg-2 d-flex align-items-center">
                         <span class="d-flex  ms-auto" *ngIf="isEditMode">
-                            <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRef(ref, i)">edit</mat-icon>
-                            <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRef(ref, i)">delete</mat-icon>
+                            <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRef(ref, i)"
+                            title="Click here to edit other reference id" aria-label="Click here to edit other reference id" (keypress.enter)="editRef(ref, i)">edit</mat-icon>
+                            <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRef(ref, i)"
+                            title="Click here to delete other reference id" aria-label="Click here to delete other reference id" (keypress.enter)="confirmDeleteRef(ref, i)">delete</mat-icon>
                         </span>
                        </div>
                    </div>
