@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.clients.model.EmailNotificationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -383,5 +384,12 @@ public interface ConflictOfInterestService {
 	 * @return
 	 */
 	Map<String, List<FileType>> fetchRequiredParams();
+
+	/**
+	 * Fetch Email preview
+	 * @param emailNotificationDto
+	 * @return
+	 */
+	ResponseEntity<Object> getEmailPreview(EmailNotificationDto emailNotificationDto);
 
 }
