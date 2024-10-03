@@ -652,8 +652,8 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         copyDisclosure.setVersionNumber(disclosure.getVersionNumber() + 1);
         copyDisclosure.setPersonId(AuthenticatedUser.getLoginPersonId());
         copyDisclosure.setDisclosureNumber(disclosure.getDisclosureNumber());
-        copyDisclosure.setCreatedBy(AuthenticatedUser.getLoginUserName());
-        copyDisclosure.setUpdatedBy(AuthenticatedUser.getLoginUserName());
+        copyDisclosure.setCreatedBy(AuthenticatedUser.getLoginPersonId());
+        copyDisclosure.setUpdatedBy(AuthenticatedUser.getLoginPersonId());
         return disclosureDao.saveOrUpdateCoiDisclosure(copyDisclosure);
     }
 
