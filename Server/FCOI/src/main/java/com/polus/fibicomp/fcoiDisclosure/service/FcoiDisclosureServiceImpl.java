@@ -213,11 +213,34 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId) {
-        List<DisclosureProjectDto> disclProjects;
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
-            disclProjects = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
+        CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(disclosureId));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)) {
+            projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(disclosureId));
         } else {
-            disclProjects = disclosureDao.getDisclosureProjects(disclosureId);
+            projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(disclosureId));
+        }
+        CompletableFuture<Void> allOf = CompletableFuture.allOf( disclosureDetailsFuture, projectsFuture);
+        List<DisclosureProjectDto> disclProjects;
+        try {
+            allOf.get();
+            List<CoiConflictStatusType> disclConflictStatusTypes = disclosureDao.getCoiConflictStatusTypes();
+            List<CoiDisclEntProjDetailsDto> disclProjEntRelations = disclosureDetailsFuture.get();
+            disclProjects = projectsFuture.get();
+            Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
+                    .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getCoiDisclProjectId));
+            disclProjects.parallelStream().forEach(disclosureProject -> {
+                List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(disclosureProject.getCoiDisclProjectId());
+                Map<String, Object> returnedObj = getRelationConflictCount(disclEntProjDetails, disclConflictStatusTypes);
+                if(returnedObj.get("conflictStatus") != null) {
+                    String conflictStatus = (String) returnedObj.get("conflictStatus");
+                    disclosureProject.setConflictStatus(conflictStatus.isEmpty() ? null : conflictStatus);
+                    disclosureProject.setConflictStatusCode(conflictStatus.isEmpty() ? null : returnedObj.get("conflictStatusCode").toString());
+                }
+            });
+        } catch (Exception e) {
+            throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
         }
         return disclProjects;
     }
@@ -400,7 +423,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
         CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())){
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())) {
             projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(vo.getDisclosureId()));
         } else {
             projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
@@ -774,7 +797,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         } else {
             actionTypes.put(FCOI_DISCLOSURE, ActionTypes.FCOI_REASSIGN_ADMIN);
             actionTypes.put(PROJECT_DISCLOSURE, ActionTypes.PROJECT_REASSIGN_ADMIN);
-            additionalDetails.put(StaticPlaceholders.NOTIFICATION_RECIPIENTS, disclosure.getAdminPersonId());
+            additionalDetails.put("NOTIFICATION_RECIPIENTS", disclosure.getAdminPersonId());
             additionalDetails.put(StaticPlaceholders.ADMINISTRATOR_NAME, personDao.getPersonFullNameByPersonId(disclosure.getAdminPersonId()));
         }
         additionalDetails.put(StaticPlaceholders.ADMIN_ASSIGNED_BY, personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));

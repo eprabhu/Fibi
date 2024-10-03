@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.clients.NotificationServiceClients;
+import com.polus.fibicomp.coi.clients.model.EmailNotificationDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -163,6 +165,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Autowired
 	private FCOIDisclProjectService projectService;
 
+	@Autowired
+	private NotificationServiceClients notificationServiceClients;
+
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
 	private static final String REVIEW_STATUS_TYPE_CODE = "1";
@@ -206,19 +211,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String TAB_TYPE_APPROVED_DISCLOSURES = "APPROVED_DISCLOSURES";
 	private static final String FCOI_DISCLOSURE = "FCOI_DISCLOSURE";
 	private static final String PROJECT_DISCLOSURE = "PROJECT_DISCLOSURE";
-
-	private static final String PROJECT_NOTIFY = "PROJECT_NOTIFY";
-	private static final String SINGLE_PERSON = "S";
-	private static final String NOTIFICATION_RECIPIENTS = "NOTIFICATION_RECIPIENTS";
-	private static final String ALL_PERSON = "A";
-
-	private static final String PROJECT_ID = "PROJECT_ID";
-
-	private static final String PROJECT_TITLE = "PROJECT_TITLE";
-
-	private static final String DISCLOSURE_STATUS = "DISCLOSURE_STATUS";
-
-	private static final String REPORTER_NAME = "REPORTER_NAME";
+	private static final String NOTIFICATION_RECIPIENT_OBJECTS = "NOTIFICATION_RECIPIENT_OBJECTS";
+	private static final String NOTIFICATION_SUBJECT = "NOTIFICATION_SUBJECT";
+	private static final String NOTIFICATION_BODY = "NOTIFICATION_BODY";
 
 	@Override
 	public List<Entity> searchEntity(ConflictOfInterestVO vo) {
@@ -2010,19 +2005,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto) {
 		Map<String, String> additionalDetails = new HashMap<>();
-		CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(notificationDto.getDisclosureId());
-		String recipientPersonIds = notificationDto.getRecipients().stream()
-				.map(NotificationRecipient::getRecipientPersonId).map(String::valueOf).collect(Collectors.joining(","));
-		additionalDetails.put(NOTIFICATION_RECIPIENTS, recipientPersonIds);
-		List<DisclosureDetailDto> projectDetails = conflictOfInterestDao.getProjectsBasedOnParams(
-				notificationDto.getProjectTypeCode(), null, null, String.valueOf(notificationDto.getProjectId()));
-		DisclosureDetailDto disclProjectDetail = projectDetails.get(0);
-		additionalDetails.put("notificationTypeId", notificationDto.getNotificationTypeId());
-		additionalDetails.put("PROJECT_ID", disclProjectDetail.getModuleItemKey());
-		additionalDetails.put("PROJECT_TITLE", disclProjectDetail.getTitle());
-		additionalDetails.put("DISCLOSURE_STATUS", disclosure.getCoiReviewStatusType().getDescription());
-		additionalDetails.put("REPORTER_NAME", personDao.getPersonFullNameByPersonId(disclosure.getPersonId()));
-		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, 0, null, additionalDetails);
+		additionalDetails.put(NOTIFICATION_RECIPIENT_OBJECTS, commonDao.convertObjectToJSON(notificationDto.getRecipients()));
+		additionalDetails.put(NOTIFICATION_SUBJECT, notificationDto.getSubject());
+		additionalDetails.put(NOTIFICATION_BODY, notificationDto.getMessage());
+		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, notificationDto.getDisclosureId(), null, additionalDetails);
 		return new ResponseEntity<>("Notification send successfully", HttpStatus.OK);
 	}
 
@@ -2032,6 +2018,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		Map<String, List<FileType>> response = new HashMap<>();
 	    response.put("fileTypes", fileTypes);
 	    return response;
+	}
+
+	@Override
+	public ResponseEntity<Object> getEmailPreview(EmailNotificationDto emailNotificationDto) {
+		return new ResponseEntity<>(notificationServiceClients.previewEmail(emailNotificationDto), HttpStatus.OK);
 	}
 
 }
