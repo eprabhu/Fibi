@@ -2,7 +2,9 @@ package com.polus.fibicomp.globalentity.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
@@ -27,12 +29,15 @@ import com.polus.core.filemanagement.FileStorageException;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dao.EntityFileAttachmentDao;
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.EntityFileRequestDto;
 import com.polus.fibicomp.globalentity.exception.EntityFileAttachmentException;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityAttachmentType;
+import com.polus.fibicomp.globalentity.pojo.EntitySection;
 import com.polus.fibicomp.globalentity.pojo.EntitySectionAttachRef;
 import com.polus.fibicomp.globalentity.pojo.ValidEntityAttachType;
+import com.polus.fibicomp.globalentity.repository.EntitySectionRepository;
 import com.polus.fibicomp.globalentity.repository.ValidEntityAttachTypesRepository;
 
 @Transactional
@@ -56,6 +61,9 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 
 	@Autowired
 	private PersonDao personDao;
+
+	@Autowired
+	private EntitySectionRepository entitySectionRepository;
 
 	private static final String ENTITY_MODULE_CODE = "26";
 
@@ -84,6 +92,7 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 							"Exception in saveFileAttachment in EntityFileAttachmentService, " + e);
 				}
 				attach.setFileDataId(fileOutputHolder[0].getFileDataId());
+				attach.setEntityId(request.getEntityId());
 				Integer attachId = entityFileAttachmentDao.saveEntityAttachmentDetail(attach);
 				entityFileAttachmentDao.saveEntitySecAttachRef(
 						EntitySectionAttachRef.builder().entityId(request.getEntityId())
@@ -175,19 +184,42 @@ public class EntityFileAttachmentServiceImpl implements EntityFileAttachmentServ
 	}
 
 	@Override
-	public List<EntityAttachment> getAttachmentsByEntityId(Integer entityId) {
-		List<EntityAttachment> attachmentsList = entityFileAttachmentDao.getAttachmentsByEntityId(entityId);
-		return attachmentsList;
+	public Map<String, List<EntityAttachmentResponseDTO>> getAttachmentsByEntityId(Integer entityId) {
+		List<EntitySection> sections = entitySectionRepository.fetchAllEntitySections();
+		Map<String, List<EntityAttachmentResponseDTO>> sectionAttachmentsDTO = sections.stream()
+				.collect(Collectors.toMap(
+						section -> section.getDescription().split(" - ")[0], 
+						section -> {
+					List<EntityAttachment> attachments = entityFileAttachmentDao.getAttachmentsBySectionCode(section.getEntitySectionCode(), entityId);
+					List<EntityAttachmentResponseDTO> attachmentDTOs = new ArrayList<>();
+					attachments.forEach(attachment -> {
+						EntityAttachmentResponseDTO dto = new EntityAttachmentResponseDTO();
+						attachmentDTOs.add(mapEntityToDTO(dto, attachment));
+					});
+					return attachmentDTOs;
+				}));
+		return sectionAttachmentsDTO;
+	}
+
+	private EntityAttachmentResponseDTO mapEntityToDTO(EntityAttachmentResponseDTO dto, EntityAttachment attachment) {
+		return EntityAttachmentResponseDTO.builder().entityAttachmentId(attachment.getEntityAttachmentId())
+				.attachmentNumber(attachment.getAttachmentNumber()).versionNumber(attachment.getVersionNumber())
+				.entityId(attachment.getEntityId()).comment(attachment.getComment())
+				.attachmentTypeCode(attachment.getAttachmentTypeCode())
+				.attachmentType(attachment.getAttachmentType().getDescription()).fileName(attachment.getFileName())
+				.updateTimestamp(attachment.getUpdateTimestamp())
+				.updateUserFullname(personDao.getPersonFullNameByPersonId(attachment.getUpdatedBy())).build();
 	}
 
 	@Override
-	public List<EntityAttachment> getAttachmentsBySectionCode(String sectionCode, Integer entityId) {
+	public List<EntityAttachmentResponseDTO> getAttachmentsBySectionCode(String sectionCode, Integer entityId) {
 		List<EntityAttachment> attachments = entityFileAttachmentDao.getAttachmentsBySectionCode(sectionCode, entityId);
-		attachments.stream()
-        .forEach(attachment -> {
-        	attachment.setUpdateUserFullame(personDao.getPersonFullNameByPersonId(attachment.getUpdatedBy()));
+		List<EntityAttachmentResponseDTO> attachmentDTOs = new ArrayList<>();
+		attachments.forEach(attachment -> {
+			EntityAttachmentResponseDTO dto = new EntityAttachmentResponseDTO();
+			attachmentDTOs.add(mapEntityToDTO(dto, attachment));
         });
-		return attachments;
+		return attachmentDTOs;
 	}
 
 	@Override

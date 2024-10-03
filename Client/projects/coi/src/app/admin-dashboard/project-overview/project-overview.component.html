@@ -50,103 +50,116 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-
-                                    <!-- Pi name -->
-                                    <div class="col-lg-4 col-md-6 mb-2">
-                                        <label for="coi-project-overview-piname"
-                                            class="d-block coi-text-dark">Principal Investigator</label>
-                                        <div tabindex="-1">
-                                            <span id="coi-project-overview-piname-{{index1}}">
-                                                <app-no-data-label [valueToShow]="projectData?.projectDetails?.piName">
-                                                    <span class="coi-text-light text-slice" 
-                                                        [title]="projectData?.projectDetails?.piName">{{projectData?.projectDetails?.piName}}</span>
-                                                </app-no-data-label>
-                                            </span>
+                                <div class="row row-gap-2">
+                                    <ng-container *ngFor="let FieldOrder of PROJECT_DETAILS_ORDER_WITHOUT_ROLE[projectData?.projectDetails?.projectTypeCode]">
+                                        <!-- Pi name -->
+                                        <div *ngIf="FieldOrder === 'PI'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-piname-{{index1}}"
+                                                class="d-block coi-text-dark">Principal Investigator</label>
+                                            <div tabindex="-1">
+                                                <span id="coi-project-overview-piname-{{index1}}">
+                                                    <app-no-data-label [valueToShow]="projectData?.projectDetails?.piName">
+                                                        <span class="coi-text-light text-slice" 
+                                                            [title]="projectData?.projectDetails?.piName">{{projectData?.projectDetails?.piName}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <!-- Lead Unit -->
-                                    <div class="col-lg-4 col-md-6 mb-2">
-                                        <label for="coi-project-overview-leadunit" class="d-block coi-text-dark">Lead
-                                            Unit</label>
-                                        <div tabindex="-1" id="coi-project-overview-leadunit-{{index1}}">
-                                            <span>
-                                                <app-no-data-label
-                                                    [valueToShow]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
-                                                    <span class="coi-text-light text-slice"
-                                                        [title]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
-                                                        {{commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})}}</span>
-                                                </app-no-data-label>
-                                            </span>
+    
+                                        <!-- Lead Unit -->
+                                        <div *ngIf="FieldOrder === 'LEAD_UNIT'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-leadunit-{{index1}}" class="d-block coi-text-dark">Lead Unit</label>
+                                            <div tabindex="-1" id="coi-project-overview-leadunit-{{index1}}">
+                                                <span>
+                                                    <app-no-data-label
+                                                        [valueToShow]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
+                                                        <span class="coi-text-light text-slice"
+                                                            [title]="commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})">
+                                                            {{commonService.getPersonLeadUnitDetails({unitName: projectData?.projectDetails?.leadUnitName, unitNumber: projectData?.projectDetails?.leadUnitNumber})}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <!-- Project status -->
-                                    <div class="col-lg-4 col-md-6 mb-2">
-                                        <label for="coi-project-overview-Project-status"
-                                            class="d-block coi-text-dark">{{projectData?.projectDetails?.projectType}} Status</label>
-                                        <div tabindex="-1">
-                                            <span id="coi-project-overview-Project-status-{{index1}}">
-                                                <app-no-data-label
-                                                    [valueToShow]="projectData?.projectDetails?.projectStatus">
-                                                    <span class="coi-text-light text-slice"
-                                                        [title]="projectData?.projectDetails?.projectStatus">
-                                                        {{projectData?.projectDetails?.projectStatus}}</span>
-                                                </app-no-data-label>
-                                            </span>
+    
+                                        <!-- Project status -->
+                                        <div *ngIf="FieldOrder === 'PROJECT_STATUS'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-Project-status-{{index1}}"
+                                                class="d-block coi-text-dark">{{projectData?.projectDetails?.projectType}} Status</label>
+                                            <div tabindex="-1">
+                                                <span id="coi-project-overview-Project-status-{{index1}}">
+                                                    <app-no-data-label
+                                                        [valueToShow]="projectData?.projectDetails?.projectStatus">
+                                                        <span class="coi-text-light text-slice"
+                                                            [title]="projectData?.projectDetails?.projectStatus">
+                                                            {{projectData?.projectDetails?.projectStatus}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <!-- Sponsor -->
-                                    <div class="col-lg-4 col-md-6 mb-2">
-                                        <label for="coi-project-overview-sponsor-name"
-                                            class="d-block coi-text-dark">Sponsor</label>
-                                        <div tabindex="-1">
-                                            <span  id="coi-project-overview-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.sponsorName">
-                                                <app-no-data-label
-                                                    [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
-                                                    <span class="coi-text-light text-slice"
-                                                        [title]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
-                                                        {{getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)}}</span>
-                                                </app-no-data-label>
-                                            </span>
+    
+                                        <!-- Sponsor -->
+                                        <div *ngIf="FieldOrder === 'SPONSOR'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-sponsor-name-{{index1}}" class="d-block coi-text-dark">Sponsor</label>
+                                            <div tabindex="-1">
+                                                <span id="coi-project-overview-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.sponsorName">
+                                                    <app-no-data-label
+                                                        [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
+                                                        <span class="coi-text-light text-slice"
+                                                            [title]="getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)">
+                                                            {{getFormattedSponsor(projectData?.projectDetails?.sponsorCode, projectData?.projectDetails?.sponsorName)}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <!-- prime Sponsor -->
-                                    <div class="col-lg-4 col-md-6 mb-2">
-                                        <label for="coi-project-overview-prime-sponsor-name"
-                                            class="d-block coi-text-dark">Prime Sponsor</label>
-                                        <div tabindex="-1">
-                                            <span id="coi-project-overview-prime-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.primeSponsorName">
-                                                <app-no-data-label
-                                                    [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
-                                                    <span class="coi-text-light text-slice"
-                                                        [title]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
-                                                        {{getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)}}</span>
-                                                </app-no-data-label>
-                                            </span>
+    
+                                        <!-- prime Sponsor -->
+                                        <div *ngIf="FieldOrder === 'PRIME_SPONSOR'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-prime-sponsor-name-{{index1}}"
+                                                class="d-block coi-text-dark">Prime Sponsor</label>
+                                            <div tabindex="-1">
+                                                <span id="coi-project-overview-prime-sponsor-name-{{index1}}" [attr.aria-label]="projectData?.projectDetails?.primeSponsorName">
+                                                    <app-no-data-label
+                                                        [valueToShow]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
+                                                        <span class="coi-text-light text-slice"
+                                                            [title]="getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)">
+                                                            {{getFormattedSponsor(projectData?.projectDetails?.primeSponsorCode, projectData?.projectDetails?.primeSponsorName)}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <!-- period -->
-                                    <div class="col-lg-4 col-md-6 mb-2"
-                                    [attr.aria-label]="'Period is ' + ((projectData?.projectDetails?.projectStartDate || projectData?.projectDetails?.projectEndDate) ?
-					                ((projectData?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (projectData?.projectDetails?.projectEndDate | dateFormatter))  : 'empty')">
-                                        <label for="coi-project-overview-start-date"
-                                            class="d-block coi-text-dark">Period</label>
-                                        <div>
-                                            <span  id="coi-project-overview-start-date-{{index1}}">
-                                                <app-no-data-label
-                                                    [valueToShow]="projectData?.projectDetails?.projectStartDate && projectData?.projectDetails?.projectEndDate">
-                                                    <span class="coi-text-light text-slice"
-                                                    [title]="((projectData?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (projectData?.projectDetails?.projectEndDate | dateFormatter))">
-                                                        {{projectData?.projectDetails?.projectStartDate | dateFormatter}} - {{projectData?.projectDetails?.projectEndDate | dateFormatter}}</span>
-                                                </app-no-data-label>
-                                            </span>
+    
+                                        <!-- period -->
+                                        <div *ngIf="FieldOrder === 'PERIOD'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4"
+                                            [attr.aria-label]="'Period is ' + ((projectData?.projectDetails?.projectStartDate || projectData?.projectDetails?.projectEndDate) ?
+                                            ((projectData?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (projectData?.projectDetails?.projectEndDate | dateFormatter))  : 'empty')">
+                                            <label for="coi-project-overview-start-date-{{index1}}"
+                                                class="d-block coi-text-dark">Period</label>
+                                            <div>
+                                                <span  id="coi-project-overview-start-date-{{index1}}">
+                                                    <app-no-data-label
+                                                        [valueToShow]="projectData?.projectDetails?.projectStartDate && projectData?.projectDetails?.projectEndDate">
+                                                        <span class="coi-text-light text-slice"
+                                                        [title]="((projectData?.projectDetails?.projectStartDate | dateFormatter) + ' - ' + (projectData?.projectDetails?.projectEndDate | dateFormatter))">
+                                                            {{projectData?.projectDetails?.projectStartDate | dateFormatter}} - {{projectData?.projectDetails?.projectEndDate | dateFormatter}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <!-- Account Number -->
+                                        <div *ngIf="FieldOrder === 'ACCOUNT_NUMBER'" class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                            <label for="coi-project-overview-account-no-{{index1}}"
+                                                class="d-block coi-text-dark">Account Number</label>
+                                            <div tabindex="-1">
+                                                <span id="coi-project-overview-account-no-{{index1}}">
+                                                    <app-no-data-label [valueToShow]="projectData?.projectDetails?.accountNumber">
+                                                        <span class="coi-text-light text-slice" 
+                                                            [title]="projectData?.projectDetails?.accountNumber">{{projectData?.projectDetails?.accountNumber}}</span>
+                                                    </app-no-data-label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                 </div>
                             </div>
                             

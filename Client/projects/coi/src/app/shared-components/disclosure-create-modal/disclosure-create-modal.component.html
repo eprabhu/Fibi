@@ -46,10 +46,12 @@
                     <span>Disclose at Unit</span>
                     <app-common-help-text [helpTextHardCoded]="unitHelpText"></app-common-help-text>
                 </label>
-                <button class="d-flex mt-1 fs-14 align-items-center btn-none" *ngIf="isHideEndpointSearch" (click)="isHideEndpointSearch = false">
+                <button *ngIf="isHideEndpointSearch" class="d-flex mt-1 fs-14 align-items-center btn-none"
+                    aria-label="Click here to edit unit" (click)="isHideEndpointSearch = false" id="edit-home-unit">
                     <span>{{commonService.getPersonLeadUnitDetails(commonService.currentUserDetails)}}</span>
+                    <!-- A title is provided because the icon is displayed as a button. As a feature, clicking on the unit also triggers the edit action. -->
                     <span class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1 coi-scale-9"
-                        id="close-edit-home-unit" title="Click to edit unit" type="button">
+                        id="close-edit-home-unit" title="Click here to edit unit">
                         <mat-icon aria-hidden="true">edit</mat-icon>
                     </span>
                 </button>
@@ -61,8 +63,8 @@
                     </app-endpoint-search>
                     <button class="btn btn-primary-icon btn-sm mt-0 border fw-normal
                         margin-left-1 px-3 d-flex justify-content-center align-items-center"
-                        *ngIf="!isHideEndpointSearch" (click)="resetHomeUnit()" id="edit-home-unit"
-                        title="Click to Reset" aria-label="Click to Reset" [class.reset-highlight]="!reviseObject.homeUnit">
+                        *ngIf="!isHideEndpointSearch" (click)="resetHomeUnit()" id="reset-home-unit"
+                        title="Click here to Reset" aria-label="Click here to Reset" [class.reset-highlight]="!reviseObject.homeUnit">
                         <span class="fa fa-rotate-left"></span>
                         <span class="ms-2">Reset</span>
                     </button>
@@ -167,10 +169,10 @@
         <div class="mt-1">
             <ul class="mb-0 fs-14">
                 <ng-container *ngFor="let type of projectTypes">
-                    <li *ngIf="type.isActive" class="me-5 d-flex align-items-center">
+                    <li *ngIf="type?.projectDisclosureNeeded" class="me-5 d-flex align-items-center">
                         <input [(ngModel)]="selectedProjectType" (ngModelChange)="changeProjectType()"
                             [value]="type.description" class="me-2 cursor-pointer" type="radio"
-                            name="{{type?.description}}" id="{{type?.description}}" [disabled]="!type?.projectDisclosureNeeded">
+                            name="{{type?.description}}" id="{{type?.description}}">
                         <label class="cursor-pointer fw-normal" for="{{type?.description}}">{{type?.description}}</label>
                     </li>
                 </ng-container>
@@ -413,7 +415,7 @@
             </button>
             <!-- for travel create -->
             <button *ngIf="triggeredFrom == 'TRAVEL_DISCLOSURE'" class="btn btn-primary" type="button"
-                id="travel-disclosure-create-btn" title="Click to continue with creating the travel disclosure"
+                id="travel-disclosure-create-btn" title="Click here to continue with creating the travel disclosure"
                 aria-label="Click here to continue with creating the travel disclosure" (click)="navigateToTravelDisclosure();">
                 Create
             </button>

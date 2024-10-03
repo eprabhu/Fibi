@@ -479,14 +479,15 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     /**
-     *
+     * 
+     * @param projectTypeCode 
      * @param projectId
-     * @param projectTypeCode
-     *
+     * 
+     * 1: award, 2: institute proposal, 3: development proposal
      * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration
      * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
      */
-    redirectToProjectDetails(projectId: string, projectTypeCode: string | number): void {
+    redirectToProjectDetails(projectTypeCode: string | number, projectId: string): void {
         const RESOURCE_URLS = {
             1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
             2: (this.EXTERNAL_IP_URL || IP_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),

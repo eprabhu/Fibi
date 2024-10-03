@@ -31,7 +31,7 @@ export const ELASTIC_AGREEMENT_OUTPUT_FORMAT = 'agreement_request_id | title | a
 export const ELASTIC_EXTERNAL_REVIEWER_OUTPUT_FORMAT = 'full_name | email_addr | Academic Rank : academic_rank | H-Index: hindex';
 
 export const ADMIN_DASHBOARD_RIGHTS = new Set(['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE', 'VIEW_PROJECT_DISCLOSURE',
-  'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE', 'MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE_OVERVIEW']);
+    'MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE', 'MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE_OVERVIEW']);
 
 export const PROJECT_OVERVIEW_RIGHTS = ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'];
 export const FCOI_DISCLOSURE_RIGHTS = ['MANAGE_FCOI_DISCLOSURE', 'VIEW_FCOI_DISCLOSURE'];
@@ -52,28 +52,28 @@ export const TIME_FORMAT = 'h:mm:ss a';
 //  Angular Material date picker
 export const DATE_PICKER_FORMAT_MATERIAL = {
     parse: {
-      dateInput: 'MM/DD/YYYY HH:mm:ss',
+        dateInput: 'MM/DD/YYYY HH:mm:ss',
     },
     display: {
-      dateInput: 'MM/DD/YYYY',
-      monthYearLabel: 'MMM YYYY',
-      dateA11yLabel: 'LL',
-      monthYearA11yLabel: 'MMMM YYYY',
+        dateInput: 'MM/DD/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
     },
-  };
+};
 
 export const EDITOR_CONFIGURATION = {
     link: {
-      addTargetToExternalLinks: true,
-      defaultProtocol: 'http://'
+        addTargetToExternalLinks: true,
+        defaultProtocol: 'http://'
     },
     removePlugins: ['imageUpload', 'mediaEmbed'],
     toolbar: {
-      removeItems: [ 'imageUpload', 'mediaEmbed', 'uploadImage' ]
+        removeItems: ['imageUpload', 'mediaEmbed', 'uploadImage']
     },
     image: {},
     mediaEmbed: {},
-  };
+};
 
 export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
@@ -106,7 +106,7 @@ export const CONSULTING_REVIEW_STATUS = {
     PENDING: '1',
     RETURNED: '8',
     WITHDRAWN: '7'
-}
+};
 
 // sso timeout related variables
 export const SSO_TIMEOUT_ERROR_MESSAGE = 'Your session has been expired.';
@@ -124,19 +124,19 @@ export const CLASS_GREEN_BADGE = 'green-badge';
 export const CLASS_BROWN_BADGE = 'brown-badge';
 
 export const PROJECT_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
-  '100': CLASS_GREEN_BADGE,
-  '200': CLASS_BROWN_BADGE,
-  '300': CLASS_RED_BADGE,
-  '400': CLASS_GREEN_BADGE
+    '100': CLASS_GREEN_BADGE,
+    '200': CLASS_BROWN_BADGE,
+    '300': CLASS_RED_BADGE,
+    '400': CLASS_GREEN_BADGE
 };
 
 export const DISCLOSURE_CONFLICT_STATUS_BADGE: { [key: string]: string } = {
-  '1': CLASS_GREEN_BADGE,
-  '2': CLASS_BROWN_BADGE,
-  '3': CLASS_RED_BADGE,
-  '4': CLASS_GREEN_BADGE,
-  '5': CLASS_BROWN_BADGE,
-  '6': CLASS_RED_BADGE,
+    '1': CLASS_GREEN_BADGE,
+    '2': CLASS_BROWN_BADGE,
+    '3': CLASS_RED_BADGE,
+    '4': CLASS_GREEN_BADGE,
+    '5': CLASS_BROWN_BADGE,
+    '6': CLASS_RED_BADGE,
 };
 
 export const COMMON_ERROR_TOAST_MSG = 'Something went wrong, please try again.';
@@ -145,21 +145,84 @@ export const ENTITY_DOCUMNET_STATUS_TYPE = {
     DUPLICATE: '3',
     ACTIVE: '1',
     INACTIVE: '2'
-}
+};
 
 export const ENTITY_VERIFICATION_STATUS = {
     VERIFIED: '1',
     UNVERIFIED: '2'
-}
+};
 
 export const DISCLOSURE_TYPE = {
     FCOI: '1',
+    PROJECTS: '2',
     REVISION: '3'
-}
+};
+
+export const PROJECT_TYPE = {
+    AWARD: '1',
+    IP: '2',
+    DEV_PROPOSAL: '3'
+};
 
 export const FEED_STATUS_CODE = {
     READY_TO_FEED: '2',
     SUCCESS: '3',
     ERROR: '4',
     NOT_READY_TO_FEED: '1'
-}
+};
+
+export const AWARD_DETAILS_ORDER_WITHOUT_ROLE = [
+    'PI',
+    'LEAD_UNIT',
+    'PROJECT_STATUS',
+    'ACCOUNT_NUMBER',
+    'SPONSOR',
+    'PRIME_SPONSOR',
+    'PERIOD'
+];
+
+export const PROPOSAL_DETAILS_ORDER_WITHOUT_ROLE = [
+    'PI',
+    'LEAD_UNIT',
+    'PROJECT_STATUS',
+    'SPONSOR',
+    'PRIME_SPONSOR',
+    'PERIOD'
+];
+
+export const PROPOSAL_DETAILS_ORDER = [
+    'PI',
+    'REPORTER_ROLE',
+    'LEAD_UNIT',
+    'PROJECT_STATUS',
+    'SPONSOR',
+    'PRIME_SPONSOR',
+    'PERIOD'
+];
+
+export const AWARD_DETAILS_ORDER = [
+    'PI',
+    'REPORTER_ROLE',
+    'LEAD_UNIT',
+    'PROJECT_STATUS',
+    'ACCOUNT_NUMBER',
+    'SPONSOR',
+    'PRIME_SPONSOR',
+    'PERIOD'
+];
+
+export const PROJECT_DETAILS_ORDER = {
+    1: AWARD_DETAILS_ORDER,
+    2: PROPOSAL_DETAILS_ORDER,
+    3: PROPOSAL_DETAILS_ORDER,
+    undefined: PROPOSAL_DETAILS_ORDER,
+    null: PROPOSAL_DETAILS_ORDER,
+};
+
+export const PROJECT_DETAILS_ORDER_WITHOUT_ROLE = {
+    1: AWARD_DETAILS_ORDER_WITHOUT_ROLE,
+    2: PROPOSAL_DETAILS_ORDER_WITHOUT_ROLE,
+    3: PROPOSAL_DETAILS_ORDER_WITHOUT_ROLE,
+    undefined: PROPOSAL_DETAILS_ORDER_WITHOUT_ROLE,
+    null: PROPOSAL_DETAILS_ORDER_WITHOUT_ROLE,
+};

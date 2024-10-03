@@ -35,7 +35,7 @@ public class HierarchyDao {
 	@Value("${oracledb}")
 	private String oracledb;
 
-	public List<ProjectHierarchyDto> fetchProjectTree(Integer moduleCode, String projectNumber) {
+	public List<ProjectHierarchyDto> getProjectRelations(Integer moduleCode, String projectNumber) {
 	    Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
 	    SessionImpl sessionImpl = (SessionImpl) session;
 	    Connection connection = sessionImpl.connection();
@@ -66,8 +66,8 @@ public class HierarchyDao {
                 dtos.add(dto);
 	        }
 	    } catch (Exception e) {
-	        log.error("Exception on fetchProjectTree {}", e.getMessage());
-	        throw new ApplicationException("Unable to fetch project tree details", e, Constants.DB_PROC_ERROR);
+	        log.error("Exception on getProjectRelations {}", e.getMessage());
+	        throw new ApplicationException("Unable to getProjectRelations", e, Constants.DB_PROC_ERROR);
 	    }
 	    return dtos;
 	}
@@ -124,6 +124,8 @@ public class HierarchyDao {
     	        	dto.setProjectType(rset.getString("PROJECT_TYPE"));
     	        	dto.setProjectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"));
     	        	dto.setProjectTitle(rset.getString("TITLE"));
+    	        	dto.setDocumentNumber(rset.getString("DOCUMENT_NUMBER"));
+    	        	dto.setAccountNumber(rset.getString("ACCOUNT_NUMBER"));
                 }
 	        }
 	        dto.setProjectPersons(projectPersons);

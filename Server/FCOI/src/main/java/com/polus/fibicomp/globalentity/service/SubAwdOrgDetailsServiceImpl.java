@@ -15,10 +15,10 @@ import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgResponseDTO;
-import com.polus.fibicomp.globalentity.pojo.EntityAttachment;
 import com.polus.fibicomp.globalentity.pojo.EntityRisk;
 import com.polus.fibicomp.globalentity.pojo.EntitySubOrgInfo;
 import com.polus.fibicomp.globalentity.repository.EntityFeedStatusTypeRepository;
@@ -74,12 +74,22 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 
 		subAwardOrgFields.forEach((field, value) -> {
 			switch (field) {
-				case organizationId -> entitySubOrgInfo.organizationId(castToInteger(value));
-				case organizationTypeCode -> entitySubOrgInfo.organizationTypeCode(castToString(value));
-				case samExpirationDate -> entitySubOrgInfo.samExpirationDate(dto.getDateFromMap(field));
-				case subAwdRiskAssmtDate -> entitySubOrgInfo.subAwdRiskAssmtDate(dto.getDateFromMap(field));
-				case feedStatusCode -> entitySubOrgInfo.feedStatusCode(castToString(value));
-			}
+				case organizationId:
+					entitySubOrgInfo.organizationId(castToInteger(value));
+					break;
+				case organizationTypeCode:
+					entitySubOrgInfo.organizationTypeCode(castToString(value));
+					break;
+				case samExpirationDate:
+					entitySubOrgInfo.samExpirationDate(dto.getDateFromMap(field));
+					break;
+				case subAwdRiskAssmtDate:
+					entitySubOrgInfo.subAwdRiskAssmtDate(dto.getDateFromMap(field));
+					break;
+				case feedStatusCode:
+					entitySubOrgInfo.feedStatusCode(castToString(value));
+					break;
+				}
 		});
 
 		return entitySubOrgInfo.build();
@@ -115,7 +125,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 	public ResponseEntity<SubAwdOrgResponseDTO> fetchDetails(Integer entityId) {
 		SubAwdOrgDetailsResponseDTO subAwdOrgDetailsResponseDTOs = mapEntityToDTO(entitySubOrgInfoRepository.findByEntityId(entityId));
 		List<EntityRisk> entityRisks = entityRiskDAO.findSubAwdOrgRiskByEntityId(entityId);
-		List<EntityAttachment> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(ORGANIZATION_SECTION_CODE, entityId);
+		List<EntityAttachmentResponseDTO> attachments = entityFileAttachmentService.getAttachmentsBySectionCode(ORGANIZATION_SECTION_CODE, entityId);
 		return new ResponseEntity<>(
 				SubAwdOrgResponseDTO.builder().subAwdOrgDetailsResponseDTO(subAwdOrgDetailsResponseDTOs).entityRisks(entityRisks).attachments(attachments)
 				.build(),

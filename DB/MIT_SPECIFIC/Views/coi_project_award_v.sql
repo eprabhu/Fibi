@@ -40,7 +40,8 @@ CREATE VIEW `coi_project_award_v` AS
         `coi_int_stage_award`.`PROJECT_TYPE_CODE` AS `PROJECT_TYPE_CODE`,
         `coi_int_stage_award`.`SRC_SYS_UPDATE_TIMESTAMP` AS `UPDATE_TIMESTAMP`,
         `coi_int_stage_award`.`ATTRIBUTE_1_VALUE` AS `PCK`,
-        `coi_int_stage_award_person`.`STATUS` as `PERSON_STATUS`
+        `coi_int_stage_award_person`.`STATUS` as `PERSON_STATUS`,
+		`coi_int_stage_award`.`ATTRIBUTE_2_VALUE` AS `DOCUMENT_NUMBER`
     FROM
         (`coi_int_stage_award`
         JOIN `coi_int_stage_award_person` ON ((`coi_int_stage_award`.`PROJECT_NUMBER` = `coi_int_stage_award_person`.`PROJECT_NUMBER`)))

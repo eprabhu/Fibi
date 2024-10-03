@@ -186,6 +186,7 @@ export class EntityRiskSliderComponent implements OnInit {
 	}
 
 	redirectToProjectDetails(): void {
-		this.commonService.redirectToProjectDetails(this.projectDetails.projectId, this.projectDetails.projectTypeCode);
-	}
+        const { documentNumber, projectId, projectTypeCode } = this.projectDetails || {};
+        this.commonService.redirectToProjectDetails(projectTypeCode, (documentNumber || projectId));
+    }
 }

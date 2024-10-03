@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFPivotCacheRecords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -185,6 +186,7 @@ public class ProjectServiceImpl implements ProjectService {
 					.projectTypeCode(project.getProjectTypeCode()).projectBadgeColour(project.getProjectBadgeColour())
 					.projectIcon(project.getProjectIcon())
 					.updateTimestamp(project.getUpdateTimestamp()).piName(project.getPiName())
+					.documentNumber(project.getDocumentNumber()).accountNumber(project.getAccountNumber())
 					.commentCount(project.getCommentCount()).keyPersonCount(keyPersonDetails.size()).build();
 			ProjectOverviewDto projectOverview = new ProjectOverviewDto();
 			projectOverview.setKeyPersonDetails(keyPersonDetails);

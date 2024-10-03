@@ -34,13 +34,14 @@
                 <caption class="sr-only">List of Projects</caption>
                 <thead class="sticky-top">
                     <tr id="coi-count-modal-listofaward-table-thead-row">
-                        <th style="width: 20%;" scope="col">Title</th>
-                        <th style="width: 12%;" scope="col">Principal Investigator</th>
-                        <th style="width: 12%;" scope="col">Lead Unit</th>
-                        <th style="width: 15%;" scope="col">Sponsor</th>
-                        <th style="width: 13%;" scope="col">Prime Sponsor</th>
-                        <th style="width: 15%;" scope="col">Conflict Status</th>
-                        <th style="width: 1%;" class="text-center" scope="col">Actions</th>
+                        <th scope="col" class="col-3">Title</th>
+                        <th scope="col">Principal Investigator</th>
+                        <th scope="col">Lead Unit</th>
+                        <th *ngIf="currentActiveModuleCode == PROJECT_TYPE['AWARD']" scope="col">Account Number</th>
+                        <th scope="col">Sponsor</th>
+                        <th scope="col">Prime Sponsor</th>
+                        <th scope="col">Conflict Status</th>
+                        <th class="text-center" scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +70,14 @@
                                 </app-no-data-label>
                             </div>
                         </td>
+                        <!-- Account Number -->
+                        <td *ngIf="currentActiveModuleCode == PROJECT_TYPE['AWARD']">
+                            <div class="text-slice">
+                                <app-no-data-label [valueToShow]="project?.accountNumber">
+                                    <span [title]="project?.accountNumber">{{project?.accountNumber}}</span>
+                                </app-no-data-label>
+                            </div>
+                        </td>
                         <!-- Sponsor -->
                         <td>
                             <div class="text-slice">
@@ -88,11 +97,8 @@
                         <!-- Conflict Status -->
                         <td>
                             <div class="d-flex text-slice">
-                                <app-no-data-label [valueToShow]="project?.conflictStatus">
-                                    <span *ngIf="project?.conflictStatus">
-                                        <span class="{{project?.disclosureConflictBadge}}"></span>
-                                        <span> {{project?.conflictStatus}} </span>
-                                    </span>
+                                <app-no-data-label [valueToShow]="project?.projectConflictStatus">
+                                    <span>{{project?.projectConflictStatus}}</span>
                                 </app-no-data-label>
                             </div>
                         </td>
@@ -104,7 +110,7 @@
                                         class="d-flex justify-content-center align-items-center btn-primary-icon rounded-circle p-2 m-1"
                                         title="Click here to view {{project?.projectType?.toLowerCase()}} details"
                                         attr.aria-label="Click here to view {{project?.projectType?.toLowerCase()}} details"
-                                        (click)="commonService.redirectToProjectDetails(project?.projectId, project?.moduleCode)">
+                                        (click)="redirectToProjectDetails(project)">
                                         <mat-icon aria-hidden="true" class="flex-shrink-0">visibility</mat-icon>
                                     </button>
                                 </app-no-data-label>

@@ -1,5 +1,5 @@
 <div>
-    <div class="m-3 p-3 grey-border rounded-2" [id]="sectionId">
+    <div class="p-3 grey-border rounded-2" [id]="sectionId">
         <!-- header -->
         <div class="row mb-2 mx-0">
             <div class="px-0 col-12 d-flex align-items-center coloured-bg-header justify-content-between">
@@ -39,14 +39,14 @@
                             <div class="col">
                                 <!-- type -->
                                 <div class="coi-text-darker d-flex" id="coi-entity-attachment-comment-{{i}}">
-                                    <app-no-data-label [valueToShow]="attachment?.attachmentType?.description">
-                                        <span [title]="attachment?.attachmentType?.description"
-                                            [attr.aria-label]="attachment?.attachmentType?.description"
-                                            class="text-slice fs-14">{{attachment?.attachmentType?.description}}</span>
+                                    <app-no-data-label [valueToShow]="attachment?.attachmentType">
+                                        <span [title]="attachment?.attachmentType"
+                                            [attr.aria-label]="attachment?.attachmentType"
+                                            class="text-slice fs-14">{{attachment?.attachmentType}}</span>
                                     </app-no-data-label>
                                     <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                         <span>(</span>
-                                        <span class="fw-500">{{attachment?.updateUserFullame}}</span>
+                                        <span class="fw-500">{{attachment?.updateUserFullname}}</span>
                                         <span class="mx-1">On</span>
                                         <span>{{attachment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                                         <span>)</span>
@@ -161,14 +161,14 @@
                                 <div class="col">
                                     <!-- type -->
                                     <div class="coi-text-darker d-flex" id="coi-entity-version-comment-{{versionIndex}}">
-                                        <app-no-data-label [valueToShow]="version?.attachmentType?.description">
-                                            <span [title]="version?.attachmentType?.description"
-                                                [attr.aria-label]="version?.attachmentType?.description"
-                                                class="text-slice fs-14">{{version?.attachmentType?.description}}</span>
+                                        <app-no-data-label [valueToShow]="version?.attachmentType">
+                                            <span [title]="version?.attachmentType"
+                                                [attr.aria-label]="version?.attachmentType"
+                                                class="text-slice fs-14">{{version?.attachmentType}}</span>
                                         </app-no-data-label>
                                         <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                             <span>(</span>
-                                            <span class="fw-500">{{version?.updateUserFullame}}</span>
+                                            <span class="fw-500">{{version?.updateUserFullname}}</span>
                                             <span class="mx-1">On</span>
                                             <span>{{version?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                                             <span>)</span>
