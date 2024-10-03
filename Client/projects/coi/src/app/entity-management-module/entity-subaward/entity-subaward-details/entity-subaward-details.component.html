@@ -1,12 +1,13 @@
 <div class="p-3 grey-border rounded-2" [id]="sectionId">
     <div class="row mb-2">
         <div class="col-12 d-flex align-items-center coloured-bg-header">
-            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex" aria-hidden="true">
-                <mat-icon class="coi-mat-icon-size">account_balance</mat-icon>
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex">
+                <mat-icon class="coi-mat-icon-size" aria-hidden="true">account_balance</mat-icon>
             </span>
             <div class="fs-16 fw-medium" id="coi-entity-subaward-details">
                 <span>{{sectionName}}</span>
-                <app-common-help-text [subSectionId]="2612"[elementId]="'coi-entity-subaward-details'"></app-common-help-text>
+                <app-common-help-text [subSectionId]="2612"
+                    [elementId]="'coi-entity-subaward-details'"></app-common-help-text>
             </div>
         </div>
     </div>
@@ -15,13 +16,15 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-subaward-orgID">
                 <span>Organization ID</span>
-                <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-subaward-orgID'"></app-common-help-text>
+                <app-common-help-text [subSectionId]="2612"
+                    [elementId]="'coi-entity-subaward-orgID'"></app-common-help-text>
             </label>
-            <input *ngIf="isEditMode" type="text" id="coi-entity-subaward-orgID" title="Organization ID" aria-label="Organization ID"
-                maxlength="60" autocomplete="off" class="form-control" disabled
-                [(ngModel)]="entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationId"/>
+            <input *ngIf="isEditMode" type="text" id="coi-entity-subaward-orgID" title="Organization ID"
+                aria-label="Organization ID" maxlength="60" autocomplete="off" class="form-control" disabled
+                [(ngModel)]="entitySubAwardService.entitySubAwardOrganization.subAwdOrgDetailsResponseDTO.organizationId" />
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
-                <app-no-data-label [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId">
+                <app-no-data-label
+                    [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId">
                     <span>{{entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationId}}</span>
                 </app-no-data-label>
             </span>
@@ -30,13 +33,16 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12 mt-sm-2 mt-md-2 mt-lg-0">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-organization-lookup">
                 <span>Organization Type</span>
-                <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-organization-lookup'"></app-common-help-text>
+                <app-common-help-text [subSectionId]="2612"
+                    [elementId]="'coi-entity-organization-lookup'"></app-common-help-text>
             </label>
-            <app-look-up *ngIf="isEditMode" [options]="ORGANIZATION_TYPE_OPTIONS" [selectedLookUpList]="selectedLookupList"
-                [uniqueId]="'coi-entity-organisation-type-lookup'" (selectedResult)="onOrganizationTypeSelect($event)">
+            <app-look-up *ngIf="isEditMode" [options]="ORGANIZATION_TYPE_OPTIONS"
+                [selectedLookUpList]="selectedLookupList" [uniqueId]="'coi-entity-organisation-type-lookup'"
+                (selectedResult)="onOrganizationTypeSelect($event)">
             </app-look-up>
             <span class="coi-text-light d-block fw-500" *ngIf="!isEditMode">
-                <app-no-data-label [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode">
+                <app-no-data-label
+                    [valueToShow]="entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode">
                     <span>{{entitySubAwardService?.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.description}}</span>
                 </app-no-data-label>
             </span>
@@ -46,17 +52,19 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12 mt-sm-2 mt-md-2">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-sam-expiration-date">
                 <span>SAM Expiration Date</span>
-                <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-sam-expiration-date'"></app-common-help-text>
+                <app-common-help-text [subSectionId]="2612"
+                    [elementId]="'coi-entity-sam-expiration-date'"></app-common-help-text>
             </label>
-            <div  *ngIf="isEditMode" class="dateField w-100">
+            <div *ngIf="isEditMode" class="dateField w-100">
                 <input matInput [matDatepicker]="_samExpirationDate" id="coi-entity-sam-expiration-date"
-                    placeholder="{{DATE_PLACEHOLDER}}" style="width: 100% !important" (click)="_samExpirationDate.open()"
-                    autocomplete="off" class="d-inline-block form-control"
-                    [(ngModel)]="samExpirationDate" (ngModelChange)="onDateSelect('SAM_EXPIRATION')"
+                    placeholder="{{DATE_PLACEHOLDER}}" style="width: 100% !important"
+                    (click)="_samExpirationDate.open()" autocomplete="off" class="d-inline-block form-control"
+                    [(ngModel)]="samExpirationDate" (ngModelChange)="onDateSelect('samExpirationDate')"
                     (keypress)="commonService._keyPress($event, 'date')" />
-                <button class="btn-none" (click)="_samExpirationDate.open()"
-                    title="Click here to select SAM expiration date." aria-label="Click here to select SAM expiration date.">
-                    <i class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
+                <button class="btn-none insidePicker" (click)="_samExpirationDate.open()"
+                    title="Click here to select SAM expiration date"
+                    aria-label="Click here to select SAM expiration date.">
+                    <mat-icon class="coi-mat-icon-size" aria-hidden="true">calendar_month</mat-icon>
                 </button>
                 <mat-datepicker #_samExpirationDate></mat-datepicker>
             </div>
@@ -71,18 +79,20 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-12 col-sm-12 mt-sm-2 mt-md-2">
             <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-entity-risk-assesment-date">
                 <span>Sub-award Risk Assesment Date</span>
-                <app-common-help-text [subSectionId]="2612" [elementId]="'coi-entity-risk-assesment-date'"></app-common-help-text>
+                <app-common-help-text [subSectionId]="2612"
+                    [elementId]="'coi-entity-risk-assesment-date'"></app-common-help-text>
             </label>
             <div *ngIf="isEditMode" class="dateField w-100">
                 <input matInput [matDatepicker]="_subAwdRiskAssmtDate" id="coi-entity-risk-assesment-date"
                     placeholder="{{DATE_PLACEHOLDER}}" style="width: 100% !important"
                     (click)="_subAwdRiskAssmtDate.open()" autocomplete="off" class="d-inline-block form-control"
-                    [(ngModel)]="subAwdRiskAssmtDate" (ngModelChange)="onDateSelect('RISK_ASSESSMENT')"
+                    [(ngModel)]="subAwdRiskAssmtDate" (ngModelChange)="onDateSelect('subAwdRiskAssmtDate')"
                     (keypress)="commonService._keyPress($event, 'date')" />
-                    <button class="btn-none" (click)="_subAwdRiskAssmtDate.open()"
-                        title="Click here to select sub-award risk assesment date." aria-label="Click here to select sub-award risk assesment date.">
-                        <i class="fa fa-calendar fa-large insidePicker hand-cursor"></i>
-                    </button>
+                <button class="btn-none insidePicker" (click)="_subAwdRiskAssmtDate.open()"
+                    title="Click here to select sub-award risk assesment date"
+                    aria-label="Click here to select sub-award risk assesment date.">
+                    <mat-icon class="coi-mat-icon-size" aria-hidden="true">calendar_month</mat-icon>
+                </button>
                 <mat-datepicker #_subAwdRiskAssmtDate>
                 </mat-datepicker>
             </div>

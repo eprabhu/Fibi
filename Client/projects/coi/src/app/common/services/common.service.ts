@@ -87,6 +87,8 @@ export class CommonService {
     CoiAttachmentModalInfo = new CoiAttachmentModalInfo();
     isEntityModified = false;
     projectHierarchySliderInfo = new ProjectHierarchySliderPayload();
+    autoSaveSavingLoader: 'SHOW'|'HIDE' = 'HIDE';
+    loaderRestrictedUrls: any[] = [];
 
     constructor(private _http: HttpClient, private elasticConfigService: ElasticConfigService, private _router: Router) {
     }

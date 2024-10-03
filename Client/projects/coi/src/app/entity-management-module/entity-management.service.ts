@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CommonService } from '../common/services/common.service';
 import { Subject, Subscription } from 'rxjs';
 import { isEmptyObject, jumpToSection } from '../common/utilities/custom-utilities';
-import { ORGANISATION_FIELDS, SPONSOR_FIELDS } from './shared/entity-interface';
+import { ORGANISATION_FIELDS, SPONSOR_FIELDS, SubawardOrgFields } from './shared/entity-interface';
 
 @Injectable()
 export class EntityManagementService {
@@ -79,7 +79,7 @@ export function canUpdateSponsorFeed(reqObj) {
     }
 }
 
-export function canUpdateOrgFeed(reqObj) {
+export function canUpdateOrgFeed(reqObj: SubawardOrgFields) {
     if(reqObj && !isEmptyObject(reqObj)) {
     return Object.keys(reqObj).some(key => ORGANISATION_FIELDS.includes(key));
     } else {
