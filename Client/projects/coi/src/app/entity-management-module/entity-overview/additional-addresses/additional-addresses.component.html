@@ -6,8 +6,8 @@
             </label></div>
         <div class="col-auto" *ngIf="additionalAddresses.length && isEditMode">
             <button id="additional-address-add-button"
-                class="btn btn-primary fs-14 d-inline-flex" title="'Click here to add additional address"
-                aria-label="'Click here to'additional address" (click)="addIndustryDetails()">
+                class="btn btn-primary fs-14 d-inline-flex" title="Click here to add additional address"
+                aria-label="Click here to additional address" (click)="addIndustryDetails()">
                 <mat-icon>add</mat-icon>Add Additional Addresses
             </button>
         </div>
@@ -24,8 +24,10 @@
                 </div>
                 <div class="col-md-3 col-lg-2 d-flex align-items-center">
                     <span class="d-flex  ms-auto" *ngIf="isEditMode">
-                    <mat-icon aria-hidden="true" (click)="editAddress(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">edit</mat-icon>
-                    <mat-icon aria-hidden="true" (click)="confirmDelete(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">delete</mat-icon>
+                    <mat-icon aria-hidden="true" (click)="editAddress(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                    title="Click here to edit additional address" aria-label="Click here to edit additional address" (keypress.enter)="editAddress(address, i)">edit</mat-icon>
+                    <mat-icon aria-hidden="true" (click)="confirmDelete(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                    title="Click here to delete additional address" aria-lable="Click here to delete additional address" (keypress.enter)="confirmDelete(address, i)">delete</mat-icon>
                 </span>
                 </div>
             </div>

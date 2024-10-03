@@ -5,7 +5,7 @@ import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subs
 import { GraphDetail } from 'projects/shared/src/lib/graph/interface';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../app-constants';
+import { COMMON_ERROR_TOAST_MSG, ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../app-constants';
 import { CommonService } from '../common/services/common.service';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { NavigationService } from '../common/services/navigation.service';
@@ -24,7 +24,8 @@ import { isValidEmailAddress } from '../common/utilities/custom-utilities';
     slideInAnimation('0', '12px', 400, 'slideUp'),
     slideInAnimation('0', '-12px', 400, 'slideDown'),
     scaleOutAnimation('-2px', '0', 200, 'scaleOut'),
-  ]
+  ],
+  providers: [EntityDashboardService]
 })
 
 export class EntityDashboardComponent {
@@ -350,10 +351,17 @@ export class EntityDashboardComponent {
     this._router.navigate(['/coi/manage-entity/entity-overview'], { queryParams: { entityManageId: entityListData.entityId} });
   }
 
-  modifyEntity(entityListData) {
-    this._commonService.isEntityModified = true;
-    this.viewDetails(entityListData);
-  }
+    modifyEntity(entityListData) {
+        const REQ_OBJ = { entityId: entityListData.entityId, actionLogCode: 15 };
+        this.$subscriptions.push(this.entityDashboardService.logFeedHistory(REQ_OBJ).subscribe((data: any) => {
+            if (data) {
+                this._commonService.isEntityModified = true;
+                this.viewDetails(entityListData);
+            }
+        }, err => {
+            this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+        }));
+    }
 
   actionsOnPageChange(event) {
       this.entityDashboardService.entitySearchRequestObject.entityDashboardData.PAGED = event-1;
