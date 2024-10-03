@@ -191,8 +191,6 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
                         .projectTypeCode(rset.getString("COI_PROJECT_TYPE_CODE"))
                         .projectBadgeColour(rset.getString("BADGE_COLOR"))
                         .projectIcon(rset.getString("PROJECT_ICON"))
-                        .projectConflictStatusCode(rset.getString("PROJECT_CONFLICT_STATUS_CODE"))
-                        .projectConflictStatus(rset.getString("PROJECT_CONFLICT_STATUS"))
                         .documentNumber(rset.getString("DOCUMENT_NUMBER"))
                         .accountNumber(rset.getString("ACCOUNT_NUMBER"))
                         .build());
