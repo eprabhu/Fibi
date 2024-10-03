@@ -54,9 +54,9 @@ export class AutoSaveService {
 
     initiateAutoSave() {
         this.commonSaveEvent = this.commonSaveTrigger$.pipe(
-            takeUntil(this.unSubscribe$),
-            throttleTime(3000))
-        .subscribe(event => this.triggerSaveEvent());
+            takeUntil(this.unSubscribe$))
+        .subscribe(event =>{
+            this.triggerSaveEvent()});
     }
 
     stopAutoSaveEvent() {
