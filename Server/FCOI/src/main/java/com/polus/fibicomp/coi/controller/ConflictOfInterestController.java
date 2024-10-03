@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.clients.model.EmailNotificationDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -481,7 +482,7 @@ public class ConflictOfInterestController {
    		return conflictOfInterestService.getSFIRelationshipDetails();
    	}
 
-	@PatchMapping("/projectPersonNotify")
+	@PostMapping("/projectPersonNotify")
     public ResponseEntity<Object> projectPersonNotify(@RequestBody NotificationDto notificationDto) {
         logger.info("Requesting for projectPersonNotify");
         return conflictOfInterestService.projectPersonNotify(notificationDto);
@@ -493,4 +494,8 @@ public class ConflictOfInterestController {
 		return conflictOfInterestService.fetchRequiredParams();
 	}
 
+	@PostMapping("/mailPreview")
+	public ResponseEntity<Object> getEmailPreview(@RequestBody EmailNotificationDto emailNotificationDto) {
+		return conflictOfInterestService.getEmailPreview(emailNotificationDto);
+	}
 }
