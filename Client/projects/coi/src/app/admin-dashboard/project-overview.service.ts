@@ -10,6 +10,8 @@ export class ProjectOverviewService {
 
     isEditParentComment = false;
     editParentCommentId = null;
+    isShowNotificationSlider = false;
+    notificationSliderData: any;
 
     constructor(private _commonService: CommonService, private _http: HttpClient) { }
 
@@ -39,6 +41,10 @@ export class ProjectOverviewService {
     }
 
     sendNotification(params){
-        return this._http.patch(this._commonService.baseUrl + '/projectPersonNotify', params, { responseType: 'text' });
+        return this._http.post(this._commonService.baseUrl + '/projectPersonNotify', params, { responseType: 'text' });
+    }
+
+    getMailPreviewById(params) {
+        return this._http.post(this._commonService.baseUrl + '/mailPreview', params);
     }
 }   
