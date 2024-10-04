@@ -13,6 +13,7 @@ import { LoginPersonDetails, GlobalEventNotifier, LoginPersonDetailsKey, Method,
 import { AttachmentInputType, COIAttachment } from '../../attachments/attachment-interface';
 import { hideModal } from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ProjectHierarchySliderPayload } from '../../shared-components/project-hierarchy-slider/services/project-hierarchy-slider.interface';
+import { NotificationTypeRO } from '../../admin-dashboard/admin-dashboard.interface';
 
 @Injectable()
 export class CommonService {
@@ -624,7 +625,7 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         ['authKey', 'cookie', 'sessionId', 'currentTab'].forEach((item) => localStorage.removeItem(item));
     }
 
-    fetchAllNotifications(notificationRequest) {
+    fetchAllNotifications(notificationRequest: NotificationTypeRO) {
         return this._http.post(this.fibiUrl + '/getNotifications', notificationRequest);
     }
 

@@ -503,8 +503,8 @@
     </ng-container>
 
     <!-- notification slider -->
-     <ng-container *ngIf="isShowNotificationSlider">
-        <app-project-overview-notification-slider [dataForNotificationSlider]="projectDetailsForSlider" [keypersonIndex]="selectedKeyPersonIndex"
+     <ng-container *ngIf="projectOverviewService.isShowNotificationSlider">
+        <app-project-overview-notification-slider [NotificationSliderData]="projectOverviewService.notificationSliderData"
         (closePage)="closeHeaderSlider()" ></app-project-overview-notification-slider>
      </ng-container>
 
