@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,22 +39,23 @@ public class HierarchyService {
 		HierarchyResponseDto rootNode = new HierarchyResponseDto();
 		if (!hierarchyData.isEmpty()) {
 			List<CoiProjectType> coiProjectTypes = conflictOfInterestDao.getCoiProjectTypes();
+			Map<String, CoiProjectType> projectTypeMap = coiProjectTypes.stream().collect(Collectors.toMap(CoiProjectType::getCoiProjectTypeCode, Function.identity()));
 			Map<String, HierarchyResponseDto> treeRoot = new HashMap<>();
 			for (ProjectHierarchyDto data : hierarchyData) {
 		        String awardNumber = data.getAwardNumber();
 		        String ipNumber = data.getIpNumber();
 		        String proposalNumber = data.getProposalNumber();
-		        rootNode = prepareRootNode(treeRoot, awardNumber, Constants.AWARD_MODULE_CODE.toString(), coiProjectTypes);
+		        rootNode = prepareRootNode(treeRoot, awardNumber, Constants.AWARD_MODULE_CODE.toString(), projectTypeMap.get(Constants.AWARD_MODULE_CODE.toString()));
 		        if (rootNode != null) {
-		            prepareChildNode(rootNode, ipNumber, proposalNumber, coiProjectTypes);
+		            prepareChildNode(rootNode, ipNumber, proposalNumber, projectTypeMap);
 		        } else {
 		            // Handle IP Node when there's no award number
-		            rootNode = prepareRootNode(treeRoot, ipNumber, Constants.INST_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
+		            rootNode = prepareRootNode(treeRoot, ipNumber, Constants.INST_PROPOSAL_MODULE_CODE.toString(), projectTypeMap.get(Constants.INST_PROPOSAL_MODULE_CODE.toString()));
 		            if (rootNode != null) {
-		                prepareInnerChildNode(rootNode, proposalNumber, coiProjectTypes);
+		                prepareInnerChildNode(rootNode, proposalNumber, projectTypeMap);
 		            } else {
 		                // Handle Proposal Node when there's no award or IP number
-		                rootNode = prepareRootNode(treeRoot, proposalNumber, Constants.DEV_PROPOSAL_MODULE_CODE.toString(), coiProjectTypes);
+		                rootNode = prepareRootNode(treeRoot, proposalNumber, Constants.DEV_PROPOSAL_MODULE_CODE.toString(), projectTypeMap.get(Constants.DEV_PROPOSAL_MODULE_CODE.toString()));
 		            }
 		        }
 		    }
@@ -59,49 +63,49 @@ public class HierarchyService {
 		return rootNode;
 	}
 
-	private HierarchyResponseDto prepareRootNode(Map<String, HierarchyResponseDto> rootMap, String projectNumber, String moduleCode, List<CoiProjectType> coiProjectTypes) {
+	private HierarchyResponseDto prepareRootNode(Map<String, HierarchyResponseDto> rootMap, String projectNumber, String moduleCode, CoiProjectType projectType) {
 		return (projectNumber != null) ? rootMap.computeIfAbsent(projectNumber, key -> {
 	        HierarchyResponseDto dto = new HierarchyResponseDto();
-	        dto.setProjectTypeCode(moduleCode.toString());
-	        coiProjectTypes.stream().filter(projectType -> moduleCode.equals(projectType.getCoiProjectTypeCode()))
-	        .findFirst().ifPresent(projectType -> {
-	        	dto.setProjectIcon(projectType.getProjectIcon());
-        		dto.setProjectType(projectType.getDescription());
-	        });
+	        dto.setProjectTypeCode(moduleCode);
+	        if (projectType != null) {
+	            dto.setProjectIcon(projectType.getProjectIcon());
+	            dto.setProjectType(projectType.getDescription());
+	        }
 	        dto.setProjectNumber(projectNumber);
 	        dto.setLinkedModule(new ArrayList<>());
 	        return dto;
 	    }) : null;
 	}
 
-	private void prepareChildNode(HierarchyResponseDto rootNode, String ipNumber, String proposalNumber, List<CoiProjectType> coiProjectTypes) {
+
+	private void prepareChildNode(HierarchyResponseDto rootNode, String ipNumber, String proposalNumber, Map<String, CoiProjectType> projectTypeMap) {
 		if (ipNumber != null) {
 	        HierarchyResponseDto ipNode = rootNode.getLinkedModule().stream()
 	                .filter(child -> child.getProjectNumber().equals(ipNumber)).findFirst()
 	                .orElseGet(() -> {
-	                    return setChildDetail(Constants.INST_PROPOSAL_MODULE_CODE.toString(), rootNode, ipNumber, coiProjectTypes);
+	                    return setChildDetail(Constants.INST_PROPOSAL_MODULE_CODE.toString(), rootNode, ipNumber, projectTypeMap);
 	                });
-	        prepareInnerChildNode(ipNode, proposalNumber, coiProjectTypes);
+	        prepareInnerChildNode(ipNode, proposalNumber, projectTypeMap);
 		}
 	}
 
-	private HierarchyResponseDto setChildDetail(String moduleCode, HierarchyResponseDto rootNode, String projectNumber, List<CoiProjectType> coiProjectTypes) {
+	private HierarchyResponseDto setChildDetail(String moduleCode, HierarchyResponseDto rootNode, String projectNumber, Map<String, CoiProjectType> projectTypeMap) {
 		HierarchyResponseDto child = new HierarchyResponseDto();
         child.setProjectTypeCode(moduleCode);
         child.setProjectNumber(projectNumber);
-        coiProjectTypes.stream().filter(projectType -> moduleCode.equals(projectType.getCoiProjectTypeCode()))
-				        .findFirst().ifPresent(projectType -> {
-				        	child.setProjectIcon(projectType.getProjectIcon());
-				    		child.setProjectType(projectType.getDescription());
-				        });
+        CoiProjectType projectType = projectTypeMap.get(moduleCode);
+        if (projectType != null) {
+	            child.setProjectIcon(projectType.getProjectIcon());
+	            child.setProjectType(projectType.getDescription());
+	        }
         child.setLinkedModule(new ArrayList<>());
         rootNode.getLinkedModule().add(child);
         return child;
 	}
 
-	private void prepareInnerChildNode(HierarchyResponseDto rootNode, String projectNumber, List<CoiProjectType> coiProjectTypes) {
+	private void prepareInnerChildNode(HierarchyResponseDto rootNode, String projectNumber, Map<String, CoiProjectType> projectTypeMap) {
 		if (projectNumber != null) {
-        	setChildDetail(Constants.DEV_PROPOSAL_MODULE_CODE.toString(), rootNode, projectNumber, coiProjectTypes);
+        	setChildDetail(Constants.DEV_PROPOSAL_MODULE_CODE.toString(), rootNode, projectNumber, projectTypeMap);
         }
 	}
 
