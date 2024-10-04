@@ -47,19 +47,6 @@ export class TravelRiskSliderComponent implements OnInit {
 	this.getTravelDisclosureHistory();
   }
 
-  getDisclosureTitleName(fcoiTypeCode: any): string {
-		switch (fcoiTypeCode) {
-			case '1':
-				return 'FCOI';
-			case '2':
-				return 'Proposal';
-			case '3':
-				return 'Award';
-			case '4':
-				return 'FCOI';
-		}
-	}
-
 	private checkForMandatory(): boolean {
 		this.riskValidationMap.clear();
 		if (!this.riskCategoryCode || this.riskCategoryCode == 'null') {
