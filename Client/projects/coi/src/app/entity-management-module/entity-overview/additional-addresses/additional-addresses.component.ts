@@ -83,7 +83,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
                 newAddress.entityMailingAddressId = data.entityMailingAddressId;
                 newAddress.country = this.selectedCountry;
                 newAddress.entityAddressType = this.selectAddressType;
-                this.additionalAddresses.push(newAddress);
+                this.additionalAddresses.unshift(newAddress);
                 this._dataStorService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearAdditionalAddress();
@@ -174,7 +174,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
     confirmDelete(address, index: number) {
         this.isEditIndex = index;
         this.deletePrimaryKey = address.entityMailingAddressId;
-        // logic to show the whole address.
+        this.addressTypeDefaultValue = address.entityAddressType.description;
         openCommonModal(this.CONFIRMATION_MODAL_ID);
     }
 
@@ -206,15 +206,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
         if (!this.mandatoryList.size && !this.isSaving) {
             this.isSaving = true;
             this.$subscriptions.push(this._entityOverviewService.updateAdditionalAddresses(this.additionalAddressObj).subscribe((res: any) => {
-                this.additionalAddresses[this.isEditIndex].addressTypeCode = this.additionalAddressObj.addressTypeCode;
-                this.additionalAddresses[this.isEditIndex].addressLine1 = this.additionalAddressObj.addressLine1;
-                this.additionalAddresses[this.isEditIndex].addressLine2 = this.additionalAddressObj.addressLine2;
-                this.additionalAddresses[this.isEditIndex].countryCode = this.additionalAddressObj.countryCode;
-                this.additionalAddresses[this.isEditIndex].country = this.selectedCountry;
-                this.additionalAddresses[this.isEditIndex].entityAddressType = this.selectAddressType;
-                this.additionalAddresses[this.isEditIndex].city = this.additionalAddressObj.city;
-                this.additionalAddresses[this.isEditIndex].state = this.additionalAddressObj.state;
-                this.additionalAddresses[this.isEditIndex].postCode = this.additionalAddressObj.postCode;
+                this.updateAndArrangeData();
                 this._dataStorService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearAdditionalAddress();
@@ -224,6 +216,20 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
                 this.isSaving = false;
             }));
         }
+    }
+
+    private updateAndArrangeData(): void {
+        const UPDATED_ADDRESS = this.additionalAddresses.splice(this.isEditIndex, 1)[0];
+        UPDATED_ADDRESS.addressTypeCode = this.additionalAddressObj.addressTypeCode;
+        UPDATED_ADDRESS.addressLine1 = this.additionalAddressObj.addressLine1;
+        UPDATED_ADDRESS.addressLine2 = this.additionalAddressObj.addressLine2;
+        UPDATED_ADDRESS.countryCode = this.additionalAddressObj.countryCode;
+        UPDATED_ADDRESS.country = this.selectedCountry;
+        UPDATED_ADDRESS.entityAddressType = this.selectAddressType;
+        UPDATED_ADDRESS.city = this.additionalAddressObj.city;
+        UPDATED_ADDRESS.state = this.additionalAddressObj.state;
+        UPDATED_ADDRESS.postCode = this.additionalAddressObj.postCode;
+        this.additionalAddresses.unshift(UPDATED_ADDRESS);
     }
 
     postConfirmation(modalAction: ModalActionEvent) {

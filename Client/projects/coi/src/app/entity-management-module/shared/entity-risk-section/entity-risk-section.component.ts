@@ -132,7 +132,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
     private addNewRiskDetails(entityRiskId: number): void {
         this.entityRiskModalDetails.entityRisk.entityRiskId = entityRiskId;
         const NEW_ENTITY_RISK = deepCloneObject(this.entityRiskModalDetails.entityRisk);
-        this.entityRiskList.push(NEW_ENTITY_RISK);
+        this.entityRiskList.unshift(NEW_ENTITY_RISK);
         this.riskUpdated.emit(this.entityRiskList);
     }
 
@@ -236,7 +236,9 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     onRiskUpdated(updatedRisk: any): void {
         if (this.editIndex > -1) {
-            this.entityRiskList[this.editIndex] = updatedRisk;
+            this.entityRiskList.splice(this.editIndex, 1);
+            this.entityRiskList.unshift(updatedRisk);
+            this.editIndex = 0;
             this.riskUpdated.emit(this.entityRiskList);
         }    
     }
