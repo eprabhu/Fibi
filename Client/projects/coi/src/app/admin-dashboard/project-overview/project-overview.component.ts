@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjectOverviewService } from '../project-overview.service';
-import { fadeInOutHeight, heightAnimation, leftSlideInOut, listAnimation, scaleOutAnimation, slideInAnimation, topSlideInOut } from '../../common/utilities/animations';
+import { heightAnimation, listAnimation } from '../../common/utilities/animations';
 import { CommonService } from '../../common/services/common.service';
-import { CoiProjectOverviewRequest, NotificationObject, ProjectDetails, ProjectOverview } from '../admin-dashboard.interface';
+import { CoiProjectOverviewRequest, ProjectDetails, ProjectOverview, ProjectOverviewDetails } from '../admin-dashboard.interface';
 import { POST_CREATE_DISCLOSURE_ROUTE_URL, PROJECT_DETAILS_ORDER_WITHOUT_ROLE  } from '../../app-constants';
 import { Router } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { getFormattedSponsor } from '../../common/utilities/custom-utilities';
 @Component({
@@ -37,7 +37,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     getFormattedSponsor = getFormattedSponsor;
     PROJECT_DETAILS_ORDER_WITHOUT_ROLE  = PROJECT_DETAILS_ORDER_WITHOUT_ROLE ;
 
-    constructor(private projectOverviewService: ProjectOverviewService, public commonService: CommonService, private _router: Router) { }
+    constructor(public projectOverviewService: ProjectOverviewService, public commonService: CommonService, private _router: Router) { }
 
     ngOnInit(): void {
         this.loadProjectData();
@@ -165,15 +165,18 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         this.showSlider = true;
     }
 
-    toggleNotificationSlider(projectDetailsForSlider: number, index: number): void{
-        this.selectedKeyPersonIndex = index;
-        this.projectDetailsForSlider = projectDetailsForSlider;
-        this.isShowNotificationSlider = true;
+    toggleNotificationSlider(projectDetailsForSlider: ProjectOverviewDetails, index: number): void{
+        const NOTIFICATION_SLIDER_DATA = {
+            projectDetailsForSlider: projectDetailsForSlider,
+            keyPersonIndex: index
+        };
+        this.projectOverviewService.notificationSliderData = NOTIFICATION_SLIDER_DATA;
+        this.projectOverviewService.isShowNotificationSlider = true;
     }
 
     closeHeaderSlider(): void {
         this.showSlider = false;
-        this.isShowNotificationSlider = false;
+        this.projectOverviewService.isShowNotificationSlider = false;
     }
 
     actionsOnPageChange(event): void {
