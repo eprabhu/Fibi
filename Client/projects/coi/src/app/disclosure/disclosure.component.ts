@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
 import { Subscription } from 'rxjs';
 import { SfiService } from './sfi/sfi.service';
-import { COI, CertifyDisclosureRO, CoiDisclosure, RO, getApplicableQuestionnaireData } from './coi-interface';
+import { COI, CertifyDisclosureRO, RO, getApplicableQuestionnaireData } from './coi-interface';
 import { DataStoreService } from './services/data-store.service';
 import { CoiService, certifyIfQuestionnaireCompleted } from './services/coi.service';
 import { Location } from '@angular/common';
@@ -21,7 +21,8 @@ import {
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     CREATE_DISCLOSURE_ROUTE_URL, COI_REVIEW_STATUS_TYPE, COI_CONFLICT_STATUS_TYPE,
     EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE,
-    COMMON_ERROR_TOAST_MSG
+    COMMON_ERROR_TOAST_MSG,
+    DISCLOSURE_TYPE
 } from '../app-constants';
 import { NavigationService } from '../common/services/navigation.service';
 import { openCommonModal } from '../common/utilities/custom-utilities';
@@ -97,6 +98,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     withdrawModalHelpText = '';
     isOpenRiskSlider = false;
     reviewList: any = [];
+    DISCLOSURE_TYPE = DISCLOSURE_TYPE;
     COI_CONFLICT_STATUS_TYPE = COI_CONFLICT_STATUS_TYPE;
     COI_REVIEW_STATUS_TYPE = COI_REVIEW_STATUS_TYPE;
     EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE;
@@ -105,6 +107,7 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     commentsRight: any = {};
     isUserCollapse = false;
     submitHelpTexts = '';
+    fcoiTypeCode = '';
     coiCountModal = new COICountModal();
 
     constructor(public router: Router,
@@ -133,7 +136,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         // this.commentsRight.canViewPrivateComments = this.commonService.getAvailableRight(['VIEW_FCOI_PRIVATE_COMMENTS']);
         // this.commentsRight.canMaintainPrivateComments = this.commonService.getAvailableRight(['MAINTAIN_FCOI_PRIVATE_COMMENTS']);
         this.getDataFromStore();
-        this.getDisclosureTypeMessage();
         this.listenDataChangeFromStore();
         this.prevURL = this.navigationService.previousURL;
         this._route.queryParams.subscribe(params => {
@@ -231,14 +233,9 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         return possibleActiveRoutes.some(paths => this.router.url.includes(paths));
     }
 
-    getDisclosureTitleName(fcoiTypeCode: any) {
-        switch (fcoiTypeCode) {
-            case '1':
-            case '4':
-                return 'FCOI';
-            default:
-                return this.coiData?.coiDisclosure?.coiProjectType?.description;
-        }
+    getDisclosureTitleName(fcoiTypeCode: any): string {
+        const { coiDisclosureFcoiType, coiProjectType} = this.coiData?.coiDisclosure;
+        return fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? coiProjectType?.description : coiDisclosureFcoiType?.description;
     }
 
     navigateToStep() {
@@ -357,9 +354,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         this.setAdminGroupOptions();
         this.setAssignAdminModalDetails();
         if(this.coiData.coiDisclosure) {
-            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
-            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode)+ ' disclosure.';
-            this.withdrawModalHelpText = 'You are about to withdraw the '+ this.getDisclosureTitleName(this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode) + ' disclosure.';
+            this.fcoiTypeCode = this.coiData.coiDisclosure.coiDisclosureFcoiType.fcoiTypeCode;
+            const DISCLOSURE_TEXT = this.fcoiTypeCode != DISCLOSURE_TYPE.REVISION ? ' disclosure.' : '.';
+            this.submitHelpTexts = 'You are about to submit the ' + this.getDisclosureTitleName(this.fcoiTypeCode).toLowerCase() + DISCLOSURE_TEXT;
+            this.returnModalHelpText = 'You are about to return the ' + this.getDisclosureTitleName(this.fcoiTypeCode).toLowerCase() + DISCLOSURE_TEXT;
+            this.withdrawModalHelpText = 'You are about to withdraw the ' + this.getDisclosureTitleName(this.fcoiTypeCode).toLowerCase() + DISCLOSURE_TEXT;
         }
     }
 
@@ -467,17 +466,19 @@ export class DisclosureComponent implements OnInit, OnDestroy {
             'add-review-modal-trigger' : 'assign-reviewer-modal-trigger').click();
     }
 
+    // currently this fuction is not using. It is for future
     openCountModal(moduleCode: number, count = 0): void {
         if (count > 0) {
+            const { person, coiDisclosureFcoiType, coiProjectType, disclosureId } = this.coiData?.coiDisclosure;
             this.coiCountModal = {
-                personUnit: this.coiData?.coiDisclosure?.person?.unit,
                 moduleCode: moduleCode,
-                personId: this.coiData?.coiDisclosure?.person?.personId,
-                disclosureType: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode === '2' ? this.coiData?.coiDisclosure?.coiProjectType?.description : 'FCOI',
+                personUnit: person?.unit,
+                personId: person?.personId,
+                disclosureId: disclosureId,
                 inputType: 'DISCLOSURE_TAB',
-                fcoiTypeCode: this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode,
-                disclosureId: this.coiData?.coiDisclosure?.disclosureId,
-                personFullName: this.coiData?.coiDisclosure?.person?.fullName,
+                personFullName: person?.fullName,
+                fcoiTypeCode: this.fcoiTypeCode,
+                disclosureType: this.fcoiTypeCode === DISCLOSURE_TYPE.PROJECT ? coiProjectType?.description : coiDisclosureFcoiType?.description,
                 isOpenCountModal: true
             };
         }
@@ -544,15 +545,6 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         } else {
             this.isSaving = false;
             openModal('confirmModal');
-        }
-    }
-
-    getDisclosureTypeMessage(): string {
-        const FCOITYPECODE = this.coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode;
-        switch (FCOITYPECODE) {
-            case '1': return 'FCOI';
-            case '2': case '3': return 'Project';
-            default: return ;
         }
     }
 
@@ -690,12 +682,11 @@ export class DisclosureComponent implements OnInit, OnDestroy {
     getManageDisclosureRight(): boolean {
         const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
         const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
-        switch (this.coiData?.coiDisclosure?.fcoiTypeCode) {
-			case '1':
-			case '4':
+        switch (this.fcoiTypeCode) {
+			case DISCLOSURE_TYPE.INITIAL:
+			case DISCLOSURE_TYPE.REVISION:
 				return IS_FCOI_ADMINISTRATOR;
-			case '2':
-			case '3':
+			case DISCLOSURE_TYPE.PROJECT:
 				return IS_PROJECT_ADMINISTRATOR;
 		}
     }

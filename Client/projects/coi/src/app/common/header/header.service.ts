@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import {ActiveDisclosure} from "../../user-dashboard/user-disclosure/user-disclosure-interface";
 import {Subject} from "rxjs";
+import { FcoiType } from '../services/coi-common.interface';
 
 @Injectable()
 
@@ -10,7 +11,7 @@ export class HeaderService {
 
     activeDisclosures: ActiveDisclosure[] = [];
     activeOPAs = [];
-    $openModal = new Subject();
+    $openModal = new Subject<FcoiType>();
 
     constructor(private _http: HttpClient,
         private _commonService: CommonService) { }

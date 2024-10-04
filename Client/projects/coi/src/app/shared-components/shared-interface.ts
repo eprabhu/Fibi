@@ -127,8 +127,6 @@ export class DisclosureProjectData {
     relationShipExists?: boolean;
     questionnaireCompleted?: any;
     disclosureReviewStatus?: any;
-    projectConflictStatus?: string;
-    projectConflictStatusCode?: string;
     disclosureStatusCount?: any[] = [];
 }
 

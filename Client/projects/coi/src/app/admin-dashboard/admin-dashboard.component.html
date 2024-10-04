@@ -58,8 +58,8 @@
                                 (keyup.space)="changeTab('MY_REVIEWS')"
                                 [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS'"
                                 class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click to view My Reviews'"
-                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'Click to view My Reviews'">
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'My Reviews' : 'Click here to view My Reviews'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'Click here to view My Reviews'">
                                 My Reviews
                             </li>
                             <span class="separator" aria-hidden="true" role="separator"></span>
@@ -67,8 +67,8 @@
                                 (keyup.space)="changeTab('ALL_REVIEWS')"
                                 [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS'"
                                 class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click to view All Reviews'"
-                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'Click to view All Reviews'">
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'All Reviews' : 'Click here to view All Reviews'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'Click here to view All Reviews'">
                                 All Reviews
                             </li>
                             <span class="separator" aria-hidden="true" role="separator"></span>
@@ -79,8 +79,8 @@
                                 (keyup.enter)="changeTab('TRAVEL_DISCLOSURES')" (keyup.space)="changeTab('TRAVEL_DISCLOSURES')"
                                 [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES'"
                                 class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click to view Travel Disclosures'"
-                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click to view Travel Disclosures'">
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Travel Disclosures' : 'Click here to view Travel Disclosures'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='TRAVEL_DISCLOSURES' ? 'Selected tab is Travel Disclosures' : 'Click here to view Travel Disclosures'">
                                 Travel <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
                             </li>
                             <span class="separator" aria-hidden="true" role="separator"></span>
@@ -91,8 +91,8 @@
                                 (keyup.enter)="changeTab('CONSULTING_DISCLOSURES')" (keyup.space)="changeTab('CONSULTING_DISCLOSURES')"
                                 [class.active]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES'"
                                 class="px-xxl-3 py-3 px-2 fs-6 align-self-center"
-                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click to view Consulting Disclosures'"
-                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click to view Consulting Disclosures'">
+                                [title]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Consulting Disclosures' : 'Click here to view Consulting Disclosures'"
+                                [attr.aria-label]="coiAdminDashboardService.coiRequestObject.tabName=='CONSULTING_DISCLOSURES' ? 'Selected tab is Consulting Disclosures' : 'Click here to view Consulting Disclosures'">
                                 Consulting <span class="d-none d-inline-1500 ms-1">Disclosures</span> 
                             </li>
                             <span class="separator" aria-hidden="true" role="separator"></span>
@@ -187,7 +187,7 @@
                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12" tabindex="-1" role="listbox"
                          aria-label="Disposition Status dropdown"
                          *ngIf="coiAdminDashboardService.coiRequestObject.tabName != 'TRAVEL_DISCLOSURES'"
-                         title="Click to search by Disposition Status">
+                         title="Click here to search by Disposition Status">
                         <label class="d-block" for="adv-disposition-status">
                             Disposition Status
                         </label>
@@ -458,7 +458,7 @@
         <div *ngIf="isShowDisclosureList && coiList.length && coiAdminDashboardService.coiRequestObject.tabName !== 'PROJECTS'" class="sort-div border mt-2 px-3">
             <span class="fs-14 fw-medium me-2 text-secondary">Sort By :</span>
             <button *ngFor="let sortSection of sortSectionsList; let index = index"
-                title="Click to sort by {{sortSection?.fieldName}}"
+                title="Click here to sort by {{sortSection?.fieldName}}"
                 (click)="sortResult(sortSection?.variableName)"
                 [attr.aria-labelledby]="'coi-admin-dashboard-sort-' + index"
                 [ngClass]="index == 0 ? 'ms-1' : 'mx-0'"
@@ -510,13 +510,13 @@
                                     <div class="row m-0">
                                         <div class="col-12 d-inline-flex mb-2 coi-card-body-notch-container align-items-end">
                                             <!-- Coi card badge -->
-                                            <span *ngIf="coi.fcoiTypeCode === '2'" class="coi-card-notch-ribbon shadow-sm"
+                                            <span *ngIf="coi.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT" class="coi-card-notch-ribbon shadow-sm"
                                                 [style.backgroundColor]="coi.projectBadgeColor"
                                                 [attr.aria-label]="coi?.projectType + ' coi'" tabindex="-1"
                                                 id="coi-user-coi-coi-card-value-heading-{{index}}">{{ coi?.projectType }}</span>
-                                            <span *ngIf="coi.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
-                                                [attr.aria-label]="coi?.projectType + ' coi'" tabindex="-1"
-                                                id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
+                                            <span *ngIf="coi.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
+                                                [attr.aria-label]="coi?.fcoiType + ' coi'" tabindex="-1"
+                                                id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ coi?.fcoiType }}</span>
                                             <!-- Coi card header -->
                                             <h4 *ngIf="!coi.travelDisclosureId && !coi.opaDisclosureId"
                                                 class="mb-0 d-flex ms-1">
@@ -526,7 +526,7 @@
                                                       [attr.aria-label]="'Disclosure person ' + coi.disclosurePersonFullName">
                                                     {{coi.disclosurePersonFullName}}</span>
                                             </span>
-                                            <ng-container *ngIf="coi.fcoiTypeCode === '2'">
+                                            <ng-container *ngIf="coi.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT">
                                                 <span class="pipe mx-1"></span>
                                                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{coi.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
@@ -987,16 +987,16 @@
                                                         tabindex="{{coi?.noOfSfi > 0 ? 0 : -1}}" role="link"
                                                         [title]="coi?.noOfSfi > 0 ? 'Click here to view SFI list' : '' "
                                                         [ngClass]="coi?.noOfSfi ? 'badge cursor-pointer' : 'zero-count-padding'"
-                                                        [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfi + (coi?.noOfSfi > 0 ? '. Click to view SFI list' : '')"
-                                                        (keyup.enter)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);" (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);"
-                                                        (keyup.space)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);">{{coi?.noOfSfi || 0}}</span>
+                                                        [attr.aria-label]="'Significant Financial Interest count is ' + coi?.noOfSfi + (coi?.noOfSfi > 0 ? '. Click here to view SFI list' : '')"
+                                                        (keyup.enter)="openCountModal(coi, coi?.noOfSfi, 8)" (click)="openCountModal(coi, coi?.noOfSfi, 8)">{{coi?.noOfSfi || 0}}</span>
                                                     <span class="fw-500" [ngClass]="coi?.noOfSfi > 0 ? 'cursor-pointer' : '' "
-                                                        (click)="setSelectedModuleCode('sfi', coi, coi?.noOfSfi, 8);"
+                                                        (click)="openCountModal(coi, coi?.noOfSfi, 8)"
+                                                        (keyup.enter)="openCountModal(coi, coi?.noOfSfi, 8)"
                                                         [title]="coi?.noOfSfi > 0 ? 'Click here to view SFI list' : '' "
                                                         [class.link-primary]="coi?.noOfSfi > 0">Significant Financial Interest</span>
                                                 </div>
                                             </div>
-                                            <ng-container *ngIf="coi?.fcoiTypeCode !== '2'">
+                                            <ng-container *ngIf="coi?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT">
                                                 <ng-container *ngFor="let projectCount of coi?.projectCount">
                                                     <div *ngIf="projectCount" class="col">
                                                         <div class="d-flex align-items-center fw-semibold">
@@ -1004,16 +1004,14 @@
                                                                 tabindex="{{projectCount?.projectCount > 0 ? 0 : -1}}" role="link"
                                                                 [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
                                                                 [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
-                                                                (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
-                                                                (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
-                                                                (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (click)="openCountModal(coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.enter)="openCountModal(coi, projectCount?.projectCount, projectCount?.moduleCode);"
                                                                 [ngClass]="projectCount?.projectCount ? 'badge cursor-pointer' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
                                                             <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
                                                                 [class.link-primary]="projectCount?.projectCount > 0"
                                                                 [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
-                                                                (click)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
-                                                                (keyup.enter)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);"
-                                                                (keyup.space)="setSelectedModuleCode(projectCount?.projectType, coi, projectCount?.projectCount, projectCount?.moduleCode);">{{projectCount?.projectType}}</span>
+                                                                (click)="openCountModal(coi, projectCount?.projectCount, projectCount?.moduleCode);"
+                                                                (keyup.enter)="openCountModal(coi, projectCount?.projectCount, projectCount?.moduleCode);">{{projectCount?.projectType}}</span>
                                                         </div>
                                                     </div>
                                                 </ng-container>
@@ -1084,13 +1082,17 @@
                                 <div class="col d-flex justify-content-end align-items-center">
                                     <div class="d-flex d-inline-block justify-content-center justify-content-lg-end px-0">
                                         <button id="coi-admin-dashboard-view-btn" (click)="redirectToDisclosure(coi)"
-                                                class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                                                [title]="coi?.travelDisclosureId ? 'Click here to view travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
-                                                            coi?.disclosureId ? 'Click here to view consulting disclosure' :
-                                                            coi?.fcoiTypeCode === 2 ? 'Click here to view Project Disclosure' : 'Click here to view FCOI disclosure'"
-                                                [attr.aria-label]="coi?.travelDisclosureId ? 'Click here to view Travel disclosure' : coi?.opaDisclosureId ? 'Click here to view OPA disclosure' :
-                                                            coi?.disclosureId ? 'Click here to view consulting disclosure' :
-                                                            coi?.fcoiTypeCode === 2 ? 'Click here to view Project Disclosure' : 'Click to view FCOI disclosure'">
+                                            [title]="coi?.travelDisclosureId ? 'Click here to view travel disclosure'
+                                                : coi?.opaDisclosureId ? 'Click here to view OPA disclosure'
+                                                : coi?.disclosureId ? 'Click here to view consulting disclosure'
+                                                : coi?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? 'Click here to view ' + coi?.projectType?.toLowerCase() + ' disclosure'
+                                                : 'Click here to view ' + coi?.fcoiType?.toLowerCase() + ' disclosure'"
+                                            [attr.aria-label]="coi?.travelDisclosureId ? 'Click here to view travel disclosure'
+                                                : coi?.opaDisclosureId ? 'Click here to view OPA disclosure'
+                                                : coi?.disclosureId ? 'Click here to view consulting disclosure'
+                                                : coi?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? 'Click here to view ' + coi?.projectType?.toLowerCase() + ' disclosure'
+                                                : 'Click here to view ' + coi?.fcoiType?.toLowerCase() + ' disclosure'"
+                                            class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content">
                                             <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">visibility</mat-icon>View
                                         </button>
                                         <button id="coi-admin-dashboard-assign-admin-btn" *ngIf="showAssignAdminButton(coi)" (click)="openAssignAdminModal(coi);"

@@ -9,12 +9,16 @@
                         <div class="card-header px-3 border-0">
                             <div class="row flex-grow-1 position-relative m-0">
                                 <div class="d-flex col-12 px-0 coi-card-header-notch-container">
-                                    <!-- badge -->
-                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'" class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
-                                        <span class="coi-card-notch-ribbon shadow-sm" [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
+                                    <!-- badge - project -->
+                                    <div *ngIf="fcoiTypeCode == DISCLOSURE_TYPE.PROJECT" class="col-auto d-flex mb-auto p-0" tabindex="-1"
+                                        [attr.aria-label]="coiData?.coiDisclosure?.coiProjectType?.description + ' disclosure'">
+                                        <span [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor"
+                                            class="coi-card-notch-ribbon shadow-sm">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
                                     </div>
-                                    <div *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '2' "class="col-auto d-flex mb-auto p-0" tabindex="-1" [attr.aria-label]="'FCOI disclosure'">
-                                        <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip">FCOI</span>
+                                    <!-- badge - fcoi -->
+                                    <div *ngIf="fcoiTypeCode != DISCLOSURE_TYPE.PROJECT "class="col-auto d-flex mb-auto p-0" tabindex="-1"
+                                        [attr.aria-label]="coiData?.coiDisclosure?.coiDisclosureFcoiType?.description +' disclosure'">
+                                        <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip">{{ coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
                                     </div>
                                     <div class="col row m-0">
                                         <div class="col-12 d-flex justify-content-between p-0">
@@ -88,7 +92,7 @@
                                         <span class="text-slice">{{coiData?.coiDisclosure?.person?.primaryTitle}}</span>
                                     </span>
                                 </div>
-                                <h3 *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
+                                <h3 *ngIf="fcoiTypeCode == DISCLOSURE_TYPE.PROJECT && coiData?.projectDetail" class="d-flex align-items-center fs-16 mb-0 mt-1 ps-0">
                                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 me-1 coi-ms-n2px ">{{coiData?.projectDetail?.projectIcon}}</mat-icon>
                                     <a tabindex="0" class="link-primary fs-6 text-slice" (click)="openProjectHierarchySlider()"
                                         title="Click here to view details of #{{ coiData?.projectDetail?.projectNumber }} - {{ coiData?.projectDetail?.title }}"
@@ -706,8 +710,9 @@
         <div class="modal-content">
             <div class="modal-header">
                     <strong id="coi-disclosure-submit-confirm-modal-header" title="{{coiData?.projectDetail?.title}}">
-                        <div class="new-line-property word-break-all">
-                            <span>Submit {{ getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode) }} Disclosure</span>
+                        <div class="d-flex">
+                            <span>Submit {{ getDisclosureTitleName(fcoiTypeCode) }}</span>
+                            <span *ngIf="fcoiTypeCode != DISCLOSURE_TYPE.REVISION" class="ms-1">Disclosure</span>
                             <app-common-help-text [helpTextHardCoded]="submitHelpTexts"></app-common-help-text>
                         </div>
                     </strong>
@@ -729,12 +734,14 @@
                         <ng-container *ngIf="count > 0">
                             <div>
                                 <p class="fs-14">Are you sure you want to submit the
-                                    <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} </strong> disclosure?</p>
+                                    <!-- do not add space between the below strong and span.-->
+                                    <strong>{{getDisclosureTitleName(fcoiTypeCode)}}</strong><span>{{ fcoiTypeCode != DISCLOSURE_TYPE.REVISION ? ' disclosure?' : '?'}}</span></p>
                             </div>
                         </ng-container>
                         <div *ngIf="count == 0">
-                            <p class="fs-14">You are about to submit a no SFI <strong>{{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}}
-                                </strong> disclosure.</p>
+                            <p class="fs-14">You are about to submit a no SFI
+                                <!-- do not add space between the below strong and span.-->
+                                <strong>{{getDisclosureTitleName(fcoiTypeCode)}}</strong><span>{{ fcoiTypeCode != DISCLOSURE_TYPE.REVISION ? ' disclosure.' : '.'}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -776,7 +783,8 @@
     [primaryBtnTooltip]= "'Click here to '+ primaryBtnName.toLowerCase() +' the disclosure.'" [secondaryBtnTooltip]= "'Click here to cancel'">
     <!-- modal header -->
     <ng-container header>
-        <span>{{primaryBtnName}} {{getDisclosureTitleName(coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode)}} Disclosure</span>
+        <span>{{primaryBtnName}} {{getDisclosureTitleName(fcoiTypeCode)}}</span>
+        <span *ngIf="fcoiTypeCode != DISCLOSURE_TYPE.REVISION" class="ms-1">Disclosure</span>
         <app-common-help-text *ngIf="confirmationHelpTexts" [helpTextHardCoded]="confirmationHelpTexts"></app-common-help-text>
     </ng-container>
     <!-- modal content -->

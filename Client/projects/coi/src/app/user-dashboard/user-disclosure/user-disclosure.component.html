@@ -1,10 +1,10 @@
 <div class="row create-disclosure">
     <ng-container *ngIf="getActiveFCOI().length">
         <ng-container *ngFor="let disclosure of headerService.activeDisclosures">
-            <!-- card design for FCOI Disclosure (not pending)-->
+            <!-- card design for Initial/Revision Disclosure (not pending)-->
             <ng-container *ngIf="hasActiveFCOI">
                 <div class="col-lg-6 mb-10 mb-lg-0"
-                    *ngIf="disclosure?.fcoiTypeCode !== '2' && disclosure?.versionStatus != 'PENDING'">
+                    *ngIf="disclosure?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT && disclosure?.versionStatus != 'PENDING'">
 
                     <!-- new card design(modern) -->
                     <div class="card coi-card-lite h-100">
@@ -109,7 +109,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="align-items-center bd-highlight d-flex flex-lg-column flex-xl-row mt-auto">
+                                        <div class="align-items-center d-flex flex-lg-column flex-xl-row mt-auto">
                                             <h5 *ngIf="dateWarning" class="fs-15" id="dateWarning"
                                                 [ngClass]="dateWarningColor ? 'dateWarningColor':'medium-Warning-color'"
                                                 tabindex="{{dateWarning ? 0 : -1}}">
@@ -123,17 +123,21 @@
                                             </h5>
 
                                             <div class="ms-auto">
+                                                <!-- Revise -->
                                                 <button class="align-items-center btn btn-sm btn-success d-inline-flex me-2"
-                                                    *ngIf="!hasPendingFCOI" (click)="openFCOIModal('FCOI')" title="Click here to Renew FCOI Disclosure"
-                                                    aria-label="Click here to Renew FCOI Disclosure" id="coi-user-disclosure-fcoi-notpending-card-revise-btn">
-                                                    <mat-icon aria-hidden="true" class="me-1">restart_alt</mat-icon>
+                                                    *ngIf="!hasPendingFCOI" (click)="openFCOIModal('REVISION')" title="Click here to revise disclosure"
+                                                    aria-label="Click here to revise disclosure" id="coi-user-disclosure-fcoi-notpending-card-revise-btn">
+                                                    <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">restart_alt</mat-icon>
                                                     <span>Revise</span>
                                                 </button>
+                                                <!-- view -->
                                                 <button class="align-items-center btn btn-sm btn-primary d-inline-flex"
                                                     id="coi-user-disclosure-fcoi-notpending-card-view-btn"
                                                     (click)="redirectToFCOIDisclosure(disclosure)"
-                                                    [attr.aria-label]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'"
-                                                    [title]="headerService?.activeDisclosures ? 'Click here to view FCOI Disclosure details' : 'Click here to view Disclosure details'">
+                                                    [attr.aria-label]="!headerService?.activeDisclosures ? 'Click here to view disclosure details'
+                                                        : 'Click here to view ' + disclosure?.coiDisclosureFcoiType?.description?.toLowerCase() + ' disclosure details'"
+                                                    [title]="!headerService?.activeDisclosures ? 'Click here to view disclosure details'
+                                                        : 'Click here to view ' + disclosure?.coiDisclosureFcoiType?.description?.toLowerCase() + ' disclosure details'">
                                                     <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
                                                 </button>
@@ -153,7 +157,7 @@
                 <div class="col-lg-6 mb-10 mb-lg-0">
 
                     <!-- new card design(modern)2 -->
-                    <div class="card coi-card-lite h-100" *ngIf="disclosure?.fcoiTypeCode !== '2' && disclosure?.versionStatus == 'PENDING'">
+                    <div class="card coi-card-lite h-100" *ngIf="disclosure?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT && disclosure?.versionStatus == 'PENDING'">
                         <div class="card-body" id="coi-user-disclosure-fcoi-pending-card">
                             <div class="row gx-9 h-100">
                                 <div class="col-sm-12">
@@ -257,12 +261,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-stack mt-auto bd-highlight">
+                                        <div class="d-flex flex-stack mt-auto">
                                             <div class="ms-auto">
                                                 <button class="align-items-center btn btn-sm btn-primary d-inline-flex"
                                                     (click)="redirectToFCOIDisclosure(disclosure)"
-                                                    [attr.aria-label]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'"
-                                                    [title]="headerService?.activeDisclosures ? 'Click to view FCOI Disclosure details' : 'Click to view Disclosure details'">
+                                                    [attr.aria-label]="!headerService?.activeDisclosures ? 'Click here to view disclosure details'
+                                                        : 'Click here to view ' + disclosure?.coiDisclosureFcoiType?.description?.toLowerCase() + ' disclosure details'"
+                                                    [title]="!headerService?.activeDisclosures ? 'Click here to view disclosure details'
+                                                        : 'Click here to view ' + disclosure?.coiDisclosureFcoiType?.description?.toLowerCase() + ' disclosure details'">
                                                     <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
                                                     <span>View</span>
                                                 </button>
@@ -291,34 +297,29 @@
                                 <div class="mb-6">
                                     <div class="d-flex flex-stack mb-6">
                                         <div class="flex-shrink-0">
-                                            <span class="coi-text-darker fs-20" tabindex="-1" aria-label="FCOI Disclosure">FCOI
-                                                Disclosure</span>
+                                            <span class="coi-text-darker fs-20" tabindex="-1" aria-label="FCOI Disclosure">FCOI Disclosure</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="mb-6">
                                     <div class="d-flex">
-                                        <p class="col fs-14 fw-normal new-line-property" tabindex="-1"
-                                            aria-label="A conflict of interest occurs when your personal, financial, or other interests could
-                                                                                                                    influence or appear to influence your judgment and decision-making in the workplace. Please
-                                                                                                                    disclose any existing or potential conflicts of interest you may have with our organization.">
+                                        <p class="col fs-14 fw-normal coi-text-justify" tabindex="-1">
                                             A conflict of interest occurs when your personal, financial, or other interests could influence or appear to
-                                            influence
-                                            your judgment and decision-making in the workplace. Please disclose any existing or
-                                            potential conflicts of interest you may have with our organization. Click on the button below to start your FCOI
-                                            disclosure creation.
+                                            influence your judgment and decision-making in the workplace. Please disclose any existing or potential conflicts of
+                                            interest you may have with our organization. Click on the button below to start your initial disclosure creation.
                                         </p>
                                     </div>
                                 </div>
-
-                                <div class="d-flex flex-stack mt-auto bd-highlight">
+                                <div class="d-flex flex-stack mt-auto">
                                     <div class="ms-auto">
-                                        <a class="align-items-center btn btn-sm btn-primary d-inline-flex" id="coi-user-disclosure-fcoi-create-card-add-btn"
-                                            (click)="openFCOIModal('FCOI')" aria-label="Create FCOI Disclosure" (keyup.enter)="openFCOIModal('FCOI')" (keyup.space)="openFCOIModal('FCOI')"
-                                            title="Click here to create new FCOI disclosure">
+                                        <!-- Create Initial Disclosure -->
+                                        <button id="coi-user-disclosure-fcoi-create-card-add-btn"
+                                            class="d-inline-flex align-items-center btn btn-sm btn-primary"
+                                            aria-label="Click here to create initial disclosure"
+                                            title="Click here to create new initial disclosure" (click)="openFCOIModal('INITIAL')">
                                             <mat-icon aria-hidden="true" class="me-1">add</mat-icon>
-                                            <span class="fs-14">Create FCOI Disclosure</span>
-                                        </a>
+                                            <span class="fs-14">Create Initial Disclosure</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -363,11 +364,11 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex flex-stack mt-auto bd-highlight">
+                                <div class="d-flex flex-stack mt-auto">
                                     <div class="ms-auto">
                                         <a class="align-items-center btn btn-sm btn-primary d-inline-flex" id="coi-user-disclosure-opa-create-card-add-btn" (click)="createOPA()"
                                         (keyup.enter)="createOPA()" (keyup.space)="createOPA()" tabindex="0"
-                                            aria-label="Create OPA Disclosure" title="Click to create new OPA disclosure">
+                                            aria-label="Create OPA Disclosure" title="Click here to create new OPA disclosure">
                                             <mat-icon aria-hidden="true" class="me-1">add</mat-icon>
                                             <span class="fs-14">Create OPA Disclosure</span>
                                         </a>
@@ -485,13 +486,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex flex-stack mt-auto bd-highlight">
+                                    <div class="d-flex flex-stack mt-auto">
                                         <div class="ms-auto">
                                             <a class="align-items-center btn btn-sm btn-primary d-inline-flex" id="coi-user-disclosure-opa-pending-card-view-btn"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId}
                                                 [routerLink]="['/coi/opa/form']" tabindex="0"
                                                 aria-label="Click here to view OPA disclosure details" role="button"
-                                                title="Click to view OPA disclosure details">
+                                                title="Click here to view OPA disclosure details">
                                                 <mat-icon class="me-1" aria-hidden="true">visibility</mat-icon>
                                                 <span>View</span>
                                             </a>
@@ -608,7 +609,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex flex-stack mt-auto bd-highlight">
+                                    <div class="d-flex flex-stack mt-auto">
                                         <div class="ms-auto">
                                             <button class="align-items-center btn btn-sm btn-primary d-inline-flex" tabindex="0" id="coi-user-disclosure-opa-approved-card-view-btn"
                                                 [queryParams]={disclosureId:opaDisclosure.opaDisclosureId} [routerLink]="['/coi/opa/form']"
@@ -683,38 +684,38 @@
             <div class="fs-14 d-inline-block" [@leftSlideInOut]>
                 <label class="text-secondary" tabindex="-1">Filter By Type :</label>
                 <span (click)="setFilter('ALL')" [class.active-filter-pills]="currentSelected.filter=='ALL'" id="coi-user-disclosure-dashboard-filterby-type"
-                    tabindex="0" (keyup.enter)="setFilter('ALL')" (keyup.space)="setFilter('ALL')"
+                    tabindex="0" (keyup.enter)="setFilter('ALL')"
                     [attr.aria-label]="currentSelected.filter=='ALL' ? 'Selected filter type is all ' : 'All'"
-                    title="Click to filter by type: All"
+                    title="Click here to filter by type: All"
                     class="filter-pills coi-text-light" role="button">All</span>
 
                 <span (click)="setFilter('FCOI')" [class.active-filter-pills]="currentSelected.filter=='FCOI'"
-                    tabindex="0" (keyup.enter)="setFilter('FCOI')" (keyup.space)="setFilter('FCOI')"
-                    [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is fcoi ' : 'Fcoi'"
-                    title="Click to filter by type: FCOI"
-                    class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-fcoi">FCOI</span>
+                    tabindex="0" (keyup.enter)="setFilter('FCOI')"
+                    [attr.aria-label]="currentSelected.filter=='FCOI' ? 'Selected filter type is initial or revision.' : 'Click here to filter by type: initial or revision'"
+                    title="Click here to filter by type: Initial/Revision"
+                    class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-fcoi">Initial/Revision</span>
 
                     <span (click)="setFilter('PROJECT')"
-                    [class.active-filter-pills]="currentSelected.filter=='PROJECT'" tabindex="0" (keyup.enter)="setFilter('PROJECT')" (keyup.space)="setFilter('PROJECT')"
+                    [class.active-filter-pills]="currentSelected.filter=='PROJECT'" tabindex="0" (keyup.enter)="setFilter('PROJECT')"
                     [attr.aria-label]="currentSelected.filter=='PROJECT' ? 'Selected filter type is Project ' : 'Project'" tabindex="0"
-                    title="Click to filter by type: Project"
+                    title="Click here to filter by type: Project"
                     class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-project">Project</span>
 
                 <span (click)="setFilter('OPA')" [class.active-filter-pills]="currentSelected.filter=='OPA'"
-                    tabindex="0" title="Click to filter by type: OPA" (keyup.enter)="setFilter('OPA')" (keyup.space)="setFilter('OPA')"
+                    tabindex="0" title="Click here to filter by type: OPA" (keyup.enter)="setFilter('OPA')"
                     [attr.aria-label]="currentSelected.filter=='OPA' ? 'Selected filter type is opa ' : 'opa'"
                     class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-opa">OPA</span>
 
                 <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'" (click)="setFilter('TRAVEL')"
-                    [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0" (keyup.enter)="setFilter('TRAVEL')" (keyup.space)="setFilter('TRAVEL')"
+                    [class.active-filter-pills]="currentSelected.filter=='TRAVEL'" tabindex="0" (keyup.enter)="setFilter('TRAVEL')"
                     [attr.aria-label]="currentSelected.filter=='TRAVEL' ? 'Selected filter type is Travel ' : 'Travel'"
-                    tabindex="0" title="Click to filter by type: Travel"
+                    tabindex="0" title="Click here to filter by type: Travel"
                     class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-travel">Travel</span>
 
                 <span *ngIf="currentSelected.tab == 'DISCLOSURE_HISTORY'" (click)="setFilter('CONSULTING')"
-                [class.active-filter-pills]="currentSelected.filter=='CONSULTING'" tabindex="0" (keyup.enter)="setFilter('CONSULTING')" (keyup.space)="setFilter('CONSULTING')"
+                [class.active-filter-pills]="currentSelected.filter=='CONSULTING'" tabindex="0" (keyup.enter)="setFilter('CONSULTING')"
                 [attr.aria-label]="currentSelected.filter=='CONSULTING' ? 'Selected filter type is Consulting ' : 'Consulting'"
-                tabindex="0" title="Click to filter by type: Consulting"
+                tabindex="0" title="Click here to filter by type: Consulting"
                 class="filter-pills coi-text-light" role="button" id="coi-user-disclosure-dashboard-filterby-travel">Consulting</span>
             </div>
         </div>
@@ -746,12 +747,12 @@
                             <div class="col-lg-10 mb-3 mb-lg-0 mb-md-3 px-0">
                                 <div class="row m-0">
                                     <div class="col-12 d-inline-flex mb-1 coi-card-body-notch-container align-items-end">
-                                        <span *ngIf="disclosure.fcoiTypeCode === '2'" class="coi-card-notch-ribbon shadow-sm"
+                                        <span *ngIf="disclosure.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT" class="coi-card-notch-ribbon shadow-sm"
                                             [style.backgroundColor]="disclosure.projectBadgeColor"
                                             [attr.aria-label]="disclosure?.projectType + ' disclosure'" tabindex="-1"
                                             id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.projectType }}</span>
-                                        <span *ngIf="disclosure.fcoiTypeCode !== '2'" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
-                                            aria-label="FCOI disclosure" tabindex="-1" id="coi-user-disclosure-coi-card-value-heading-{{index}}">FCOI</span>
+                                        <span *ngIf="disclosure.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT" class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip"
+                                            attr.aria-label="{{disclosure?.fcoiType}} disclosure" tabindex="-1" id="coi-user-disclosure-coi-card-value-heading-{{index}}">{{ disclosure?.fcoiType }}</span>
                                         <h4 *ngIf="!disclosure.travelDisclosureId && !disclosure.opaDisclosureId"
                                             class="mb-0 d-flex ms-1">
                                             <span class="d-inline-flex">
@@ -760,7 +761,7 @@
                                                     [attr.aria-label]="'Disclosure person ' + disclosure.disclosurePersonFullName" id="coi-user-disclosure-coi-card-value-person-{{index}}">
                                                     {{disclosure.disclosurePersonFullName}}</span>
                                             </span>
-                                            <ng-container *ngIf="disclosure.fcoiTypeCode === '2'">
+                                            <ng-container *ngIf="disclosure.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT">
                                                 <span class="pipe mx-1"></span>
                                                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{disclosure.projectIcon}}</mat-icon>
                                                 <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
@@ -1323,16 +1324,14 @@
                                                 (click)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
                                                 (keydown.enter)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
                                                 (keydown.space)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
-                                                id="coi-user-disclosure-noof-sfi">{{disclosure?.noOfSfi
-                                                || 0}}</span>
+                                                id="coi-user-disclosure-noof-sfi">{{disclosure?.noOfSfi || 0}}</span>
                                             <span class="fw-500" [ngClass]="disclosure?.noOfSfi > 0 ? 'link-primary': 'coi-text-light' "
-                                                [title]="disclosure?.noOfSfi > 0 ? 'Click to view SFI list' : '' " role="link"
+                                                [title]="disclosure?.noOfSfi > 0 ? 'Click here to view SFI list' : '' " role="link"
                                                 (keydown.enter)="openCountModal(disclosure, disclosure?.noOfSfi, 8)"
-                                                (click)="openCountModal(disclosure, disclosure?.noOfSfi, 8);">Significant
-                                                Financial Interest</span>
+                                                (click)="openCountModal(disclosure, disclosure?.noOfSfi, 8);">Significant Financial Interest</span>
                                         </div>
                                     </div>
-                                    <ng-container *ngIf="disclosure?.fcoiTypeCode !== '2'">
+                                    <ng-container *ngIf="disclosure?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT">
                                         <ng-container *ngFor="let projectCount of disclosure?.projectCount">
                                             <div *ngIf="projectCount" class="col">
                                                 <div class="d-flex align-items-center fw-semibold">
@@ -1341,15 +1340,13 @@
                                                         [attr.aria-label]="projectCount?.projectType + ' count is ' + projectCount?.projectCount + (projectCount?.projectCount > 0 ? '. Click here to view ' + projectCount?.projectType + ' list' : '')"
                                                         [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
                                                         (click)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.space)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
                                                         (keyup.enter)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
                                                         [ngClass]="projectCount?.projectCount ? 'badge cursor-pointer' : 'zero-count-padding'">{{projectCount?.projectCount}}</span>
                                                     <span class="fw-500" [ngClass]="projectCount?.projectCount > 0 ? 'cursor-pointer' : '' "
                                                         [class.link-primary]="projectCount?.projectCount > 0"
                                                         [title]="projectCount?.projectCount > 0 ? 'Click here to view ' + projectCount?.projectType?.toLowerCase() + ' list' : ''"
                                                         (click)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.enter)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)"
-                                                        (keyup.space)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)">{{projectCount?.projectType}}</span>
+                                                        (keyup.enter)="openCountModal(disclosure, projectCount?.projectCount, projectCount?.moduleCode)">{{projectCount?.projectType}}</span>
                                                 </div>
                                             </div>
                                         </ng-container>
@@ -1426,12 +1423,19 @@
                         <div class="col-lg-2">
                             <div class="d-flex d-inline-block justify-content-end align-items-center px-0 h-100 ">
                                 <button (click)="redirectToDisclosure(disclosure)" id="coi-user-disclosure-dashboard-view-btn"
-                                    class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content"
-                                    [title]="disclosure?.travelDisclosureId ? 'Click to view travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                                            disclosure?.fcoiTypeCode == 2 ? 'Click to view project disclosure' : 'Click to view FCOI disclosure'"
-                                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click to view travel disclosure' : disclosure?.opaDisclosureId ? 'Click to view OPA disclosure' :
-                                                            disclosure?.fcoiTypeCode == 2 ? 'Click to view project disclosure' : 'Click to view FCOI disclosure'">
-                                    <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>View
+                                    [title]="disclosure?.travelDisclosureId ? 'Click here to view travel disclosure'
+                                        : disclosure?.opaDisclosureId ? 'Click here to view OPA disclosure'
+                                        : disclosure?.disclosureId ? 'Click here to view consulting disclosure'
+                                        : disclosure?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? 'Click here to view ' + disclosure?.projectType?.toLowerCase() + ' disclosure'
+                                        : 'Click here to view ' + disclosure?.fcoiType?.toLowerCase() + ' disclosure'"
+                                    [attr.aria-label]="disclosure?.travelDisclosureId ? 'Click here to view travel disclosure'
+                                        : disclosure?.opaDisclosureId ? 'Click here to view OPA disclosure'
+                                        : disclosure?.disclosureId ? 'Click here to view consulting disclosure'
+                                        : disclosure?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? 'Click here to view ' + disclosure?.projectType?.toLowerCase() + ' disclosure'
+                                        : 'Click here to view ' + disclosure?.fcoiType?.toLowerCase() + ' disclosure'"
+                                    class="d-flex align-items-center btn btn-outline-secondary fs-14 height-fit-content">
+                                    <mat-icon aria-hidden="true" class="me-1">visibility</mat-icon>
+                                    <span>View</span>
                                 </button>
                             </div>
                         </div>

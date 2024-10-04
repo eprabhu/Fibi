@@ -7,7 +7,7 @@
                     [style.backgroundColor]="projectDetails?.projectBadgeColour" tabindex="-1"
                     id="coi-{{uniqueId}}-heading">{{ projectDetails?.projectType }}</span>
                 <!-- project type -->
-                <div class="d-flex align-items-center mt-1 ms-2">
+                <div class="d-flex align-items-center mt-1 ms-1">
                     <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0">{{projectDetails?.projectIcon}}</mat-icon>
                     <a tabindex="0" class="link-primary cursor-pointer fs-6 fw-600"
                         (click)="redirectToProjectDetails()" (keyup.enter)="redirectToProjectDetails()"
