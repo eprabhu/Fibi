@@ -304,7 +304,7 @@ export const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i +
 
 export function hideModal(elementId: string) {
     let myModal = document.querySelector(`#${elementId} .btn-close`) as HTMLElement;
-    myModal.click();
+    myModal?.click();
 }
 
 export function openModal(elementId: string, options = null) {
@@ -314,5 +314,5 @@ export function openModal(elementId: string, options = null) {
       focus: true
     }
     let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
-    myModal.show();
+    myModal?.show();
   }
