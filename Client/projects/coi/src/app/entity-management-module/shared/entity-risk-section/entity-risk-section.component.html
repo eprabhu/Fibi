@@ -12,10 +12,10 @@
             </div>
             <div class="col-auto" *ngIf="entityRiskList?.length && isEditMode">
                 <button id="add-risk-details-button" class="btn btn-primary fs-14 d-inline-flex"
-                    title="Click here to add risk details" aria-label="Click here to add risk details"
+                    title="Click here to add risk" aria-label="Click here to add risk"
                     (click)="openAddEntityRiskModal()">
                     <mat-icon aria-hidden="true">add</mat-icon>
-                    <span>Add Risk Details</span>
+                    <span>Add Risk</span>
                 </button>
             </div>
         </div>
@@ -42,7 +42,7 @@
                         <!-- edit -->
                         <button *ngIf="entityRiskList?.length" id="coi-entity-risk-edit-{{riskIndex}}"
                             class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to edit risk" aria-label="Click here to edit risk"
+                            title="Click here to update risk" aria-label="Click here to update risk"
                             (click)="editOrHistorySlider(risk, riskIndex , true)">
                             <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
                         </button>
@@ -52,8 +52,7 @@
                         class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                         title="Click here to view risk history" aria-label="Click here to view risk history"
                         (click)="editOrHistorySlider(risk, riskIndex , false)">
-                        <mat-icon id="coi-risk-history" aria-hidden="true"
-                        title="Entity Risk history">history</mat-icon>
+                        <mat-icon id="coi-risk-history" aria-hidden="true">history</mat-icon>
                         </button>
                         <!-- delete -->
                         <!-- <button id="coi-entity-sub-award-delete-{{riskIndex}}"

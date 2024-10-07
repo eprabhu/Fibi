@@ -29,7 +29,7 @@
                     <div class="col-md-3 col-lg-2 d-flex align-items-center">
                         <span class="d-flex  ms-auto" *ngIf="isEditMode">
                         <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRelationship(registration, i)"
-                        title="Click here to edit registration details" aria-label="Click here to edit registration details" (keypress.enter)="editRelationship(registration, i)">edit</mat-icon>
+                        title="Click here to update registration details" aria-label="Click here to update registration details" (keypress.enter)="editRelationship(registration, i)">edit</mat-icon>
                         <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDelete(registration, i)"
                         title="Click here to delete registration details" aria-label="Click here to delete registration details" (keypress.enter)="confirmDelete(registration, i)">delete</mat-icon>
                     </span>
@@ -47,7 +47,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="addRegistrationDetails-header">{{isEditIndex != null ? 'Edit':'Add'}} Registration Details</h4>
+				<h4 class="modal-title" id="addRegistrationDetails-header">{{isEditIndex != null ? 'Update':'Add'}} Registration Details</h4>
 				<button type="button" class="btn-close" id="coi-add-registration-details-close-btn"
                         title="Click here to close" data-bs-dismiss="modal" aria-label="Click here to close" (click)="clearRegistrationDetails()"></button>
 			</div>
@@ -74,7 +74,7 @@
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-name" name="coi-entity-name"
                             [ngClass]="(mandatoryList?.has('registrationNumber')) ? 'is-invalid d-block' : ''"
-                            [(ngModel)]="registrationDetails.regNumber">
+                            [(ngModel)]="registrationDetails.regNumber" appLengthValidator [limit]="30">
                         <div *ngIf="mandatoryList?.has('registrationNumber')" class="invalid-feedback d-block fs-13">
                             {{mandatoryList?.get('registrationNumber')}}
                         </div>
@@ -89,10 +89,10 @@
 				</button>
 				<button class="btn btn-primary me-0" id="coi-add-entity-registration-details-add-btn"
                     name="coi-add-entity-registration-details-add-btn" type="button"
-					title="Click here to {{isEditIndex != null ? 'edit': 'add'}} entity registration details"
-                    attr.aria-label="Click here to {{isEditIndex != null ? 'edit': 'add'}} entity registration details"
+					title="Click here to {{isEditIndex != null ? 'update': 'add'}} registration details"
+                    attr.aria-label="Click here to {{isEditIndex != null ? 'update': 'add'}} registration details"
                     (click)="isEditIndex != null ? editRegistration() : addRegistration()">
-                    {{isEditIndex != null ? 'Edit':'Add'}} Registration
+                    {{isEditIndex != null ? 'Update':'Add'}} Registration Details
 				</button>
 			</div>
 		</div>

@@ -22,4 +22,4 @@
 </div>
 
 <app-duplicate-entity-check [dupCheckPayload]="dupCheckPayload" [entityDupCheckConfig]="entityDupCheckConfig"
-    (actionResponse)="duplicateCheckResponse($event)"></app-duplicate-entity-check>
+    (actionResponse)="duplicateCheckResponse($event.action)"></app-duplicate-entity-check>

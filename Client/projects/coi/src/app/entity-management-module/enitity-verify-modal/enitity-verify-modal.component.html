@@ -9,17 +9,19 @@
     <ng-container modal-body>
         <div class="row mx-0 gap-3">
             <!-- Entity Information -->
-            <div class="col-12 px-3 py-2 border rounded-2">
+            <div class="col-12 p-3 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
-                    <span class="coi-text-darker">Entity Information</span>
-                    <span *ngIf="isComplete.entity" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
-                    <span *ngIf="!isComplete.entity" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
+                    <span class="coi-text-darker">Entity Information {{ modalSection.entity ? 'Completed' : 'Incomplete' }}</span>
+                    <span *ngIf="modalSection.entity" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!modalSection.entity" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
                 <!-- Entity Information Error List -->
-                <ng-container *ngIf="!isComplete.entity">
+                <ng-container *ngIf="!modalSection.entity">
                     <ul class="m-0 p-0 list-unstyled">
                         <li class="mt-1">
                             <a tabindex="0" class="d-flex align-items-center link-primary"
+                                title="Click here to navigate to overview"
+                                aria-label="Click here to navigate to overview"
                                 (click)="navigateToSection('entity-overview')" (keyup.enter)="navigateToSection('entity-overview')">
                                 <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-8">cancel</mat-icon></span>
                                 <span class="fs-14 fw-normal ms-1 mt-1">Basic Details</span>
@@ -29,17 +31,19 @@
                 </ng-container>
             </div>
             <!-- Sponsor -->
-            <div class="col-12 px-3 py-2 border rounded-2">
+            <div class="col-12 p-3 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
-                    <span class="coi-text-darker">Sponsor</span>
-                    <span *ngIf="isComplete.sponsor" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
-                    <span *ngIf="!isComplete.sponsor" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
+                    <span class="coi-text-darker">Sponsor Information {{ modalSection.sponsor ? 'Completed' : 'Incomplete' }}</span>
+                    <span *ngIf="modalSection.sponsor" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!modalSection.sponsor" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
                 <!-- Sponsor Error List -->
-                <ng-container *ngIf="!isComplete.sponsor">
+                <ng-container *ngIf="!modalSection.sponsor">
                     <ul class="m-0 p-0 list-unstyled">
                         <li class="mt-1">
                             <a tabindex="0" class="d-flex align-items-center link-primary"
+                                title="Click here to navigate to sponsor"
+                                aria-label="Click here to navigate to sponsor"
                                 (click)="navigateToSection('entity-sponsor')" (keyup.enter)="navigateToSection('entity-sponsor')">
                                 <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
                                 <span class="fs-14 fw-normal ms-1 mt-1">Sponsor Details</span>
@@ -49,17 +53,19 @@
                 </ng-container>
             </div>
             <!-- Sub-award Organization -->
-            <div class="col-12 px-3 py-2 border rounded-2">
+            <div class="col-12 p-3 border rounded-2">
                 <div class="d-flex align-items-center justify-content-between gap-2">
-                    <span class="coi-text-darker">Sub-award Organization</span>
-                    <span *ngIf="isComplete.organization" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
-                    <span *ngIf="!isComplete.organization" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
+                    <span class="coi-text-darker">Sub-award Organization Information {{ modalSection.organization ? 'Completed' : 'Incomplete' }}</span>
+                    <span *ngIf="modalSection.organization" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!modalSection.organization" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
                 </div>
                 <!-- Sub-award Organization Error List -->
-                <ng-container *ngIf="!isComplete.organization">
+                <ng-container *ngIf="!modalSection.organization">
                     <ul class="m-0 p-0 list-unstyled">
                         <li *ngIf="!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode" class="mt-1">
                             <a tabindex="0" class="d-flex align-items-center link-primary"
+                                title="Click here to navigate to sub-award organization"
+                                aria-label="Click here to navigate to sub-award organization"
                                 (click)="navigateToSection('entity-subaward')" (keyup.enter)="navigateToSection('entity-subaward')">
                                 <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
                                 <span class="fs-14 fw-normal ms-1 mt-1">Sub-award Organization Details</span>
@@ -67,6 +73,8 @@
                         </li>
                         <li *ngIf="!this.entitySubAwardOrganization?.entityRisks?.length" class="mt-2">
                             <a tabindex="0" class="d-flex align-items-center link-primary"
+                                title="Click here to navigate to sub-award organization"
+                                aria-label="Click here to navigate to sub-award organization"
                                 (click)="navigateToSection('entity-subaward')" (keyup.enter)="navigateToSection('entity-subaward')">
                                 <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
                                 <span class="fs-14 fw-normal ms-1 mt-1">Sub-award Organization Risk</span>
@@ -74,6 +82,41 @@
                         </li>
                     </ul>
                 </ng-container>
+            </div>
+            <!-- duplicateMatch -->
+            <div class="col-12 p-3 border rounded-2">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <span class="coi-text-darker">{{matchedDuplicateEntites?.length ? 'Potential Duplicates Found (' + matchedDuplicateEntites?.length + ')' : 'No Potential Duplicates Found'}}</span>
+                    <span *ngIf="modalSection.duplicateMatch" class="coi-circle-icons bg-success ms-1"><mat-icon aria-hidden="true" class="text-white flex-shrink-0 coi-scale-7">check</mat-icon></span>
+                    <span *ngIf="!modalSection.duplicateMatch" class="coi-circle-icons ms-1"><mat-icon aria-hidden="true" class="text-danger flex-shrink-0 fs-24 coi-scale-9">not_interested</mat-icon></span>
+                </div>
+                <!-- View Duplicates Error List -->
+                <ng-container *ngIf="matchedDuplicateEntites?.length">
+                    <ul class="m-0 p-0 list-unstyled">
+                        <li class="mt-1">
+                            <a tabindex="0" class="d-flex align-items-center link-primary"
+                                title="Click here to view duplicate entities"
+                                aria-label="Click here to view duplicate entities"
+                                (click)="navigateToSection('entity-duplicate')" (keyup.enter)="navigateToSection('entity-duplicate')">
+                                <span class="coi-circle-icons"><mat-icon aria-hidden="true" class="text-warning flex-shrink-0 fs-24 coi-scale-8">warning</mat-icon></span>
+                                <span class="fs-14 fw-normal ms-1 mt-1">View Duplicates</span>
+                            </a>
+                        </li>
+                    </ul>
+                </ng-container>
+                <!-- confirmation -->
+                <div *ngIf="matchedDuplicateEntites?.length" class="col-12 pt-2">
+                    <div class="d-flex align-items-center gap-2 matching-card p-3 rounded-2">
+                        <input type="checkbox" [(ngModel)]="hasConfirmedNoDuplicate"
+                            name="coi-entity-verify-duplicate-confirm"
+                            (ngModelChange)="updateVerifyButtonState()"
+                            title="Click here to confirm the items are not exact duplicates"
+                            aria-label="Click here to confirm the items are not exact duplicates"
+                            class="coi-certify-box cursor-pointer" id="coi-entity-verify-duplicate-confirm">
+                        <label for="coi-entity-verify-duplicate-confirm"
+                            class="coi-text-light cursor-pointer">{{ DUPLICATE_MARK_CONFIRMATION_TEXT }}</label>
+                    </div>
+                </div>
             </div>
         </div>
     </ng-container>
