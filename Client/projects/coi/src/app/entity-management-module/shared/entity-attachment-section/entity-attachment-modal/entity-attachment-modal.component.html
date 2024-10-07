@@ -1,7 +1,7 @@
 <app-coi-modal [modalConfig]="entityAttachmentModalConfig" (modalAction)="attachmentModalActions($event)">
     <!-- header -->
     <ng-container modal-header>
-        <span>{{attachmentInputType === 'DESCRIPTION_CHANGE' ? 'Edit' : attachmentInputType === 'ADD' ? 'Add' : 'Replace'}}</span>
+        <span>{{attachmentInputType === 'DESCRIPTION_CHANGE' ? 'Update' : attachmentInputType === 'ADD' ? 'Add' : 'Replace'}}</span>
         <span class="ms-1">Attachment(s)<app-common-help-text [subSectionId]="subSectionId"
                             [elementId]="'coi-sub-modal-head-' + subSectionId"></app-common-help-text></span>
     </ng-container>
