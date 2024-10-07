@@ -1,6 +1,7 @@
 import { AttachmentInputType, COIAttachment } from "../../attachments/attachment-interface";
 
 export type Method = 'SOME' | 'EVERY';
+export type FcoiType = 'INITIAL' | 'REVISION' | 'PROJECT';
 export type GlobalEventNotifierUniqueId = 'CREATE_NEW_TRAVEL_DISCLOSURE' | 'COI_OPA_HEADER' | 'COI_DISCLOSURE_HEADER_RESIZE' | 'SCROLL_SPY' | 'COI_DISCLOSURE_ADD_CONFLICT_UPDATE';
 export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, content?: any };
 export type LoginPersonDetailsKey = keyof LoginPersonDetails;

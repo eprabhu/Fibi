@@ -108,7 +108,7 @@
         "secure": false
     },
     "/fcoiDisclosure/reviseDisclosure": {
-        "target": "http://10.199.100.23:9090/coi",
+        "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
     "/fcoiDisclosure/risk": {
@@ -768,6 +768,10 @@
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },
+    "/entity/saveExternalReference" : {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
     "/entity/saveRisk" : {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
@@ -849,11 +853,11 @@
         "secure": false
     },
     "/fibi-coi-connect/cleansematch/entity/runCleanseMatch" : {
-        "target": "http://10.199.100.33:8000/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/fibi-coi-connect/enrich/entity/runEnrich" : {
-        "target": "http://10.199.100.33:8000/",
+        "target": "http://10.199.100.34:9090/",
         "secure": false
     },
     "/entity/verify/*" : {
@@ -889,6 +893,22 @@
         "secure": false
     },
     "/entity/logAction": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/deleteRegistrationDetails/*": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/deleteIndustryDetailsByClassId/*": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/deleteAdditionalAddress/*": {
+        "target": "http://10.199.100.34:9090/coi",
+        "secure": false
+    },
+    "/entity/deleteExternalReference/*": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false
     },

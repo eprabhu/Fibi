@@ -119,13 +119,21 @@ export class EntityAttachmentSectionComponent implements OnInit, OnDestroy, OnCh
             this.entityAttachmentsList = deepCloneObject(event);
             this.filterLatestVersions()
         } else if (event) {
-            this.filteredEntityAttachmentsList[this.updateIndex] = deepCloneObject(event);
-            this.entityAttachmentsList[this.updateIndex] = deepCloneObject(event);
+            this.updateAndArrangeAttachments(event);
         }
         this.emitUpdatedAttachmentList.emit(this.entityAttachmentsList);
         this.isOpenAttachmentModal = false;
         this.currentAttachment = null;
         this.updateIndex = null;
+    }
+
+    private updateAndArrangeAttachments(event: EntityAttachment) {
+        const UPDATED_ATTACHMENT = deepCloneObject(event);
+        this.filteredEntityAttachmentsList.splice(this.updateIndex, 1);
+        const INDEX = this.entityAttachmentsList.findIndex(attachment => attachment.entityAttachmentId == attachment?.entityAttachmentId);
+        INDEX > -1 ?? this.entityAttachmentsList.splice(INDEX, 1);
+        this.filteredEntityAttachmentsList.unshift(UPDATED_ATTACHMENT);
+        this.entityAttachmentsList.unshift(UPDATED_ATTACHMENT);
     }
 
     getSectionCode(): number | undefined {

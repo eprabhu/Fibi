@@ -5,8 +5,7 @@ import { CommonService } from '../../common/services/common.service';
 import {
     CREATE_DISCLOSURE_ROUTE_URL, POST_CREATE_DISCLOSURE_ROUTE_URL, CONSULTING_REDIRECT_URL,
     CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL, OPA_REDIRECT_URL,
-    HTTP_ERROR_STATUS,
-    DISCLOSURE_TYPE
+    HTTP_ERROR_STATUS, DISCLOSURE_TYPE
 } from '../../app-constants';
 import { Router } from '@angular/router';
 import { UserDisclosure } from './user-disclosure-interface';
@@ -16,9 +15,9 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { listAnimation, leftSlideInOut } from '../../common/utilities/animations';
 import { getDuration } from '../../../../../fibi/src/app/common/utilities/date-utilities';
 import { HeaderService } from '../../common/header/header.service';
-import { getPersonLeadUnitDetails, openCoiSlider, closeSlider } from '../../common/utilities/custom-utilities';
+import { openCoiSlider } from '../../common/utilities/custom-utilities';
 import { COICountModal, COICountModalViewSlider } from '../../shared-components/shared-interface';
-import { CoiDisclosureCount } from '../../common/services/coi-common.interface';
+import { CoiDisclosureCount, FcoiType } from '../../common/services/coi-common.interface';
 
 @Component({
     selector: 'app-user-disclosure',
@@ -76,6 +75,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     $debounceEventForAPISearch = new Subject();
     pageCountFromAPI: number;
     countModalData = new COICountModal();
+    DISCLOSURE_TYPE = DISCLOSURE_TYPE;
 
     constructor(public userDisclosureService: UserDisclosureService,
                 public userDashboardService: UserDashboardService,
@@ -323,13 +323,13 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         subscriptionHandler(this.$subscriptions);
     }
 
-    openCountModal(disclosure: any, count: number | null = null, moduleCode: number = 0) {
+    openCountModal(disclosure: any, count: number | null = null, moduleCode: number = 0): void {
         if (count > 0) {
             this.countModalData = {
                 personUnit: disclosure?.unit,
                 moduleCode: moduleCode,
                 personId: disclosure?.personId,
-                disclosureType: disclosure?.fcoiTypeCode === '2' ? disclosure?.projectType : 'FCOI',
+                disclosureType: disclosure?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? disclosure?.projectType : disclosure?.fcoiType,
                 inputType: 'DISCLOSURE_TAB',
                 fcoiTypeCode: disclosure?.fcoiTypeCode,
                 disclosureId: disclosure?.coiDisclosureId,
@@ -405,19 +405,19 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
 
     private getDisclosureHistoryProjectHeader(disclosureHistory: any): any[] {
         return disclosureHistory?.map((ele: any) => {
-            ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+            ele.projectHeader = ele.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
             return ele;
         }) || [];
     }
 
     private getDisclosureProjectHeader(disclosures: any) {
         return disclosures?.map((ele: any) => {
-            ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+            ele.projectHeader = ele.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
             return ele;
         }) || [];
     }
 
-    openFCOIModal(type) {
+    openFCOIModal(type: FcoiType): void {
         this.headerService.$openModal.next(type);
     }
 
@@ -441,7 +441,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
     getActiveFCOI() {
         this.fcoiDatesRemaining();
         return this.headerService.activeDisclosures.filter(disclosure =>
-            ([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)));
+            ([DISCLOSURE_TYPE.INITIAL, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)));
     }
 
     private fcoiDatesRemaining() {
@@ -451,10 +451,10 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
         this.hasPendingOPA = false;
         this.headerService.activeDisclosures.forEach(disclosure => {
             //the revision condition is also applied in disclosure create modal for showing revise btn.
-            if (([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus == 'PENDING') {
+            if (([DISCLOSURE_TYPE.INITIAL, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus == 'PENDING') {
                 this.hasPendingFCOI = true;
             }
-            if (([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING') {
+            if (([DISCLOSURE_TYPE.INITIAL, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING') {
                 this.hasActiveFCOI = true;
             }
         });
@@ -467,7 +467,7 @@ export class UserDisclosureComponent implements OnInit, OnDestroy {
             }
         });
         const disclosureDate = this.headerService.activeDisclosures.filter(disclosure =>
-            ([DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING');
+            ([DISCLOSURE_TYPE.INITIAL, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode)) && disclosure?.versionStatus !== 'PENDING');
         if (disclosureDate[0]) {
             const expirationDate = (disclosureDate[0].expirationDate);
             const currentDate = new Date().getTime();

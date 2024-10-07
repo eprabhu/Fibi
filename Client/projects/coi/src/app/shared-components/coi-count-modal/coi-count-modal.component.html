@@ -3,7 +3,8 @@
     <ng-container modal-header>
         <div class="d-flex align-items-center">
             <span class="me-1 text-nowrap">{{ coiCountModal.moduleCode === 8 ? 'SFIs Attached to' : 'Projects Related to' }}:</span>
-            <span class="me-1 text-nowrap">{{ coiCountModal.disclosureType }} Disclosure By {{ coiCountModal.personFullName }}</span>
+            <span class="me-1 text-nowrap">{{ coiCountModal.disclosureType }} {{coiCountModal?.fcoiTypeCode === DISCLOSURE_TYPE.REVISION ? '' : ' Disclosure'}}</span>
+            <span class="me-1 text-nowrap">By {{ coiCountModal.personFullName }}</span>
             <span>[</span>
             <span class="text-slice mx-1" [title]="slicedHeaderPart">{{ slicedHeaderPart }}</span>
             <span class="me-3">]</span>
@@ -97,8 +98,8 @@
                         <!-- Conflict Status -->
                         <td>
                             <div class="d-flex text-slice">
-                                <app-no-data-label [valueToShow]="project?.projectConflictStatus">
-                                    <span>{{project?.projectConflictStatus}}</span>
+                                <app-no-data-label [valueToShow]="project?.conflictStatus">
+                                    <span>{{project?.conflictStatus}}</span>
                                 </app-no-data-label>
                             </div>
                         </td>

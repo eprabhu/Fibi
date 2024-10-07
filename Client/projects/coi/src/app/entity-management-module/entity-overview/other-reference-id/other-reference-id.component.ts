@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {EntityExternalIdMappings, OtherReferenceId} from '../../shared/entity-interface';
-import {hideModal, isEmptyObject, openModal} from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import {deepCloneObject, hideModal, isEmptyObject, openModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import {EntityOverviewService} from '../entity-overview.service';
@@ -91,6 +91,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
         this.defaultRefType = null;
         this.isEditIndex = null;
         this.selectedRefType = [];
+        this.selectedReference = null;
         hideModal('otherReferenceIdModal');
     }
 
@@ -116,7 +117,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
                 const newReference: any = this.otherReferenceIdObj;
                 newReference.entityExternalMappingId = res.entityExternalMappingId;
                 newReference.entityExternalIdType = this.selectedReference;
-                this.externalReferences.push(newReference);
+                this.externalReferences.unshift(newReference);
                 this._dataStoreService.enableModificationHistoryTracking();
                 this.updateDataStore();
                 this.clearOtherReferenceID();
@@ -141,6 +142,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
         this.otherReferenceIdObj.externalIdTypeCode = reference.externalIdTypeCode;
         this.otherReferenceIdObj.entityExternalMappingId = reference.entityExternalMappingId;
         this.defaultRefType = reference.entityExternalIdType.description;
+        this.selectedReference = reference.entityExternalIdType;
     }
 
     confirmDeleteRef(reference: EntityExternalIdMappings, index: number) {
@@ -192,21 +194,22 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
     }
 
     private updateExternalReferences() {
-        this.externalReferences[this.isEditIndex].externalId = this.otherReferenceIdObj.externalId;
-        this.externalReferences[this.isEditIndex].description = this.otherReferenceIdObj.description;
-        this.setRefIdType();
+        const UPDATED_REFERENCE = this.externalReferences.splice(this.isEditIndex, 1)[0];
+        UPDATED_REFERENCE.externalId = this.otherReferenceIdObj.externalId;
+        UPDATED_REFERENCE.description = this.otherReferenceIdObj.description;
+        this.setRefIdType(UPDATED_REFERENCE);
     }
 
-    setRefIdType() {
-        const currentRef = this.externalReferences[this.isEditIndex];
-        const selectedRef = this.selectedReference;
-        if (selectedRef?.description || currentRef?.entityExternalIdTypeDescription) {
-            currentRef.entityExternalIdTypeDescription = selectedRef.description || currentRef.entityExternalIdTypeDescription;
+    setRefIdType(currentRef: any) {
+        const SELECTED_REFERENCE = this.selectedReference;
+        if (SELECTED_REFERENCE?.description || currentRef?.entityExternalIdTypeDescription) {
+            currentRef.entityExternalIdTypeDescription = SELECTED_REFERENCE.description || currentRef.entityExternalIdTypeDescription;
         }
-        if (selectedRef || currentRef?.entityExternalIdType) {
-            currentRef.entityExternalIdType = selectedRef || currentRef.entityExternalIdType;
+        if (SELECTED_REFERENCE || currentRef?.entityExternalIdType) {
+            currentRef.entityExternalIdType = SELECTED_REFERENCE || currentRef.entityExternalIdType;
         }
-        currentRef.externalIdTypeCode =  this.otherReferenceIdObj.externalIdTypeCode;
+        currentRef.externalIdTypeCode = this.otherReferenceIdObj.externalIdTypeCode;
+        this.externalReferences.unshift(currentRef);
     }
 
     updateDataStore() {

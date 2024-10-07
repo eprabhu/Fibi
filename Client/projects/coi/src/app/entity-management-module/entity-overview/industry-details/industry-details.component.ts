@@ -32,7 +32,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     industryCategoryDescriptionsList: any = [];
     entityId: any;
     entityIndustryClassifications: any[] = [];
-    entityIndustryClassificationsGrouping: any = {};
+    entityIndustryClassificationsGrouping: any[] = [];
     categoryDescriptionList = [];
     categoryTypeList = [];
     deleteCatCodeList = [];
@@ -135,7 +135,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
             const fullDataCatIds = this.entityIndustryClassifications.map(it => it.industryCategoryId);
             this.addedEntityIndustryCatIds = this.entityIndustryCategories?.filter((item: any) => !fullDataCatIds.includes(item.industryCategoryId));
             const newAddedCatIds = this.entityIndustryCategories.map(it => it.industryCategoryId);
-            this.removedEntityIndustryClassIds = this.selectedIndustry?.value?.filter((item: any) => !newAddedCatIds.includes(item.industryCategoryId));
+            this.removedEntityIndustryClassIds = this.selectedIndustry?.[1]?.filter((item: any) => !newAddedCatIds.includes(item.industryCategoryId));
         } else {
             this.entityIndustryCategories = [];
         }
@@ -169,7 +169,8 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         this.entityId = entityData?.entityDetails?.entityId;
         this.entityIndustryClassifications = entityData.entityIndustryClassifications || [];
         if (this.entityIndustryClassifications.length) {
-            this.entityIndustryClassificationsGrouping = this.groupBy(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
+            const GROUP_BY = this.groupByMap(this.entityIndustryClassifications, 'industryCategoryCode', 'industryCategoryType', 'description');
+            this.entityIndustryClassificationsGrouping = Array.from(GROUP_BY.entries());
         }
         this.isEditMode = this._dataStoreService.getEditMode();
         this.checkUserHasRight();
@@ -183,13 +184,24 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
         );
     }
 
-    groupBy(jsonData, key, innerKey, secondInnerKey) {
+    groupBy(jsonData: any[], key: string, innerKey: string, secondInnerKey: string) {
         return jsonData?.reduce((relationsTypeGroup, item) => {
             (relationsTypeGroup[item[key][innerKey][secondInnerKey]] = relationsTypeGroup[item[key][innerKey][secondInnerKey]] || []).push(item);
             return relationsTypeGroup;
         }, {});
     }
 
+    private groupByMap(jsonData: any[], key: string, innerKey: string, secondInnerKey: string): Map<string, any[]> {
+        return jsonData?.reduce((relationsTypeGroup, item) => {
+            const GROUP_KEY = item[key][innerKey][secondInnerKey];
+            if (!relationsTypeGroup.has(GROUP_KEY)) {
+                relationsTypeGroup.set(GROUP_KEY, []);
+            }
+            relationsTypeGroup.get(GROUP_KEY).push(item);
+            return relationsTypeGroup;
+        }, new Map<string, any[]>());
+    }
+    
     async editIndustry(industry, index: number) {
         this.selectedIndustry = deepCloneObject(industry);
         this.isEditIndex = index;
@@ -202,12 +214,12 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
     getCategoryType(industry) {
-        return [{code: industry?.value[0]?.industryCategoryCode?.industryCategoryTypeCode}];
+        return [{code: industry?.[1][0]?.industryCategoryCode?.industryCategoryTypeCode}];
     }
 
     getCategoryDescription(industry) {
-        if (!industry || !industry.value) { return []; }
-        return industry?.value.map((catCode) => {
+        if (!industry || !industry[1]) { return []; }
+        return industry[1].map((catCode) => {
             if (catCode.isPrimary) {
                 this.industryDetails.primaryCatId = catCode.industryCategoryId;
             }
@@ -221,14 +233,14 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
     }
 
     getMappedCategory(industry) {
-        if (!industry || !industry.value) { return []; }
-        return industry?.value.map((indClass) => ({...indClass.industryCategoryCode, entityIndustryClassId: indClass.entityIndustryClassId }));
+        if (!industry || !industry[1]) { return []; }
+        return industry[1].map((indClass) => ({...indClass.industryCategoryCode, entityIndustryClassId: indClass.entityIndustryClassId }));
     }
 
     confirmDeleteIndustry(industry, index) {
         this.selectedIndustry = industry;
-        this.deleteCatCodeList = industry.value.map((ind) => Number(ind.industryCategoryCode.industryCategoryCode));
-        this.deleteClassList = industry.value.map((ind) => ind.entityIndustryClassId);
+        this.deleteCatCodeList = industry[1].map((ind) => Number(ind.industryCategoryCode.industryCategoryCode));
+        this.deleteClassList = industry[1].map((ind) => ind.entityIndustryClassId);
         this.isEditIndex = index;
         openCommonModal(this.CONFIRMATION_MODAL_ID);
     }
@@ -246,7 +258,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
             this.isSaving = true;
             this.$subscriptions.push(forkJoin(this.deleteClassList.map(catCode => this._entityOverviewService
                 .deleteIndustryDetailsByClassId(catCode))).subscribe((res) => {
-                delete this.entityIndustryClassificationsGrouping[this.selectedIndustry.key];
+                delete this.entityIndustryClassificationsGrouping[this.selectedIndustry?.[0]];
                 this.entityIndustryClassifications = this.entityIndustryClassifications
                     .filter(items => !this.deleteClassList.includes(items.entityIndustryClassId));
                 this._dataStoreService.enableModificationHistoryTracking();

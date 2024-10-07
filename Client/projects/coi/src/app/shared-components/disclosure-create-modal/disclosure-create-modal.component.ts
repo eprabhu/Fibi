@@ -139,7 +139,7 @@ export class DisclosureCreateModalComponent implements OnInit {
                         this.setExistingDisclosureDetails('Project', data.projectDisclosure, projectTitle);
                     } else if (data.fcoiProject != null) {
                         this.isShowExistingDisclosure = true;
-                        this.setExistingDisclosureDetails('FCOI', data.fcoiProject, projectTitle);
+                        this.setExistingDisclosureDetails(this.hasFCOI ? 'Revision' : 'Initial', data.fcoiProject, projectTitle);
                     } else {
                         this.assignSelectedProject(event);
                     }
@@ -188,7 +188,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             }, err => {
                 if (err.status === 405) {
                     this.isShowConcurrencyWarning = true;
-                        this.setExistingDisclosureDetails('Project', err.error);
+                    this.setExistingDisclosureDetails('Project', err.error);
                 } else {
                     this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
                         err.error.errorMessage : 'Error in creating project disclosure. Please try again.');
@@ -199,7 +199,7 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     private validateTravelDisclosure(): boolean {
         if (!this.reviseObject.homeUnit) {
-            this.mandatoryList.set('homeUnit', 'Please enter a valid unit to create a Travel disclosure.');
+            this.mandatoryList.set('homeUnit', 'Please enter a valid unit to create a travel disclosure.');
         }
         return this.mandatoryList.size === 0 ? true : false;
     }
@@ -254,7 +254,7 @@ export class DisclosureCreateModalComponent implements OnInit {
             };
         } else {
             return {
-                fcoiTypeCode: '2',
+                fcoiTypeCode: DISCLOSURE_TYPE.PROJECT,
                 homeUnit: this.reviseObject.homeUnit,
                 coiProjectTypeCode: this.getCoiProjectTypeFromCode(),
                 revisionComment: this.reviseObject.revisionComment,
@@ -267,7 +267,7 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     createFCOIDisclosure(): void {
         const FCOI_DISCLOSURE_RO: FCOIDisclosureCreateRO = {
-            fcoiTypeCode: '1',
+            fcoiTypeCode: DISCLOSURE_TYPE.INITIAL,
             homeUnit: this.reviseObject.homeUnit,
             revisionComment: this.reviseObject.revisionComment,
             personId: this.commonService.getCurrentUserDetail('personID')
@@ -280,10 +280,10 @@ export class DisclosureCreateModalComponent implements OnInit {
             }, err => {
                 if (err.status === 405) {
                     this.isShowConcurrencyWarning = true;
-                        this.setExistingDisclosureDetails('FCOI', err.error);
+                    this.setExistingDisclosureDetails('Initial', err.error);
                 } else {
                 this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
-                    err.error.errorMessage : 'Error in creating new FCOI. Please try again.');
+                    err.error.errorMessage : 'Error in creating intial disclosure. Please try again.');
                 }
             });
         }
@@ -390,9 +390,9 @@ export class DisclosureCreateModalComponent implements OnInit {
 
     private checkForFCOIActive(): void {
         //the revision condition is also applied in user disclosure component for showing revise btn in fcoi card.
-        this.hasFCOI = this.activeDisclosures.find((disclosure: any) => [DISCLOSURE_TYPE.FCOI, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode) && disclosure?.versionStatus !== 'PENDING');
+        this.hasFCOI = this.activeDisclosures.find((disclosure: any) => [DISCLOSURE_TYPE.INITIAL, DISCLOSURE_TYPE.REVISION].includes(disclosure?.fcoiTypeCode) && disclosure?.versionStatus !== 'PENDING');
         this.canReviseFCOI = this.activeDisclosures.find(disclosure =>
-            disclosure.fcoiTypeCode == '1' && disclosure.coiReviewStatusType.reviewStatusCode != '4'
+            disclosure.fcoiTypeCode == DISCLOSURE_TYPE.INITIAL && disclosure.coiReviewStatusType.reviewStatusCode != '4'
         );
         this.disclosureNumber = this.hasFCOI ? this.hasFCOI.disclosureNumber : null;
     }
@@ -400,10 +400,10 @@ export class DisclosureCreateModalComponent implements OnInit {
     private validateFCOIForm(): boolean {
         this.mandatoryList.clear();
         if (!this.reviseObject.revisionComment) {
-            this.mandatoryList.set('reviseComment', `Please enter the reason for ${this.hasFCOI ? 'revise' : 'create'} your FCOI disclosure.`);
+            this.mandatoryList.set('reviseComment', `Please provide the reason ${this.hasFCOI ? 'for revising the disclosure.' : 'to create the initial disclosure.'}`);
         }
         if (!this.reviseObject.homeUnit) {
-            this.mandatoryList.set('homeUnit', 'Please select a valid unit to create an FCOI disclosure.');
+            this.mandatoryList.set('homeUnit', `Please select a valid unit ${this.hasFCOI ? 'for revising the disclosure.' : 'to create the initial disclosure.'}`);
         }
         return this.mandatoryList.size !== 0 ? false : true;
     }
@@ -429,10 +429,10 @@ export class DisclosureCreateModalComponent implements OnInit {
                     }, err => {
                         if (err.status === 405) {
                             this.isShowConcurrencyWarning = true;
-                                this.setExistingDisclosureDetails('FCOI', err.error);
+                            this.setExistingDisclosureDetails('Revision', err.error);
                         } else {
                         this.commonService.showToast(HTTP_ERROR_STATUS, (err.error && err.error.errorMessage) ?
-                            err.error.errorMessage : 'Error in creating new version. Please try again.');
+                            err.error.errorMessage : 'Error in revising the disclosure. Please try again.');
 
                     }}));
             } else {
@@ -443,7 +443,7 @@ export class DisclosureCreateModalComponent implements OnInit {
     }
 
     private setReviseDisclosure(): void {
-        this.existingDisclosureDetails.disclosureType = 'FCOI';
+        this.existingDisclosureDetails.disclosureType = 'Revision';
         this.existingDisclosureDetails.adminGroupId = this.canReviseFCOI.adminGroupId;
         this.existingDisclosureDetails.adminPersonId = this.canReviseFCOI.adminPersonId;
         this.existingDisclosureDetails.certifiedAt = this.canReviseFCOI.certifiedAt;
@@ -468,7 +468,7 @@ export class DisclosureCreateModalComponent implements OnInit {
         this.existingDisclosureDetails.disclosurePersonFullName = this.canReviseFCOI.disclosurePersonFullName;
     }
 
-    private setExistingDisclosureDetails(type: string, data: any, projectTitle: string = ''): void {
+    private setExistingDisclosureDetails(type: 'Project' | 'Initial' | 'Revision', data: any, projectTitle: string = ''): void {
         this.disclosureNumber = data.disclosureNumber;
         this.existingDisclosureDetails = deepCloneObject(data);
         this.existingDisclosureDetails['disclosureType'] = type;

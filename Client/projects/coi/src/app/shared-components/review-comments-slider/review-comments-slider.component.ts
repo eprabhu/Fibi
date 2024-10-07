@@ -450,27 +450,6 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
         return REQ_BODY;
     }
 
-    getDisclosureTitleName(fcoiTypeCode: any): string {
-		switch (fcoiTypeCode) {
-			case '1':
-				return 'FCOI';
-            default:
-                    return 'Project';
-		}
-	}
-
-	getColorBadges(disclosure): string {
-        if(disclosure && disclosure.fcoiTypeCode == 1) {
-            return 'bg-fcoi-clip'
-        } else {
-            return 'project-background'
-        }
-	}
-
-    modalHeader(projectDetails): string {
-		return `# ${projectDetails.moduleCode == '3' ? projectDetails.moduleItemId : projectDetails.moduleItemKey} - ${projectDetails?.title}`;
-	}
-
     addToAttachment() {
         if (this.checkMandatoryFilled()) {
         this.uploadedFile.forEach(element => {
