@@ -105,7 +105,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 
 	@Override
 	public ResponseEntity<String> updateDetails(SubAwdOrgRequestDTO dto) {
-		if (dto.getFeedStatusCode() != null) {
+		if (dto.getSubAwardOrgFields().get(SubAwardOrgField.feedStatusCode) != null) {
 			EntitySubOrgInfo orgInfo = entitySubOrgInfoRepository.findByEntityId(dto.getEntityId());
 			if (orgInfo.getEntityFeedStatusType() == null
 					|| !feedStatusRepository.getDescriptionByCode(FEED_STATUS_READY_TO_FEED).equals(orgInfo.getEntityFeedStatusType().getDescription())) {

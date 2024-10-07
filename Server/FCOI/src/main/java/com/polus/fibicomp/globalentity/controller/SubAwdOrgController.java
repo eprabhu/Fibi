@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
+import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgResponseDTO;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
@@ -35,6 +36,10 @@ public class SubAwdOrgController {
 	@Qualifier(value = "entityRiskService")
 	private GlobalEntityService entityRiskService;
 
+	@Autowired
+	@Qualifier(value = "globalEntityService")
+	private GlobalEntityService globalEntityService;
+
 	@PostMapping(value = "/save")
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SubAwdOrgRequestDTO dto) {
 		log.info("Requesting for saveDetails");
@@ -48,7 +53,11 @@ public class SubAwdOrgController {
 		log.info("Requesting for updateDetails");
 		log.info("entityId : {}", dto.getEntityId());
 		log.info("subAwardOrgFields : {}", dto.getSubAwardOrgFields());
-		return subAwardOrganizationService.updateDetails(dto);
+		ResponseEntity<String> response = subAwardOrganizationService.updateDetails(dto);
+		if (dto.getSubAwardOrgFields().get(SubAwardOrgField.feedStatusCode) != null) {
+			globalEntityService.processEntityMessageToQ(dto.getEntityId());
+		}
+		return response;
 	}
 
 	@GetMapping(value = "/fetch/{entityId}")
