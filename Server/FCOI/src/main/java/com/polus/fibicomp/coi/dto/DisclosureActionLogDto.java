@@ -39,5 +39,6 @@ public class DisclosureActionLogDto {
 	private String coiAdmin;
 	private CoiReviewLocationType reviewLocationType;
 	private CoiReviewerStatusType reviewerStatusType;
+	private String fcoiTypeDescription;
 
 }

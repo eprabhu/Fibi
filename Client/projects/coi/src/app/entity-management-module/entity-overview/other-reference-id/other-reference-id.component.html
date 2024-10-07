@@ -9,7 +9,7 @@
                 <div class="col-auto ms-auto" *ngIf="externalReferences.length && isEditMode">
                     <button id="additional-address-add-button"
                             class="btn btn-primary fs-14 d-inline-flex" title="Click here to Add Other Reference Id"
-                            aria-label="Click here to add Add Other Reference Id" (click)="addOtherRefId(true)">
+                            aria-label="Click here to add other reference id" (click)="addOtherRefId(true)">
                         <mat-icon>add</mat-icon>Add Other Reference Id
                     </button>
                 </div>
@@ -26,7 +26,7 @@
                        <div class="col-md-3 col-lg-2 d-flex align-items-center">
                         <span class="d-flex  ms-auto" *ngIf="isEditMode">
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRef(ref, i)"
-                            title="Click here to edit other reference id" aria-label="Click here to edit other reference id" (keypress.enter)="editRef(ref, i)">edit</mat-icon>
+                            title="Click here to update other reference id" aria-label="Click here to update other reference id" (keypress.enter)="editRef(ref, i)">edit</mat-icon>
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRef(ref, i)"
                             title="Click here to delete other reference id" aria-label="Click here to delete other reference id" (keypress.enter)="confirmDeleteRef(ref, i)">delete</mat-icon>
                         </span>
@@ -43,7 +43,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">{{isEditIndex != null ? 'Edit':'Add'}} Other Reference Id</h4>
+				<h4 class="modal-title">{{isEditIndex != null ? 'Update':'Add'}} Other Reference Id</h4>
 				<button type="button" class="btn-close" id="coi-other-reference-id-close-btn" (click)="clearOtherReferenceID()"
                         title="Click here to close" data-bs-dismiss="modal"
 					aria-label="Click here to close"></button>
@@ -69,7 +69,7 @@
                             <app-common-help-text [subSectionId]="2608" [elementId]="'coi-reference-id'"></app-common-help-text>
                         </label>
                         <input type="text" class="form-control" [(ngModel)]="otherReferenceIdObj.externalId" id="coi-reference-id"
-                        [ngClass]="(mandatoryList?.has('referenceId')) ? 'is-invalid d-block' : ''">
+                            [ngClass]="(mandatoryList?.has('referenceId')) ? 'is-invalid d-block' : ''" appLengthValidator [limit]="30">
                         <div *ngIf="mandatoryList?.has('referenceId')" class="invalid-feedback d-block fs-13" tabindex="-1"
                             aria-label="Entity Registration Type">
                             <span id="coi-entity-registration-type-validation1">{{mandatoryList?.get('referenceId')}}</span>
@@ -100,9 +100,9 @@
 				title="Click to cancel" (click)="clearOtherReferenceID()">Cancel
 				</button>
 				<button class="btn btn-primary me-0" id="coi-other-reference-id-add-btn" type="button"
-					title="Click here to {{isEditIndex != null ? 'Edit':'Add'}} Other Reference"
-                        [attr.aria-label]="'Click here to ' + (isEditIndex != null ? 'edit':'add') + ' Other Reference'"
-                        (click)="addOtherReferenceID()">{{isEditIndex != null ? 'Edit':'Add'}} Other Reference
+					title="Click here to {{isEditIndex != null ? 'update':'add'}} other reference id"
+                    [attr.aria-label]="'Click here to ' + (isEditIndex != null ? 'update':'add') + ' other reference id'"
+                    (click)="addOtherReferenceID()">{{isEditIndex != null ? 'Update':'Add'}} Other Reference Id
 				</button>
 			</div>
 		</div>

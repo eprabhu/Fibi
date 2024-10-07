@@ -3,7 +3,7 @@
         [isHeaderNeeded]="true" [overlay_z_index]="1056" [slider_z_index]="1057" [sliderWidth]="'w-50'">
         <ng-container header id="coi-risk-slider-header">
             <span>{{isEditRisk ? 'Update ' + sectionName : sectionName + ' History'}}</span>
-            <app-common-help-text [helpTextHardCoded]="'Yor are about to ' + (isEditRisk ?  'Edit the Risk' : 'View Risk History')"></app-common-help-text>
+            <app-common-help-text [helpTextHardCoded]="'You are about to ' + (isEditRisk ?  'update the risk.' : 'view risk history.')"></app-common-help-text>
         </ng-container>
         <ng-container content>
             <div class="position-sticky z-2 custom-stickytop">
@@ -75,7 +75,7 @@
                         <div class="col-12 d-flex align-items-center justify-content-end gap-2">
                             <button id="coi-risk-slider-clear-btn" title="Click here to clear" aria-label="Click here to clear" type="button"
                                 class="btn btn-outline-secondary fs-14" (click)="clearRiskSlider()">Clear</button>
-                            <button id="coi-risk-slider-update-btn" title="Click here to Update Risk" aria-label="Click here to Update Risk" type="button"
+                            <button id="coi-risk-slider-update-btn" title="Click here to update risk" aria-label="Click here to update risk" type="button"
                                 class="btn btn-primary fs-14" (click)="updateEntityRisk()">Update Risk</button>
                         </div>
                     </div>

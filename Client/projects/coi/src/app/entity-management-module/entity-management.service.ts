@@ -56,6 +56,10 @@ export class EntityManagementService {
         return this._http.get(`${this._commonService.baseUrl}/entity/fetchHistory/${entityId}`);
     }
 
+    checkForDuplicate(entityDetails) {
+        return this._http.post(`${this._commonService.baseUrl}/entity/validateDuplicate`, entityDetails);
+    }
+
 }
 
 export function getEntityFullAddress(entityDetails, valuesToAdd = ['primaryAddressLine1', 'primaryAddressLine2', 'city', 'state' ]): string {

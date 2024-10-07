@@ -151,7 +151,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     private canUpdateFeed(entitySponsorFields: SponsorFields): boolean {
         return (this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateSponsorFeed(entitySponsorFields)
-        && !!this.entitySponsorService?.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType?.code);
+            && (entitySponsorFields.hasOwnProperty('sponsorTypeCode') && entitySponsorFields.sponsorTypeCode));
     }
 
     private updateSponosrDetails(autoSaveReaObj: SponsorUpdateClass): void {
@@ -185,7 +185,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     private setServiceVariable(entitySponsorFields: SponsorFields): void {
-        const SUB_AWARD_DTO = this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO;
+        const SUB_AWARD_DTO = this.entitySponsorService?.entitySponsorDetails?.sponsorDetailsResponseDTO;
         SUB_AWARD_DTO.sponsorType ??= new SponsorType();
         Object.entries(entitySponsorFields).forEach(([key, value]) => {
             key === 'sponsorTypeCode'
@@ -209,7 +209,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     private updateCompletionFlag(): void {
-        if (this.entitySponsorService?.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType.code) {
+        if (this.entitySponsorService?.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code) {
             this.entityTabStatus.entity_sponsor_info = true;
             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus': this.entityTabStatus });
         }

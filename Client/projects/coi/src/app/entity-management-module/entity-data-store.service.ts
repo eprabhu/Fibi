@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, SponsorUpdateClass, SubAwardOrgUpdateClass } from './shared/entity-interface';
+import { DuplicateCheckObj, EntireEntityDetails, EntityDetails, EntityTabStatus, SponsorUpdateClass, SubAwardOrgUpdateClass } from './shared/entity-interface';
 import { CommonService } from '../common/services/common.service';
 import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE } from '../app-constants';
 import { canUpdateSponsorFeed, canUpdateOrgFeed } from './entity-management.service';
@@ -108,6 +108,17 @@ export class EntityDataStoreService {
             REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/organization/update`, SUBAWARD_REQ_OBJ));
         }
         return REQUEST;
+    }
+
+    getDuplicateCheckRO(): DuplicateCheckObj {
+        const DUPLICATE_ENTITY_RO = new DuplicateCheckObj();
+        DUPLICATE_ENTITY_RO.entityName = this.storeData?.entityDetails?.entityName;
+        DUPLICATE_ENTITY_RO.countryCode = this.storeData?.entityDetails?.countryCode;
+        DUPLICATE_ENTITY_RO.primaryAddressLine1 = this.storeData?.entityDetails?.primaryAddressLine1;
+        if (this.storeData?.entityDetails?.primaryAddressLine2) {
+            DUPLICATE_ENTITY_RO.primaryAddressLine2 = this.storeData?.entityDetails?.primaryAddressLine2;
+        }
+        return DUPLICATE_ENTITY_RO;
     }
 
 }

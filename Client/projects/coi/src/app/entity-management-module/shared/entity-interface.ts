@@ -1,6 +1,12 @@
+import { ModalActionEvent } from "../../shared-components/coi-modal/coi-modal.interface";
+
 export type EntityRiskProxyController = '/organization' | '/sponsor' | '/compliance' | '';
 export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
-export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found';
+export type VerifyActionType = 'API_FAILED' | 'VIEW_DUPLICATE' | 'VIEW_SPONSOR' | 'VIEW_SUBAWARD' | 'VIEW_OVERVIEW';
+export type DuplicateActionType = 'CLOSE_BTN' | 'SECONDARY_BTN' | 'PRIMARY_BTN' | 'NOT_FOUND' | 'CHECK_BOX' | 'CLOSE_SLIDER' | 'API_FAILED';
+export type VerifyModalAction = ModalActionEvent | { event?: any, action: VerifyActionType };
+export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found_modal';
+export const ENTITY_DUPLICATE_MATCH_SLIDER_ID = 'duplicate_entity_match_found_slider';
 
 export class Create_Entity {
     entityName: string = '';
@@ -190,25 +196,6 @@ export class EntityTabStatus {
     sponsor_code: string;
     organization_feed_status_code: any;
     sponsor_feed_status_code: any;
-}
-
-export class EntityAttachmentDetails {
-    entityAttachmentId: number;
-    attachmentNumber: number;
-    versionNumber: number;
-    versionStatus: any;
-    entityId: number;
-    comment: string;
-    attachmentTypeCode: string;
-    attachmentType: EntityAttachmentType;
-    attachmentStatusCode: any;
-    attachmentStatus: any;
-    fileName: string;
-    mimeType: string;
-    fileDataId: string;
-    updateTimestamp: number;
-    updatedBy: string;
-    updateUserFullame: string;
 }
 
 export interface EntityAttachmentType {
@@ -455,25 +442,18 @@ export class OverallAttachmentList {
     Compliance: EntityAttachment[];
 }
 
-export interface EntityAttachment {
-    entityAttachmentId?: number;
-    attachmentNumber?: number;
-    versionNumber?: number;
-    versionStatus?: string
-    entityId?: string | number;
-    entity?: EntityDetails;
-    comment?: string;
-    attachmentTypeCode?: string;
-    attachmentType?: EntityAttachmentType;
-    attachmentStatusCode?: any;
-    attachmentStatus?: any;
-    fileName?: string;
-    mimeType?: string;
-    fileDataId?: string;
-    updateTimestamp?: number;
-    updatedBy?: string;
-    updateUserFullame?: string;
-    versionList?: EntityAttachment[];
+export class EntityAttachment {
+    attachmentNumber?: number = null;
+    attachmentType?: string = '';
+    attachmentTypeCode?: string = '';
+    comment?: string = '';
+    entityAttachmentId?: number = null;
+    entityId?: number = null;
+    fileName?: string = '';
+    updateTimestamp?: number = null;
+    updateUserFullname?: string = '';
+    versionNumber?: number = null;
+    versionList?: EntityAttachment[] = [];
 }
 
 export class EntitySectionDetails {
@@ -506,17 +486,22 @@ export class EntityCardDetails {
 }
 
 export class DuplicateCheckObj{
-    entityName : string;
-    primaryAddressLine1: string;
-    primaryAddressLine2: string;
-    countryCode: string;
+    entityName?: string;
+    primaryAddressLine1?: string;
+    primaryAddressLine2?: string;
+    countryCode?: string;
 }
 
-export class EntityDupCheckConfig{
-    duplicateView: 'MODAL_VIEW' | 'CARD_VIEW' = 'MODAL_VIEW';
-    modalHeader?: string = 'Matching Entities Found'; //based on mode optional
-    modalPrimaryButton?: string = 'Create New';
-    modalHelpText?: string = `The details you entered match the following entities in our system. Please review the list below. If you still wish to create a new entity, you can skip this step and click on '${this.modalPrimaryButton}'.`;
+export class EntityDupCheckConfig {
+    duplicateView: 'MODAL_VIEW' | 'CARD_VIEW' | 'SLIDER_VIEW' | '' = 'MODAL_VIEW';
+    header?: string = 'Matching Entities Found'; //based on mode optional
+    helpTextModuleCode? = '';
+    primaryButton?: string = 'Create New';
+    confirmationText? = '';
+    hasConfirmedNoDuplicate? = false;
+    entityIdToFilter?: number = null;
+    triggeredFrom?: 'CREATE_ENTITY' | 'ENTITY_VERIFY' | '' = '' 
+    infoText?: string = `The details you entered match the following entities in our system. Please review the list below. If you still wish to create a new entity, you can skip this step and click on '${this.primaryButton}'.`;
 }
 
 export class DupMarkingModalConfig {
@@ -562,6 +547,16 @@ export class SponsorFields {
     sponsorTypeCode?: any;
     acronym?: string;
     feedStatusCode?: any;
+}
+export class DNBReqObj {
+    sourceDataName: string;
+    sourceDunsNumber: any;
+    emailAddress: string;
+    addressLine1: string;
+    addressLine2: string;
+    postalCode: string;
+    state: string;
+    countryCode: string;
 }
 
 //changes during modification in the following fields need to update feed status of sponsor
