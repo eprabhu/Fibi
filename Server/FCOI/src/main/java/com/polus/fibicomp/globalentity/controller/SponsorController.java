@@ -37,19 +37,30 @@ public class SponsorController {
 	@Qualifier(value = "entityRiskService")
 	private GlobalEntityService entityRiskService;
 
+	@Autowired
+	@Qualifier(value = "globalEntityService")
+	private GlobalEntityService globalEntityService;
+
 	@PostMapping(value = "/save")
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for saveDetails");
 		Map<String, Integer> response = sponosrService.saveDetails(dto);
 		dto.setAcType(ACTION_TYPE_SAVE);
 		sponosrService.logAction(dto);
+		if (dto.getFeedStatusCode() != null) {
+			globalEntityService.processEntityMessageToQ(dto.getEntityId());
+		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PatchMapping(value = "/update")
 	public ResponseEntity<String> updateDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for updateDetails");
-		return sponosrService.updateDetails(dto);
+		ResponseEntity<String> response = sponosrService.updateDetails(dto);
+		if (dto.getFeedStatusCode() != null) {
+			globalEntityService.processEntityMessageToQ(dto.getEntityId());
+		}
+		return response;
 	}
 
 	@GetMapping(value = "/fetch/{entityId}")
