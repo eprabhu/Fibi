@@ -101,8 +101,8 @@ public class HierarchyDao {
                 projectPerson.setKeyPersonId(rset.getString("KEY_PERSON_ID"));
                 projectPerson.setKeyPersonName(rset.getString("KEY_PERSON_NAME"));
                 projectPerson.setKeyPersonRole(rset.getString("KEY_PERSON_ROLE_NAME"));
-                projectPerson.setHomeUnitName(rset.getString("LEAD_UNIT_NAME"));
-                projectPerson.setHomeUnitNumber(rset.getString("LEAD_UNIT_NUMBER"));
+                projectPerson.setHomeUnitName(rset.getString("KEY_PERSON_UNIT_NAME"));
+                projectPerson.setHomeUnitNumber(rset.getString("KEY_PERSON_UNIT"));
                 projectPersons.add(projectPerson);
                 if (dto.getSponsorName() == null) {
                 	dto.setProjectNumber(projectNumber);
