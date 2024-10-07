@@ -27,6 +27,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -130,6 +131,9 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 
 	@Autowired
 	private FcoiDisclosureDao fcoiDisclosureDao;
+
+	@Autowired
+	private CustomExceptionService exceptionService;
 	
 	private static final String TRAVEL_DISCLOSURES = "TRAVEL_DISCLOSURES";
 	private static final String CONSULTING_DISCLOSURES = "CONSULTING_DISCLOSURES";
@@ -797,6 +801,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 		} catch(Exception e) {
 			logger.error("Exception in getPendingFCOIDisclosure {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return null;
 	}
@@ -1365,6 +1370,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 		} catch (Exception e ) {
 			e.printStackTrace();
 			logger.error("Error in Travel Disclosure Sort {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return null;
 	}
@@ -2819,6 +2825,7 @@ public class ConflictOfInterestDaoImpl implements ConflictOfInterestDao {
 			}
 		} catch (Exception e) {
 			logger.error("Exception in getMaxPersonEntityNumber {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return 0;
 	}

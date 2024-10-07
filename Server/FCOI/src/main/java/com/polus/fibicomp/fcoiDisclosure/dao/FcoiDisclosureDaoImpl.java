@@ -12,6 +12,7 @@ import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ActionLogService;
+import com.polus.fibicomp.config.CustomExceptionService;
 import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.dto.ProjectEntityRequestDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
@@ -65,6 +66,9 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
 
     @Autowired
     private ActionLogService actionLogService;
+
+    @Autowired
+    private CustomExceptionService exceptionService;
 
     @Override
     public CoiDisclosure saveOrUpdateCoiDisclosure(CoiDisclosure coiDisclosure) {
@@ -213,6 +217,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Exception in convertJsonStringToListMap", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return null;
     }
@@ -360,6 +365,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
         } catch (Exception e) {
             logger.error("Exception on syncDisclosureRisk {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return null;
     }
@@ -583,6 +589,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             }
         } catch (Exception ex) {
             logger.error("Exception in isFCOIDisclosureExists", ex);
+            exceptionService.saveErrorDetails(ex.getMessage(), ex,CoreConstants.JAVA_ERROR);
         }
         return null;
     }
@@ -852,6 +859,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             session.flush();
         } catch (Exception e) {
             logger.error("Exception on syncFcoiDisclProjectsAndEntities for coiDisclProjectId : {} | {}", coiDisclProjectId, e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
     }
 
@@ -920,6 +928,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (Exception e) {
             logger.error("Exception in syncFCOIDisclosure {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
     }
 
@@ -1153,6 +1162,7 @@ public class FcoiDisclosureDaoImpl implements FcoiDisclosureDao {
             Objects.requireNonNull(statement).execute();
         } catch (Exception e) {
             logger.error("Exception on generateProjectSnapshot : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 //            throw new ApplicationException("Unable to generate project snapshot!", e, Constants.DB_PROC_ERROR);
         }
     }
