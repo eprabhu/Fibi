@@ -1,4 +1,4 @@
-<div class="card coi-card-regular shadow-sm"
+<div class="card coi-card-regular shadow-sm {{customClass}}"
     [ngClass]="(detailsSource === 'DUNS' && isDunsMatchAlreadyDone) ? 'coi-card-highlight' : 'card-light-gray-border'">
     <div class="card-body" id="coi-common-entity-card-body">
         <div class="row row-gap-2">
@@ -11,22 +11,30 @@
                         <span class="text-slice coi-text-darker"
                             [title]="entityDetailsObj?.entityName">{{entityDetailsObj?.entityName}}</span>
                         <span *ngIf="detailsSource === 'DUNS'"
-                            class="fs-12 ms-1 flex-shrink-0">({{entityDetailsObj?.matchQualityInformation}}%
-                            Matching)</span>
+                            class="fs-12 ms-1 flex-shrink-0">({{entityDetailsObj?.matchQualityInformation}}% Matching)</span>
                     </p>
                 </div>
                 <div class="align-items-center d-flex gap-2 ms-auto">
+                    <!-- view -->
                     <button *ngIf="detailsSource === 'LOCAL'" id="view-entity-common-card"
                         aria-label="Click here to view entity details" title="Click here to view entity details"
                         class="btn btn-outline-secondary fs-14" name="view-entity-common-card" (click)="openEntity(entityDetailsObj?.entityId)">
                         View
                     </button>
+                    <!-- use this / used -->
                     <button *ngIf="detailsSource === 'DUNS' && !isDuplicateEntityAvailable" id="use-entity-common-card"
                         [disabled]="isDunsMatchAlreadyDone" (click)="sendEntityDetails()"
                         aria-label="Click here to use this entity" title="Click here to use this entity"
                         [class.btn-primary]="isDunsMatchAlreadyDone" class="btn btn-outline-secondary fs-14"
                         name="use-entity-common-card">
                         {{isDunsMatchAlreadyDone ? 'Used' : 'Use this'}}
+                    </button>
+                    <!-- mark as duplicate -->
+                    <button *ngIf="isShowDuplicateMark" id="mark-as-duplicate-entity-common-card"
+                        (click)="openMarkAsDuplicateModal()" aria-label="Click here to mark as duplicate this entity"
+                        title="Click here to mark as duplicate this entity" class="btn btn-primary fs-14"
+                        name="mark-as-duplicate-entity-common-card">
+                        Mark as Duplicate
                     </button>
                     <button *ngIf="detailsSource === 'LOCAL'" id="view-entity" attr.aria-label="Click here to {{isExpanded ? 'collapse' : 'expand'}}"
                         title="Click here to {{isExpanded ? 'collapse' : 'expand'}}"
@@ -231,7 +239,8 @@
                             <button id="mark-as-duplicate-entity-common-card" *ngIf="!isAlreadyMarkedAsDuplicate"
                                 (click)="openMarkAsDuplicateModal()" aria-label="Click here to mark as duplicate this entity"
                                 title="Click here to mark as duplicate this entity" class="btn btn-primary fs-14"
-                                name="mark-as-duplicate-entity-common-card">Mark as Duplicate
+                                name="mark-as-duplicate-entity-common-card">
+                                Mark as Duplicate
                             </button>
                         </div>
                     </div>

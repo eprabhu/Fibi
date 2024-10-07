@@ -5,28 +5,24 @@ import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/uti
 import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import {
+    DNBReqObj,
+    DuplicateActionType,
+    DuplicateCheckObj,
     EntireEntityDetails,
     EntityCardDetails,
     EntityDetails,
+    EntityDupCheckConfig,
     EntityTabStatus,
-    removeToast
+    removeToast,
+    VerifyModalAction
 } from '../shared/entity-interface';
 import { AutoSaveService } from '../../common/services/auto-save.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
 import { EntityManagementService, getEntityFullAddress } from '../entity-management.service';
 import { CommonService } from '../../common/services/common.service';
-
-class DNBReqObj {
-    sourceDataName: string;
-    sourceDunsNumber: any;
-    emailAddress: string;
-    addressLine1: string;
-    addressLine2: string;
-    postalCode: string;
-    state: string;
-    countryCode: string;
-}import { COIModalConfig, ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
+import { COIModalConfig } from '../../shared-components/coi-modal/coi-modal.interface';
 import { COMMON_ERROR_TOAST_MSG, ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { DUPLICATE_MARK_CONFIRMATION_TEXT, DUPLICATE_MARK_INFORMATION_TEXT } from '../shared/entity-constants';
 
 @Component({
   selector: 'app-header-details',
@@ -48,6 +44,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     isEditMode = false;
     matchedEntites: any;
     isOpenVerifyModal = false;
+    isOpenEntityDuplicate = false;
     entityTabStatus = new EntityTabStatus();
     canVerifyEntity = false;
     canManageEntity = false;
@@ -60,6 +57,8 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
     duplicateEntityDetails = new EntityCardDetails();
     badgeClass: string;
     originalEntityName: string;
+    dupCheckPayload: DuplicateCheckObj;
+    entityDupCheckConfig = new EntityDupCheckConfig();
     ENTITY_VERIFIED = ENTITY_VERIFICATION_STATUS.VERIFIED;
     ENTITY_UNVERIFIED = ENTITY_VERIFICATION_STATUS.UNVERIFIED;
     ENTITY_DUPLICATE = ENTITY_DOCUMNET_STATUS_TYPE.DUPLICATE;
@@ -110,6 +109,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         closeCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
         setTimeout(() => {
             this.showSlider = false;
+            this.isOpenEntityDuplicate = false;
             this.sliderElementId = '';
 		}, 500);
 	  }
@@ -143,6 +143,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.isEditMode = this.dataStore.getEditMode();
         this.canModifyEntity = this.getCanModifyEntity();
         this.badgeClass = this.getBadgeClass();
+        this.dupCheckPayload = this.dataStore.getDuplicateCheckRO();
         this.originalEntityName = ENTITY_DATA?.originalName;
         this.checkUserHasRight();
     }
@@ -175,12 +176,24 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         return entityDetails;
     }
 
-    openVerifyEntityModal(): void {
+    openVerifyEntityModal(hasConfirmedNoDuplicate = false): void {
         this.isOpenVerifyModal = true;
+        this.entityDupCheckConfig.hasConfirmedNoDuplicate = hasConfirmedNoDuplicate;
     }
 
-    verifyModalAction(modalAction: ModalActionEvent | null): void {
+    verifyModalAction(modalAction: VerifyModalAction): void {
         this.isOpenVerifyModal = false;
+        if (modalAction.action === 'VIEW_DUPLICATE') {
+            this.entityDupCheckConfig.duplicateView = 'SLIDER_VIEW';
+            this.entityDupCheckConfig.primaryButton = '';
+            this.entityDupCheckConfig.confirmationText = DUPLICATE_MARK_CONFIRMATION_TEXT;
+            this.entityDupCheckConfig.infoText = DUPLICATE_MARK_INFORMATION_TEXT;
+            this.entityDupCheckConfig.header = 'Potential Entity Duplicates'
+            this.entityDupCheckConfig.hasConfirmedNoDuplicate = modalAction.event?.hasConfirmedNoDuplicate;
+            this.entityDupCheckConfig.triggeredFrom = 'ENTITY_VERIFY';
+            this.entityDupCheckConfig.entityIdToFilter = this.entityDetails.entityId;
+            this.isOpenEntityDuplicate = true;
+        }
     }
 
     navigateToBack() {
@@ -203,6 +216,12 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
             openCommonModal(this.ENTITY_DUNS_MATCH_CONFIRMATION_MODAL_ID);
         } else if(event === 'OPEN_MODAL') {
             this.duplicateEntityDetails = deepCloneObject(entity.duplicateEntityDetails);
+        }
+    }
+
+    openDuplicateConfirmationModal(event: {action: 'OPEN_MODAL', event: any}) {
+        if(event.action === 'OPEN_MODAL') {
+            this.duplicateEntityDetails = deepCloneObject(event.event);
         }
     }
 
@@ -289,6 +308,14 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
     openEntity(): void{
         openInNewTab('manage-entity/entity-overview?', ['entityManageId'], [this.entityDetails?.originalEntityId]);
+    }
+
+    duplicateCheckResponse(event: {action: DuplicateActionType, event?: any}): void {
+        this.isOpenEntityDuplicate = false;
+        this.entityDupCheckConfig.duplicateView = '';
+        if (this.entityDupCheckConfig.triggeredFrom === 'ENTITY_VERIFY' || event.action === 'API_FAILED') {
+            this.openVerifyEntityModal(event.event?.hasConfirmedNoDuplicate);
+        }
     }
 
     ngOnDestroy() {
