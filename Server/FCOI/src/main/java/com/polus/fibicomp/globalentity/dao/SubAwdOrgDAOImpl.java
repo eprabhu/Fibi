@@ -68,7 +68,6 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 		hqlQuery.append(", ").append(updates.toString());
 		hqlQuery.append(" WHERE e.entityId = :entityId");
 
-		System.out.println("hqlQuery : " + hqlQuery.toString());
 		Query query = session.createQuery(hqlQuery.toString());
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());

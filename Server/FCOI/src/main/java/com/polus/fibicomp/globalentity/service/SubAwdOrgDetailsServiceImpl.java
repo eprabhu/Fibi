@@ -89,7 +89,7 @@ public class SubAwdOrgDetailsServiceImpl implements SubAwdOrgDetailsService {
 				case feedStatusCode:
 					entitySubOrgInfo.feedStatusCode(castToString(value));
 					break;
-				}
+			}
 		});
 
 		return entitySubOrgInfo.build();
