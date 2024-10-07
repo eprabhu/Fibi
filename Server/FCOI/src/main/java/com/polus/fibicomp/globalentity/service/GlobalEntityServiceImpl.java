@@ -4,9 +4,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.polus.core.constants.CoreConstants;
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,11 @@ import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
+import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
+import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
@@ -77,6 +80,9 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	@Autowired
     private EntityActionLogService actionLogService;
 
+	@Autowired
+	private CustomExceptionService exceptionService;
+
 	protected static Logger logger = LogManager.getLogger(GlobalEntityServiceImpl.class.getName());
 	private static final Integer ENTITY_MODULE_CODE = 26;
 	private static final String DOCUMENT_STATUS_FLAG_DUPLICATE = "3";
@@ -116,10 +122,12 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 				EntityRequestDTO.builder().entityId(entityId).approvedBy(AuthenticatedUser.getLoginPersonId())
 						.approvedTimestamp(commonDao.getCurrentTimestamp()).entityStatusTypeCode("1").build());
 		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SPONSOR_INFO_TAB))) {
-			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
+			Map<EntitySponsorField, Object> entitySponsorFields = Map.of(EntitySponsorField.feedStatusCode, "2");
+			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).entitySponsorFields(entitySponsorFields).build());
 		}
 		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SUB_ORG_INFO_TAB))) {
-			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
+			Map<SubAwardOrgField, Object> subAwardOrgFields = Map.of(SubAwardOrgField.feedStatusCode, "2"); 
+			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).subAwardOrgFields(subAwardOrgFields).build());
 		}
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(entityId);
@@ -142,6 +150,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			}
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
+			exceptionService.saveErrorDetails(e.getMessage(), e, CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
 	}
@@ -206,6 +215,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			actionLogService.saveEntityActionLog(DUPLICATE_ACTION_LOG_CODE, logDTO, dto.getDescription());
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in markDuplicate");
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseMessageDTO("Entity marked as duplicate successfully");
 	}
@@ -221,6 +231,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			actionLogService.saveEntityActionLog(dto.getActionLogCode(), dto, null);
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in logAction");
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseMessageDTO("Entity action log saved successfully");
 	}

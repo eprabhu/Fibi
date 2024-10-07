@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dto;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +19,6 @@ public class SponsorRequestDTO {
 	private String sponsorTypeCode;
 	private String feedStatusCode;
 	private String acType;
+	private Map<EntitySponsorField, Object> entitySponsorFields;
 
 }

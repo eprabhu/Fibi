@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { EntireEntityDetails, EntityDetails, EntityTabStatus, SubAwardOrgUpdateClass } from './shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityTabStatus, SponsorUpdateClass, SubAwardOrgUpdateClass } from './shared/entity-interface';
 import { CommonService } from '../common/services/common.service';
 import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE } from '../app-constants';
 import { canUpdateSponsorFeed, canUpdateOrgFeed } from './entity-management.service';
@@ -99,9 +99,9 @@ export class EntityDataStoreService {
 
     getApiCalls(entityId, reqObj): any[] {
         const REQUEST = [];
-        const REQ_OBJ = { entityId: entityId, feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED }
+        const SPONSOR_REQ_OBJ: SponsorUpdateClass = { entityId, entitySponsorFields: { feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED } };
         if(canUpdateSponsorFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sponsor_info) {
-            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/sponsor/update`, REQ_OBJ));
+            REQUEST.push(this._http.patch(`${this._commonService.baseUrl}/entity/sponsor/update`, SPONSOR_REQ_OBJ));
         }
         const SUBAWARD_REQ_OBJ: SubAwardOrgUpdateClass = { entityId, subAwardOrgFields: { feedStatusCode: FEED_STATUS_CODE.READY_TO_FEED } };
         if(canUpdateOrgFeed(reqObj) && this.storeData?.entityTabStatus?.entity_sub_org_info) {

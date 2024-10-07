@@ -388,6 +388,15 @@ export class SubAwardOrganization {
     entityRisks?: EntityRisk[] = [];
     subAwdOrgDetailsResponseDTO? = new SubAwardOrganizationDetails();
 }
+
+export class SubAwardOrganizationDetails {
+    id?: number | null = null;
+    entityId?: string | number | null = null;
+    organizationId?: number | null = null;
+    entityOrganizationType: EntityOrganizationType = new EntityOrganizationType();
+    samExpirationDate?: any | null = null;
+    subAwdRiskAssmtDate?: any | null = null;
+}
 export class EntitySponsor {
     attachments?: any[] = [];
     entityRisks?: EntityRisk[] = [];
@@ -399,7 +408,7 @@ export class SponsorDetails {
     acronym?: string | null = null;
     entityId?: number | null = null;
     sponsorCode?: string | null = null;
-    sponsorType?: SponsorType | null = new SponsorType();
+    sponsorType?: SponsorType = new SponsorType();
 }
 export class SponsorType {
     code: string;
@@ -408,14 +417,6 @@ export class SponsorType {
     fromGlMapping: any;
     toGlMapping: any;
     isActive: boolean;
-}
-export class SubAwardOrganizationDetails {
-    id?: number | null = null;
-    entityId?: string | number | null = null;
-    organizationId?: number | null = null;
-    entityOrganizationType: EntityOrganizationType = new EntityOrganizationType();
-    samExpirationDate?: any | null = null;
-    subAwdRiskAssmtDate?: any | null = null;
 }
 
 export class EntityOrganizationType {
@@ -551,6 +552,17 @@ export class SubawardOrgFields {
     feedStatusCode?: any;
 }
 
+export class SponsorUpdateClass {
+    entityId: number;
+    entitySponsorFields = new SponsorFields();
+}
+
+export class SponsorFields {
+    sponsorCode?: any;
+    sponsorTypeCode?: any;
+    acronym?: string;
+    feedStatusCode?: any;
+}
 
 //changes during modification in the following fields need to update feed status of sponsor
 export const SPONSOR_FIELDS = [
