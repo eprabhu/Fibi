@@ -318,6 +318,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
 					.reviewerStatusType(coiReview.getReviewerStatusType())
 					.reviewLocationType(coiReview.getReviewLocationType())
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 			coiReview.setCoiDisclosure(disclosure);
@@ -399,6 +400,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.reviewername(reviewerName)
 					.reviewLocationType(coiReview.getReviewLocationType())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.fcoiTypeDescription(coiReview.getCoiDisclosure().getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -471,6 +473,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.reviewername(reviewerName)
 					.reviewLocationType(coiReview.getReviewLocationType())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
@@ -531,6 +534,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.reviewername(reviewerName)
 						.reviewLocationType(coiReview.getReviewLocationType())
 						.administratorName(AuthenticatedUser.getLoginUserFullName())
+						.fcoiTypeDescription(coiReview.getCoiDisclosure().getCoiDisclosureFcoiType().getDescription())
 						.build();
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
@@ -1519,6 +1523,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
 					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
 	                .reporter(AuthenticatedUser.getLoginUserFullName())
+	                .fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 			Map<String, String> actionTypes = new HashMap<>();
@@ -1552,6 +1557,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
 					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
@@ -1949,6 +1955,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_REVIEW_COMPLETED).disclosureId(disclosure.getDisclosureId())
 						.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
 						.administratorName(AuthenticatedUser.getLoginUserFullName())
+						.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 						.build();
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 				Map<String, String> actionTypes = new HashMap<>();
