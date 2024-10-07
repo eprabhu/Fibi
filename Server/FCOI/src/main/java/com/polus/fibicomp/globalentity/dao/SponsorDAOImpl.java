@@ -20,8 +20,11 @@ import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntitySponsorInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
 @Transactional
+@Slf4j
 public class SponsorDAOImpl implements SponsorDAO {
 
 	@Autowired
@@ -45,8 +48,9 @@ public class SponsorDAOImpl implements SponsorDAO {
 	public void updateDetails(SponsorRequestDTO dto) {
 		Map<EntitySponsorField, Object> entitySponsorFields = dto.getEntitySponsorFields();
 
-		if (entitySponsorFields == null) {
-			throw new IllegalArgumentException("entitySponsorFields map is null or empty.");
+		if (entitySponsorFields == null || entitySponsorFields.isEmpty()) {
+			log.info("entitySponsorFields map is null or empty.");
+			return;
 		}
 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();

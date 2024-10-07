@@ -22,6 +22,7 @@ import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.service.ActionLogService;
@@ -136,6 +137,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                 .updatedBy(vo.getPersonId())
                 .build();
         disclosureDao.saveOrUpdateCoiDisclosure(coiDisclosure);
+        CoiDisclosureFcoiType coiDisclosureFcoiType = disclosureDao.getCoiDisclosureFcoiTypeByCode(vo.getFcoiTypeCode());
         List<CoiDisclProjects> disclosureProjects = new ArrayList<>();
         String loginPersonId = vo.getPersonId();
         if (vo.getFcoiTypeCode().equals(Constants.PROJECT_DISCL_FCOI_TYPE_CODE)) {
@@ -177,7 +179,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
                     .fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
                     .reporter(personDao.getPersonFullNameByPersonId(loginPersonId))
-                    .fcoiTypeDescription(coiDisclosure.getCoiDisclosureFcoiType().getDescription())
+                    .fcoiTypeDescription(coiDisclosureFcoiType.getDescription())
                     .build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (Exception e) {

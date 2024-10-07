@@ -57,4 +57,7 @@ public interface Constant {
 	String INACTIVE = "I";
 	String DISCLOSURE_TYPE_CODE_PROPOSAL = "2";
 
+	String DATE_FORMAT = "\\d{4}-\\d{2}-\\d{2}";
+	String STATIC_SALT = "$2a$10$IcWCnJIVz.4mgZbfSt2dY.";
+
 }
