@@ -26,7 +26,7 @@ export class EntitySponsorService {
         return this._http.patch(this._commonService.baseUrl + '/entity/sponsor/updateRisk', params, { responseType: 'text' });
     }
 
-    SponsorDetailsAutoSave(autoSaveRO){
+    sponsorDetailsAutoSave(autoSaveRO){
         return this._http.post(this._commonService.baseUrl + '/entity/sponsor/save', autoSaveRO);
     }
 

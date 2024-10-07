@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dao.EntityRiskDAO;
 import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityAttachmentResponseDTO;
+import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.SponsorDetailsResponseDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
@@ -61,7 +63,30 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	}
 
 	private EntitySponsorInfo mapDTOToEntity(SponsorRequestDTO dto) {
-		return EntitySponsorInfo.builder().entityId(dto.getEntityId()).acronym(dto.getAcronym()).sponsorTypeCode(dto.getSponsorTypeCode()).feedStatusCode(dto.getFeedStatusCode()).build();
+		Map<EntitySponsorField, Object> entitySponsorFields = dto.getEntitySponsorFields();
+		EntitySponsorInfo.EntitySponsorInfoBuilder entitySponsorInfo = EntitySponsorInfo.builder()
+				.entityId(dto.getEntityId()).updateTimestamp(commonDao.getCurrentTimestamp())
+				.updatedBy(AuthenticatedUser.getLoginPersonId());
+
+		entitySponsorFields.forEach((field, value) -> {
+			switch (field) {
+				case acronym:
+					entitySponsorInfo.acronym(castToString(value));
+					break;
+				case sponsorTypeCode:
+					entitySponsorInfo.sponsorTypeCode(castToString(value));
+					break;
+				case feedStatusCode:
+					entitySponsorInfo.feedStatusCode(castToString(value));
+					break;
+			}
+		});
+
+		return entitySponsorInfo.build();
+	}
+
+	private String castToString(Object value) {
+		return value instanceof String ? (String) value : null;
 	}
 
 	@Override
@@ -73,7 +98,7 @@ public class SponsorDetailsServiceImpl implements SponsorDetailsService {
 	}
 
 	public void logAction(SponsorRequestDTO dto) {
-		if (dto.getFeedStatusCode() != null) {
+		if(dto.getEntitySponsorFields().get(EntitySponsorField.feedStatusCode) != null ) {
 			if (dto.getAcType().equals(ACTION_TYPE_SAVE)) {
 				ActionLogRequestDTO logDTO = ActionLogRequestDTO.builder().entityId(dto.getEntityId())
 						.oldFeedStatus(feedStatusRepository.getDescriptionByCode(FEED_STATUS_NOT_READY_TO_FEED))

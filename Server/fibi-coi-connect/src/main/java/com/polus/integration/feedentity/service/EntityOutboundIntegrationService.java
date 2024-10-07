@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.polus.integration.constant.Constant;
 import com.polus.integration.feedentity.client.KCFeignClient;
 import com.polus.integration.feedentity.dao.EntityIntegrationDao;
 import com.polus.integration.feedentity.dto.EntityDTO;
@@ -31,8 +32,6 @@ public class EntityOutboundIntegrationService {
 
 	public void getEntityDetails(Integer entityId) {
 		log.info("Requesting feedEntityDetails for entityId: {}", entityId);
-		String yearPattern = "\\d{4}";
-		String monthYearPattern = "\\d{4}-\\d{2}";
 
 		try {
 			List<EntityDTO> entityDTOs = entityIntegrationDao.getEntityDetails(entityId);
@@ -43,18 +42,14 @@ public class EntityOutboundIntegrationService {
 
 			for (EntityDTO entityDTO : entityDTOs) {
 				String incorporationDate = entityDTO.getIncorporationDate();
-				log.info("incorporationDate : {}", incorporationDate);
 
 				if (incorporationDate != null && !incorporationDate.isEmpty()) {
-					if (Pattern.matches(yearPattern, incorporationDate)) {
-						incorporationDate = incorporationDate + "-01-01";
-					} else if (Pattern.matches(monthYearPattern, incorporationDate)) {
-						incorporationDate = incorporationDate + "-01";
+					log.info("incorporationDate : {}", incorporationDate);
+					if (Pattern.matches(Constant.DATE_FORMAT, incorporationDate)) {
+						entityDTO.setIncorporationDate(incorporationDate);
 					} else {
 						log.warn("Invalid incorporation date format: {}", incorporationDate);
 					}
-					log.info("updated incorporationDate : {}", incorporationDate);
-					entityDTO.setIncorporationDate(incorporationDate);
 				}
 
 				try {

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.polus.core.constants.CoreConstants;
@@ -31,9 +30,11 @@ import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
+import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ResponseMessageDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
+import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.dto.ValidateDuplicateRequestDTO;
 import com.polus.fibicomp.globalentity.dto.validateDuplicateResponseDTO;
@@ -121,10 +122,12 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 				EntityRequestDTO.builder().entityId(entityId).approvedBy(AuthenticatedUser.getLoginPersonId())
 						.approvedTimestamp(commonDao.getCurrentTimestamp()).entityStatusTypeCode("1").build());
 		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SPONSOR_INFO_TAB))) {
-			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
+			Map<EntitySponsorField, Object> entitySponsorFields = Map.of(EntitySponsorField.feedStatusCode, "2");
+			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).entitySponsorFields(entitySponsorFields).build());
 		}
 		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SUB_ORG_INFO_TAB))) {
-			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).feedStatusCode("2").build());
+			Map<SubAwardOrgField, Object> subAwardOrgFields = Map.of(SubAwardOrgField.feedStatusCode, "2"); 
+			subAwdOrgDAO.updateDetails(SubAwdOrgRequestDTO.builder().entityId(entityId).subAwardOrgFields(subAwardOrgFields).build());
 		}
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(entityId);
