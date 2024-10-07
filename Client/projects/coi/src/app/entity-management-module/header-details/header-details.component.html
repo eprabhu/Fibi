@@ -194,7 +194,12 @@
 </ng-container>
 
 <ng-container *ngIf="isOpenVerifyModal">
-    <app-enitity-verify-modal (verifyModalAction)="verifyModalAction($event)"></app-enitity-verify-modal>
+    <app-enitity-verify-modal [hasConfirmedNoDuplicate]="entityDupCheckConfig.hasConfirmedNoDuplicate" (verifyModalAction)="verifyModalAction($event)"></app-enitity-verify-modal>
+</ng-container>
+
+<ng-container *ngIf="isOpenEntityDuplicate">
+    <app-duplicate-entity-check [dupCheckPayload]="dupCheckPayload" [entityDupCheckConfig]="entityDupCheckConfig"
+        (actionResponse)="duplicateCheckResponse($event)" (openModal)="openDuplicateConfirmationModal($event)"></app-duplicate-entity-check>
 </ng-container>
 
 <!-- DUNS match confirmation pop-up starts -->
@@ -235,4 +240,5 @@
         </div>
     </div>
 </div>
+
 <app-duplicate-marking-confirmation [duplicateEntityDetails]="duplicateEntityDetails" (emitAPISuccess)="validateSliderClose()"></app-duplicate-marking-confirmation>
