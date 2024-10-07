@@ -11,6 +11,7 @@ import { EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabSt
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { AUTO_SAVE_DEBOUNCE_TIME } from '../../shared/entity-constants';
 
 @Component({
     selector: 'app-entity-subaward-details',
@@ -50,7 +51,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     }
 
     triggerSingleSave(): void {
-        this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(750))).subscribe((data: any) => {
+        this.$subscriptions.push(this.$debounceEvent.pipe(debounce(() => interval(AUTO_SAVE_DEBOUNCE_TIME))).subscribe((data: any) => {
             if (data) {
                 this._autoSaveService.commonSaveTrigger$.next(true);
             }
