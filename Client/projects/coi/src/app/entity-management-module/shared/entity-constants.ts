@@ -61,3 +61,5 @@ export const AttachmentTab = new Map([
     ['ATT_COMPLIANCE_ATTACHMENTS' , ATT_COMPLIANCE_ATTACHMENTS]
 ]);
 
+export const AUTO_SAVE_DEBOUNCE_TIME = 750;
+

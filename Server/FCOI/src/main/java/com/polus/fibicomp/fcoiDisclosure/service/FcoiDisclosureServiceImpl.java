@@ -13,6 +13,7 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
+import com.polus.fibicomp.config.CustomExceptionService;
 import com.polus.fibicomp.constants.ActionTypes;
 import com.polus.fibicomp.constants.StaticPlaceholders;
 import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
@@ -92,6 +93,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Autowired
     private FCOIDisclProjectService projectService;
+
+    @Autowired
+    private CustomExceptionService exceptionService;
 
     @Override
     public ResponseEntity<Object> createDisclosure(CoiDisclosureDto vo) throws JsonProcessingException {
@@ -175,9 +179,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .reporter(personDao.getPersonFullNameByPersonId(loginPersonId))
                     .build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             logger.error("createDisclosure : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
@@ -278,6 +282,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("Error in saveConflictHistory: {}", e.getMessage());
+                exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
             }
         });
         executorService.shutdown();
@@ -300,6 +305,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (Exception e) {
             logger.error("certifyDisclosure : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
     }
@@ -660,6 +666,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     }));
         } catch (Exception e) {
             logger.info("Unable to sync SFIs : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED).disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber()).fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment()).reporter(AuthenticatedUser.getLoginUserFullName()).build();
         actionLogService.saveDisclosureActionLog(actionLogDto);
@@ -779,6 +786,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId(), disclosure.getDisclosureNumber(), disclosure.getAdminPersonId());
         } catch (Exception e) {
             logger.error("assignDisclosureAdmin : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         dto.setUpdateTimestamp(disclosureDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId()));
         if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {

@@ -20,14 +20,12 @@ public class EntityIntegrationScheduler {
 		try {
 			log.info("Scheduler started - Setting up header token and calling getEntityDetails");
 
-			// Calling the service method with parameters
 			integrationService.getEntityDetails(null);
 
 			log.info("Scheduler completed successfully");
 
 		} catch (Exception e) {
 			log.error("Exception occurred while executing scheduled task", e);
-			// You can add more specific exception handling if needed
 		}
 	}
 }
