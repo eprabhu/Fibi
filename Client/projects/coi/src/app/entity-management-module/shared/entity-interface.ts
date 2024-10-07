@@ -198,25 +198,6 @@ export class EntityTabStatus {
     sponsor_feed_status_code: any;
 }
 
-export class EntityAttachmentDetails {
-    entityAttachmentId: number;
-    attachmentNumber: number;
-    versionNumber: number;
-    versionStatus: any;
-    entityId: number;
-    comment: string;
-    attachmentTypeCode: string;
-    attachmentType: EntityAttachmentType;
-    attachmentStatusCode: any;
-    attachmentStatus: any;
-    fileName: string;
-    mimeType: string;
-    fileDataId: string;
-    updateTimestamp: number;
-    updatedBy: string;
-    updateUserFullame: string;
-}
-
 export interface EntityAttachmentType {
     attachmentTypeCode?: string
     description?: string
@@ -461,25 +442,18 @@ export class OverallAttachmentList {
     Compliance: EntityAttachment[];
 }
 
-export interface EntityAttachment {
-    entityAttachmentId?: number;
-    attachmentNumber?: number;
-    versionNumber?: number;
-    versionStatus?: string
-    entityId?: string | number;
-    entity?: EntityDetails;
-    comment?: string;
-    attachmentTypeCode?: string;
-    attachmentType?: EntityAttachmentType;
-    attachmentStatusCode?: any;
-    attachmentStatus?: any;
-    fileName?: string;
-    mimeType?: string;
-    fileDataId?: string;
-    updateTimestamp?: number;
-    updatedBy?: string;
-    updateUserFullame?: string;
-    versionList?: EntityAttachment[];
+export class EntityAttachment {
+    attachmentNumber?: number = null;
+    attachmentType?: string = '';
+    attachmentTypeCode?: string = '';
+    comment?: string = '';
+    entityAttachmentId?: number = null;
+    entityId?: number = null;
+    fileName?: string = '';
+    updateTimestamp?: number = null;
+    updateUserFullname?: string = '';
+    versionNumber?: number = null;
+    versionList?: EntityAttachment[] = [];
 }
 
 export class EntitySectionDetails {
