@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.security.AuthenticatedUser;
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,9 @@ public class ConsultingDisclosureServiceImpl implements ConsultingDisclosureServ
 
 	@Autowired
 	private ConflictOfInterestDao conflictOfInterestDao;
+
+	@Autowired
+	private CustomExceptionService exceptionService;
 
 	@Override
 	public ResponseEntity<Object> createConsultingDisclosure(String personId, String homeUnit) {
@@ -177,6 +182,7 @@ public class ConsultingDisclosureServiceImpl implements ConsultingDisclosureServ
 			saveAssignAdminActionLog(consultDisclAssignAdminDto.getAdminPersonId(), consultDisclAssignAdminDto.getDisclosureId());
 		} catch (Exception e) {
 			logger.error("Exception in assignAdminConsultingDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e, CoreConstants.JAVA_ERROR);
 		}
 		consultingDisclosureDao.assignAdminConsultingDisclosure(consultDisclAssignAdminDto);
 		return getConsultingDisclosure(consultDisclAssignAdminDto.getDisclosureId());
