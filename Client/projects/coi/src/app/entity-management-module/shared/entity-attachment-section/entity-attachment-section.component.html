@@ -32,7 +32,7 @@
                     <div class="card coi-card-regular p-3 shadow-sm">
                         <div class="row mx-0 gap-2">
                             <!-- file icon -->
-                            <div class="col-auto d-flex align-items-center h-100 justify-content-center attachment-icon-container p-3 rounded-2">
+                            <div class="col-auto d-flex align-items-center justify-content-center attachment-icon-container p-3 rounded-2">
                                 <mat-icon aria-hidden="true" class="fs-24 flex-shrink-0">description</mat-icon>
                             </div>
                             <!-- files -->
@@ -46,9 +46,9 @@
                                     </app-no-data-label>
                                     <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                         <span>(</span>
-                                        <span class="fw-500">{{attachment?.updateUserFullname}}</span>
+                                        <span class="fw-500 text-nowrap">{{attachment?.updateUserFullname}}</span>
                                         <span class="mx-1">On</span>
-                                        <span>{{attachment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                        <span class="text-nowrap">{{attachment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                                         <span>)</span>
                                     </div>
                                 </div>
