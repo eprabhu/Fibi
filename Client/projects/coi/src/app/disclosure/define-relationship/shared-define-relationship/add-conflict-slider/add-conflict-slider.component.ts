@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
-import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE } from "../../../../app-constants";
+import { HTTP_SUCCESS_STATUS, HTTP_ERROR_STATUS, PROJECT_CONFLICT_STATUS_BADGE, DISCLOSURE_TYPE } from "../../../../app-constants";
 import { CommonService } from "../../../../common/services/common.service";
 import { openCoiSlider } from "../../../../common/utilities/custom-utilities";
 import { deepCloneObject, isEmptyObject } from "../../../../../../../fibi/src/app/common/utilities/custom-utilities";
@@ -28,6 +28,7 @@ export class AddConflictSliderComponent implements OnInit, OnDestroy {
     conflictHistory = [];
     personUnitDetails = '';
     isReadMore: boolean[] = [];
+    DISCLOSURE_TYPE = DISCLOSURE_TYPE;
     $subscriptions: Subscription[] = [];
     projectConflictStatusCode: string = '';
     projectConflictValidationMap = new Map();

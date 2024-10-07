@@ -4,12 +4,12 @@
         <div class="modal-header">
           <h4 id="reviseOrCreateDisclosureModal-header" class="modal-title" *ngIf="!isShowExistingDisclosure">
             <ng-container *ngIf="hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
-                <span>Revise Disclosure</span>
+                <span>Create Revision</span>
                 <app-common-help-text [helpTextHardCoded]="'You are about to revise disclosure.'"></app-common-help-text>
             </ng-container>
             <ng-container *ngIf="!hasFCOI && triggeredFrom == 'FCOI_DISCLOSURE'">
-                <span>Create FCOI Disclosure</span>
-                <app-common-help-text [helpTextHardCoded]="'You are about to create FCOI disclosure.'"></app-common-help-text>
+                <span>Create Initial Disclosure</span>
+                <app-common-help-text [helpTextHardCoded]="'You are about to create initial disclosure.'"></app-common-help-text>
             </ng-container>
             <ng-container *ngIf="triggeredFrom != 'FCOI_DISCLOSURE'">
                 <span>Create {{ triggeredFrom == 'PROJECT_DISCLOSURE' ? 'Project' : 'Travel' }} Disclosure</span>
@@ -31,8 +31,7 @@
                         A new {{selectedProjectType}} disclosure has been initiated. Please review and take appropriate action.
                     </ng-container>
                     <ng-container *ngIf="triggeredFrom != 'PROJECT_DISCLOSURE'">
-                        A new financial conflict of interest (FCOI) disclosure has been initiated. Please review and take
-                        appropriate action.
+                        A new financial conflict of interest (FCOI) disclosure has been initiated. Please review and take appropriate action.
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="hasFCOI">
@@ -397,14 +396,14 @@
         <div class="modal-footer">
             <button class="btn btn-outline-secondary" id="disclosure-create-cancel-btn" data-bs-dismiss="modal" type="button"
                 title="Click here to cancel" aria-label="Click here to cancel" (click)="clearModal()">Cancel</button>
-            <!-- FCOI/REVISE -->
+            <!-- INITIAL/REVISION -->
             <button *ngIf="triggeredFrom == 'FCOI_DISCLOSURE' && !isShowExistingDisclosure && !isShowConcurrencyWarning" class="btn btn-primary me-0"
                 id="fcoi-revise-disclosure-create-cancel-btn" type="button" (click)="createOrReviseDisclosure()"
-                [title]="hasFCOI ? 'Click here to create revision' : 'Click here to create FCOI'"
-                [attr.aria-label]="hasFCOI ? 'Click here to create revision' : 'Click here to create FCOI'">
-                <!-- FCOI create -->
-                <ng-container *ngIf="!hasFCOI">Create FCOI</ng-container>
-                <!-- REVISE create -->
+                [title]="hasFCOI ? 'Click here to create revision' : 'Click here to create initial disclosure'"
+                [attr.aria-label]="hasFCOI ? 'Click here to create revision' : 'Click here to create initial disclosure'">
+                <!-- INITIAL create -->
+                <ng-container *ngIf="!hasFCOI">Create Initial Disclosure</ng-container>
+                <!-- REVISION create -->
                 <ng-container *ngIf="hasFCOI">Create Revision</ng-container>
             </button>
             <!-- project create -->

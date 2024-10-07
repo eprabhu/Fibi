@@ -153,8 +153,8 @@ export const ENTITY_VERIFICATION_STATUS = {
 };
 
 export const DISCLOSURE_TYPE = {
-    FCOI: '1',
-    PROJECTS: '2',
+    INITIAL: '1',
+    PROJECT: '2',
     REVISION: '3'
 };
 

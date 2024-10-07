@@ -101,7 +101,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                     registration.regTypeCode = this.selectedType[0].code;
                     registration.registrationTypeDescription = this.selectedType[0]?.description;
                     registration.regNumber = this.registrationDetails.regNumber;
-                    this.entityRegistrations.push(registration);
+                    this.entityRegistrations.unshift(registration);
                     this._dataStoreService.enableModificationHistoryTracking();
                     this.updateDataStore();
                 }
@@ -158,15 +158,9 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
             this.registrationDetails.entityId = this.entityId;
             this.$subscriptions.push(this._entityOverviewService
                 .updateRegistrationDetails(this.registrationDetails).subscribe((data: any) => {
-                    if (data) {
-                        this.entityRegistrations[this.isEditIndex].registrationTypeDescription = this.selectedType
-                        && this.selectedType[0] ? this.selectedType[0]?.description : this.entityRegistrationDefaultValue;
-                        this.entityRegistrations[this.isEditIndex].regNumber = this.registrationDetails.regNumber;
-                        this.entityRegistrations[this.isEditIndex].regTypeCode = this.registrationDetails.regTypeCode;
-                        this.entityRegistrations[this.isEditIndex].registrationType = null;
-                        this.updateDataStore();
-                    }
+                    this.updateAndArrangeData();
                     this._dataStoreService.enableModificationHistoryTracking();
+                    this.updateDataStore();
                     this.clearRegistrationDetails();
                     this.isSaving = false;
                 }, err => {
@@ -174,6 +168,15 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
                     this.isSaving = false;
                 }));
         }
+    }
+
+    private updateAndArrangeData(): void {
+        const UPDATED_REGISTRATION = this.entityRegistrations.splice(this.isEditIndex, 1)[0];
+        UPDATED_REGISTRATION.registrationTypeDescription = this.selectedType?.[0] ? this.selectedType[0]?.description : this.entityRegistrationDefaultValue;
+        UPDATED_REGISTRATION.regNumber = this.registrationDetails.regNumber;
+        UPDATED_REGISTRATION.regTypeCode = this.registrationDetails.regTypeCode;
+        UPDATED_REGISTRATION.registrationType = null;
+        this.entityRegistrations.unshift(UPDATED_REGISTRATION);
     }
 
     postConfirmation(modalAction: ModalActionEvent) {

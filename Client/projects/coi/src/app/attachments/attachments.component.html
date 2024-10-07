@@ -1,102 +1,117 @@
 <ng-container *ngIf="!isLoading">
 
     <div class="row mb-2 mx-2">
-    <!-- Add attachment -->
-    <div class="px-0 col-12 d-flex align-items-center coloured-bg-header justify-content-end">
-        <div class="col-auto" *ngIf="filteredCoiAttachmentsList?.length && !isViewMode">
-            <button id="coi-attachment-add-button" class="btn btn-primary fs-14 d-inline-flex"
-                title="Click here to add attachment." aria-label="Click here to add attachment."
-                (click)="openAttachmentModal('ADD')">
-                <mat-icon aria-hidden="true" class="flex-shrink-0">add</mat-icon>
-                <span>Add Attachment</span>
-            </button>
+        <!-- Add attachment -->
+        <div class="px-0 col-12 d-flex align-items-center coloured-bg-header justify-content-end">
+            <div class="col-auto" *ngIf="filteredCoiAttachmentsList?.length && !isViewMode">
+                <button id="coi-attachment-add-button" class="btn btn-primary fs-14 d-inline-flex"
+                    title="Click here to add attachment." aria-label="Click here to add attachment."
+                    (click)="openAttachmentModal('ADD')">
+                    <mat-icon aria-hidden="true" class="flex-shrink-0">add</mat-icon>
+                    <span>Add Attachment</span>
+                </button>
+            </div>
         </div>
-    </div>
 
     <!-- list -->
-    <ng-container *ngIf="filteredCoiAttachmentsList.length">
-        <ng-container *ngFor="let attachment of filteredCoiAttachmentsList; let index = index">
-            <div class="card coi-card-regular p-3 shadow-sm">
-                <div class="row mx-0 gap-2">
-                    <!-- file icon -->
-                    <div
-                        class="col-auto d-flex align-items-center h-100 justify-content-center attachment-icon-container p-3 rounded-2">
-                        <mat-icon aria-hidden="true" class="fs-24 flex-shrink-0">description</mat-icon>
-                    </div>
-                    <!-- files -->
-                    <div class="col">
-                        <!-- type -->
-                        <div class="coi-text-darker d-flex" id="coi-attachment-comment-{{index}}">
-                            <app-no-data-label [valueToShow]="attachment?.attachmentTypeDescription">
-                                <span [title]="attachment?.attachmentTypeDescription"
-                                    [attr.aria-label]="attachment?.attachmentTypeDescription"
-                                    class="text-slice fs-14">{{attachment?.attachmentTypeDescription}}</span>
-                            </app-no-data-label>
-                            <div class="ms-1 d-inline-flex coi-text-light fs-13">
-                                <span>(</span>
-                                <span class="fw-500">{{attachment?.updateUserFullame}}</span>
-                                <span class="mx-1">On</span>
-                                <span>{{attachment.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
-                                <span>)</span>
+        <ng-container *ngIf="filteredCoiAttachmentsList.length">
+            <ng-container *ngFor="let attachment of filteredCoiAttachmentsList; let index = index; let isOdd = odd" >
+                <div class="col-6 ps-0" [class.px-0]="isOdd">
+                    <div class="card coi-card-regular p-2 shadow-sm">
+                        <div class="row mx-0 gap-2">
+                            <!-- file icon -->
+                            <div
+                                class="col-auto d-flex align-items-center h-100 justify-content-center attachment-icon-container p-3 rounded-2">
+                                <mat-icon aria-hidden="true" class="fs-24 flex-shrink-0">description</mat-icon>
+                            </div>
+                            <!-- files -->
+                            <div class="col">
+                                <!-- type -->
+                                <div class="coi-text-darker d-flex" id="coi-attachment-comment-{{index}}">
+                                    <app-no-data-label [valueToShow]="attachment?.attachmentTypeDescription">
+                                        <span [title]="attachment?.attachmentTypeDescription"
+                                            [attr.aria-label]="attachment?.attachmentTypeDescription"
+                                            class="text-slice fs-14">{{attachment?.attachmentTypeDescription}}</span>
+                                    </app-no-data-label>
+                                    <div class="ms-1 d-inline-flex coi-text-light fs-13">
+                                        <span>(</span>
+                                        <span class="fw-500">{{attachment?.updateUserFullame}}</span>
+                                        <span class="mx-1">On</span>
+                                        <span>{{attachment.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                        <span>)</span>
+                                    </div>
+                                </div>
+                                <!-- description -->
+                                <div class="coi-text-light" id="coi-attachment-description-{{index}}">
+                                    <app-no-data-label [valueToShow]="attachment?.description">
+                                        <span [title]="attachment?.description" [attr.aria-label]="attachment?.description"
+                                            class="text-slice fs-13">{{attachment?.description}}</span>
+                                    </app-no-data-label>
+                                </div>
+                                <!-- file name -->
+                                <div class="coi-text-lighter" id="coi-attachment-filename-{{index}}">
+                                    <app-no-data-label [valueToShow]="attachment.fileName">
+                                        <span [title]="attachment.fileName" [attr.aria-label]="attachment.fileName"
+                                            class="text-slice fs-13">{{attachment.fileName}}</span>
+                                    </app-no-data-label>
+                                </div>
+                            </div>
+                            <!-- actions -->
+                            <div class="col-auto d-flex justify-content-center align-items-center">
+                                <!-- download -->
+                                <button id="coi-attachment-download-{{index}}"
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                    title="Click here to download attachment." aria-label="Click here to download attachment."
+                                    (click)="downloadAttachment(attachment)">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">download</mat-icon>
+                                </button>
+                                <!-- version -->
+                                <button id="coi-attachment-version-{{index}}"
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
+                                    title="Click here to view file versions." aria-label="Click here to view file versions."
+                                    (click)="openVersionModal(attachment, index)">
+                                    <mat-icon aria-hidden="true" class="flex-shrink-0">difference</mat-icon>
+                                </button>
+                                <!-- more options button -->
+                                <button *ngIf="!isViewMode" [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
+                                        class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">
+                                        <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                </button>
+                                <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                    <!-- edit -->
+                                    <ng-container>
+                                        <button mat-menu-item id="coi-attachment-edit-{{index}}"
+                                            title="Click here to update attachment." aria-label="Click here to edit attachment."
+                                            (click)="editCoiAttachment(attachment, index)">
+                                            <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
+                                            <span class="ms-2 fw-medium fs-14">Update</span>
+                                        </button>
+                                    </ng-container>
+                                    <!-- replace -->
+                                    <ng-container>
+                                        <button mat-menu-item id="coi-attachment-replace-{{index}}"
+                                            title="Click here to replace attachment." aria-label="Click here to replace attachment."
+                                            (click)="replaceAttachmentModal(attachment, index)">
+                                            <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
+                                            <span class="ms-2 fw-medium fs-14">Replace</span>
+                                        </button>
+                                    </ng-container>
+                                    <!-- delete -->
+                                    <ng-container>
+                                        <button mat-menu-item id="coi-attachment-delete-{{index}}"
+                                            title="Click here to delete attachment." aria-label="Click here to delete attachment."
+                                            (click)="openDeleteConfirmModal(attachment, index)">
+                                            <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
+                                            <span class="ms-2 fw-medium fs-14">Delete</span>
+                                        </button>
+                                    </ng-container>
+                                </mat-menu>
                             </div>
                         </div>
-                        <!-- description -->
-                        <div class="coi-text-light" id="coi-attachment-description-{{index}}">
-                            <app-no-data-label [valueToShow]="attachment?.description">
-                                <span [title]="attachment?.description" [attr.aria-label]="attachment?.description"
-                                    class="text-slice fs-13">{{attachment?.description}}</span>
-                            </app-no-data-label>
-                        </div>
-                        <!-- file name -->
-                        <div class="coi-text-lighter" id="coi-attachment-filename-{{index}}">
-                            <app-no-data-label [valueToShow]="attachment.fileName">
-                                <span [title]="attachment.fileName" [attr.aria-label]="attachment.fileName"
-                                    class="text-slice fs-13">{{attachment.fileName}}</span>
-                            </app-no-data-label>
-                        </div>
-                    </div>
-                    <!-- actions -->
-                    <div class="col-auto d-flex justify-content-center align-items-center">
-                        <!-- edit -->
-                        <button id="coi-attachment-edit-{{index}}" *ngIf="!isViewMode"
-                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to edit attachment." aria-label="Click here to edit attachment."
-                            (click)="editCoiAttachment(attachment, index)">
-                            <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
-                        </button>
-                        <!-- delete -->
-                        <button id="coi-attachment-delete-{{index}}" *ngIf="!isViewMode"
-                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to delete attachment." aria-label="Click here to delete attachment."
-                            (click)="openDeleteConfirmModal(attachment, index)">
-                            <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
-                        </button>
-                        <!-- download -->
-                        <button id="coi-attachment-download-{{index}}"
-                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to download attachment." aria-label="Click here to download attachment."
-                            (click)="downloadAttachment(attachment)">
-                            <mat-icon aria-hidden="true" class="flex-shrink-0">download</mat-icon>
-                        </button>
-                        <!-- replace -->
-                        <button id="coi-attachment-replace-{{index}}" *ngIf="!isViewMode"
-                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to replace attachment." aria-label="Click here to replace attachment."
-                            (click)="replaceAttachmentModal(attachment, index)">
-                            <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
-                        </button>
-                        <!-- version -->
-                        <button id="coi-attachment-version-{{index}}"
-                            class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                            title="Click here to view file versions." aria-label="Click here to view file versions."
-                            (click)="openVersionModal(attachment, index)">
-                            <mat-icon aria-hidden="true" class="flex-shrink-0">difference</mat-icon>
-                        </button>
                     </div>
                 </div>
-            </div>
+            </ng-container>
         </ng-container>
-    </ng-container>
     </div>
     <!-- add attachment button -->
     <ng-container *ngIf="!filteredCoiAttachmentsList?.length">

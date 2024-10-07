@@ -13,14 +13,14 @@
                     <!-- Badge and Current Risk -->
                     <div class="col-12 d-flex mb-3 ps-0 align-items-start">
                         <div class="d-flex col align-items-center">
-                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode == '2'">
+                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT">
                                 <span [attr.aria-label]="disclosureDetails?.coiProjectType?.description + ' disclosure'" class="coi-card-notch-ribbon shadow-sm"
                                     [style.backgroundColor]="disclosureDetails?.coiProjectType?.badgeColor">{{ disclosureDetails?.coiProjectType?.description }}</span>
                             </ng-container>
-                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode != '2' ">
-                                <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip" [attr.aria-label]="'FCOI disclosure'">FCOI</span>
+                            <ng-container *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT ">
+                                <span class="coi-card-notch-ribbon shadow-sm bg-fcoi-clip" [attr.aria-label]="disclosureDetails?.coiDisclosureFcoiType?.description + ' disclosure'">{{ disclosureDetails?.coiDisclosureFcoiType?.description }}</span>
                             </ng-container>
-                            <h4 *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode==='2' && projectDetails" class="mb-0 label-text f-16 me-5 d-flex align-items-center">
+                            <h4 *ngIf="disclosureDetails?.coiDisclosureFcoiType?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT && projectDetails" class="mb-0 label-text f-16 me-5 d-flex align-items-center">
                                 <mat-icon aria-hidden="true" class="coi-text-light flex-shrink-0 ms-1">{{projectDetails?.projectIcon}}</mat-icon>
                                 <a class="link-primary fs-6 text-slice"
                                     title="Click here to view details of #{{ projectDetails?.projectNumber }} - {{ projectDetails?.title }}"
