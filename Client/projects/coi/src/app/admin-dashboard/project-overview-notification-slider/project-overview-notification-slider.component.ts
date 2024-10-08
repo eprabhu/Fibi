@@ -112,11 +112,12 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     private validateMandatoryFields(): void {
         this.notificationObject.message = removeUnwantedTags(this.notificationObject.message);
         this.validationMap.clear();
+        const TRIMMED_SUBJECT = this.notificationObject.subject ? this.notificationObject.subject.trim() : '';
         const TO_RECIPIENTS = this.notificationObject.recipients.filter(e => e.recipientType === 'TO')
         if (TO_RECIPIENTS.length === 0) {
             this.validationMap.set('recipients', 'Please add at least one recipient.');
         }
-        if (!this.notificationObject.subject) {
+        if (!TRIMMED_SUBJECT) {
             this.validationMap.set('subject', 'Please provide a subject.');
         }
         if (!this.notificationObject.message) {
