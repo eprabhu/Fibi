@@ -1,9 +1,18 @@
 package com.polus.integration.proposal.dao;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.integration.proposal.dto.DisclosureResponse;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
 import com.polus.integration.proposal.pojo.COIIntegrationProposal;
 import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
@@ -18,6 +27,7 @@ import com.polus.questionnaire.service.QuestionnaireEngineServiceImpl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -44,6 +54,9 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 	@Autowired
 	private ProposalQnAIntegrationRepository qnAIntegrationRepository;
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public FibiCoiQnrMapping getQuestionnaireMappingInfo(Integer questionnaireId) {
@@ -144,6 +157,86 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 	        log.error("Error in canMarkDisclosureAsVoid", e.getMessage());
 	        return Boolean.FALSE;
 	    }
+	}
+
+	@Override
+	public DisclosureResponse feedProposalDisclosureStatus(String proposalNumber, String personId) {
+		if (StringUtils.isBlank(proposalNumber) || StringUtils.isBlank(personId)) {
+			log.warn("Invalid proposal number or person ID provided.");
+			return DisclosureResponse.builder().error("Invalid proposal number or person ID.").build();
+		}
+
+		try {
+			log.info("Calling stored procedure COI_INT_PROP_PERSON_DISCL_STATUS with proposalNumber: {} and personId: {}", proposalNumber, personId);
+
+			return jdbcTemplate.execute((Connection conn) -> {
+				try (CallableStatement cs = conn.prepareCall("{call COI_INT_PROP_PERSON_DISCL_STATUS(?, ?)}")) {
+					cs.setString(1, proposalNumber);
+					cs.setString(2, personId);
+
+					try (ResultSet rset = cs.executeQuery()) {
+						if (rset != null && rset.next()) {
+							Integer id = rset.getInt("DISCLOSURE_ID");
+							String status = rset.getString("DISCLOSURE_STATUS");
+
+							log.info("Disclosure ID: {}, Status: {} for proposalNumber: {}, personId: {}", id, status, proposalNumber, personId);
+
+							if (status != null) {
+								return DisclosureResponse.builder().disclosureId(id).disclosureStatus(status).build();
+							} else {
+								log.warn("No disclosure data found for proposalNumber: {} and personId: {}", proposalNumber, personId);
+								return DisclosureResponse.builder().message("No data found!").build();
+							}
+						} else {
+							log.warn("ResultSet is empty for proposalNumber: {} and personId: {}", proposalNumber, personId);
+							return DisclosureResponse.builder().message("No data found!").build();
+						}
+					}
+				} catch (SQLException ex) {
+					log.error("SQLException while executing stored procedure COI_INT_PROP_PERSON_DISCL_STATUS for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, ex.getMessage(), ex);
+					throw new RuntimeException("A SQL error occurred during the procedure call.", ex);
+				}
+			});
+		} catch (DataAccessException e) {
+			log.error("DataAccessException while executing stored procedure COI_INT_PROP_PERSON_DISCL_STATUS with proposalNumber: {} and personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
+			return DisclosureResponse.builder().error("A SQL error occurred while fetching the disclosure status. Please try again later.").build();
+		} catch (Exception e) {
+			log.error("Unexpected error occurred while fetching person disclosure details for proposalNumber: {} and personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
+			return DisclosureResponse.builder().error("An error occurred while fetching the disclosure status. Please try again later.").build();
+		}
+	}
+
+	@Override
+	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber) {
+		if (StringUtils.isBlank(proposalNumber)) {
+			log.warn("Invalid proposal number provided.");
+			return DisclosureResponse.builder().error("Invalid proposal number.").build();
+		}
+
+		try {
+			log.info("Calling database function COI_INT_PROP_DISCL_STATUS with proposalNumber: {}", proposalNumber);
+			Query query = entityManager.createNativeQuery("SELECT COI_INT_PROP_DISCL_STATUS(:proposalNumber)").setParameter("proposalNumber", proposalNumber);
+
+			Object result = query.getSingleResult();
+			log.info("Function result for proposalNumber {}: {}", proposalNumber, result);
+
+			if (result instanceof Number) {
+				Integer disclosureSubmitted = ((Number) result).intValue();
+				String message = (disclosureSubmitted == 1) ? "Disclosure Submitted." : "Disclosure Not Submitted.";
+				log.info("Proposal {} - {}", proposalNumber, message);
+				return DisclosureResponse.builder().disclosureSubmitted(disclosureSubmitted).message(message).build();
+			}
+
+			log.warn("Unexpected result type from function for proposalNumber {}: {}", proposalNumber, result);
+			return DisclosureResponse.builder().error("Unexpected result from the database.").build();
+
+		} catch (PersistenceException e) {
+			log.error("Database error while fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			return DisclosureResponse.builder().error("A database error occurred. Please try again later.").build();
+		} catch (Exception e) {
+			log.error("Unexpected error while fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			return DisclosureResponse.builder().error("An unexpected error occurred. Please try again later.").build();
+		}
 	}
 
 }
