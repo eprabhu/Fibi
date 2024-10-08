@@ -109,7 +109,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
         AUTO_SAVE_PAYLOAD.entityId = this.entityDetails.entityId;
         Object.keys(this.changeDetectionObj).forEach((ele) => {
             if (this.changeDetectionObj[ele]) {
-                AUTO_SAVE_PAYLOAD.entitySponsorFields[ele] = this.sponsorUpdateObj.entitySponsorFields[ele];
+                AUTO_SAVE_PAYLOAD.entitySponsorFields[ele] = this.sponsorUpdateObj?.entitySponsorFields[ele]?.trim() || null;
             }
         });
         return AUTO_SAVE_PAYLOAD;
@@ -151,7 +151,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     private canUpdateFeed(entitySponsorFields: SponsorFields): boolean {
         return (this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateSponsorFeed(entitySponsorFields)
-            && (entitySponsorFields.hasOwnProperty('sponsorTypeCode') && entitySponsorFields.sponsorTypeCode));
+            && (entitySponsorFields.sponsorTypeCode || this.entitySponsorService?.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code));
     }
 
     private updateSponosrDetails(autoSaveReaObj: SponsorUpdateClass): void {

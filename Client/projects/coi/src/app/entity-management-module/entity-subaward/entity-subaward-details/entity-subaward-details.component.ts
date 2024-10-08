@@ -170,9 +170,9 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private handleAPISuccess(autoSaveReqObj: SubAwardOrgUpdateClass): void {
         this._dataStoreService.enableModificationHistoryTracking();
+        this.setServiceVariable(autoSaveReqObj.subAwardOrgFields);
         this.updateCompletionFlag();
         this.updateEntireFeed(autoSaveReqObj);
-        this.setServiceVariable(autoSaveReqObj.subAwardOrgFields);
         this.commonService.setChangesAvailable(false);
         this.stopAutoSaveLoader('SUCCESS');
     }
@@ -221,8 +221,8 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
     }
 
     private canUpdateFeed(subAwardOrgFields: SubawardOrgFields): boolean {
-        return this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateOrgFeed(subAwardOrgFields)
-            && isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization);
+        return this.entityDetails.entityStatusTypeCode === ENTITY_VERIFICATION_STATUS.VERIFIED && canUpdateOrgFeed(subAwardOrgFields) &&
+        (isOrganizationConditionSatisfied(this.entitySubAwardService.entitySubAwardOrganization) || (this.entitySubAwardService.entitySubAwardOrganization.entityRisks.length && subAwardOrgFields.organizationTypeCode));
     }
 
     onDateSelect(dateType: 'samExpirationDate' | 'subAwdRiskAssmtDate'): void {
