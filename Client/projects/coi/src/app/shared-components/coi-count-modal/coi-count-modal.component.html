@@ -41,7 +41,7 @@
                         <th *ngIf="currentActiveModuleCode == PROJECT_TYPE['AWARD']" scope="col">Account Number</th>
                         <th scope="col">Sponsor</th>
                         <th scope="col">Prime Sponsor</th>
-                        <th scope="col">Conflict Status</th>
+                        <th scope="col" class="text-nowrap">Conflict Status</th>
                         <th class="text-center" scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -97,9 +97,9 @@
                         </td>
                         <!-- Conflict Status -->
                         <td>
-                            <div class="d-flex text-slice">
+                            <div class="text-slice">
                                 <app-no-data-label [valueToShow]="project?.conflictStatus">
-                                    <span>{{project?.conflictStatus}}</span>
+                                    <span [title]="project?.conflictStatus">{{project?.conflictStatus}}</span>
                                 </app-no-data-label>
                             </div>
                         </td>

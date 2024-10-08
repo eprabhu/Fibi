@@ -8,6 +8,7 @@ import { CommonService } from '../../common/services/common.service';
 import { CoiProjectOverviewComment, projectOverviewCommentFetch } from '../admin-dashboard.interface';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { SharedProjectDetails } from '../../common/services/coi-common.interface';
+import { COMMON_ERROR_TOAST_MSG } from '../../app-constants';
 
 @Component({
     selector: 'app-project-overview-comments-slider',
@@ -110,7 +111,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
             }
             this.showAddComment = false;
         }, error => {
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
         }));
     }
 
@@ -121,7 +122,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Comment updated successfully');
             }
         }, error => {
-            this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+            this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
         }))
     }
 
@@ -135,7 +136,7 @@ export class ProjectOverviewCommentsSliderComponent implements OnInit {
             if (error.status === 405) {
                 this.commonService.showToast(HTTP_ERROR_STATUS, 'Unable to delete the comment');
             } else {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
             }
         }))
     }

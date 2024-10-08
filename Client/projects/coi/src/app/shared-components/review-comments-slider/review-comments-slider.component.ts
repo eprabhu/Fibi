@@ -4,7 +4,7 @@ import { subscriptionHandler } from '../../../../../fibi/src/app/common/utilitie
 import { Subscription } from 'rxjs';
 import { CommentConfiguration, CompleterOptions, CommentFetch, CoiReviewComment } from './review-comments-interface';
 import { ReviewCommentsService } from './review-comments.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { topSlideInOut } from '../../common/utilities/animations';
 import {EDITOR_CONFIURATION} from '../../../../../fibi/src/app/app-constants';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
@@ -225,7 +225,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
                 this.reviewCommentDetails.commentTags.splice(index, 1);
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Assignee removed successfully.')
             }, err => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.')
+                this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG)
             }));
         } else {
             this.reviewCommentDetails.commentTags.splice(index, 1);
@@ -245,21 +245,21 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._reviewCommentsService.addCOIReviewComment(details).subscribe((res: any) => {
                 this.cancelOrClearCommentsDetails();
                 if (details.parentCommentId) {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply comment added Successfully');
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Reply comment added successfully');
                 } else {
-                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
+                    this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added successfully');
                 }
                 this.showAddComment = showAddComment;
             }, error => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
             }));
         }
         if(this.reviewCommentDetails.componentTypeCode == '10') {
             this.$subscriptions.push(this._reviewCommentsService.addOPAReviewComment(details).subscribe((res: any) => {
                 this.cancelOrClearCommentsDetails();
-                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added Successfully');
+                this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Review comments added successfully');
             }, error => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
             }));
         }
     }
@@ -341,7 +341,7 @@ export class ReviewCommentsSliderComponent implements OnInit, OnDestroy {
             this.$subscriptions.push(this._reviewCommentsService.deleteCOICommentAttachment({ attachmentId: item.attachmentId, fileDataId: item.fileDataId }).subscribe(res => {
                 this.commonService.showToast(HTTP_SUCCESS_STATUS, 'Attachment deleted successfully');
             }, error => {
-                this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
             }));
         } else {
         }
