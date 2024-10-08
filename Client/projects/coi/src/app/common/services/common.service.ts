@@ -4,7 +4,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG, OPA_DISCLOSURE_RIGHTS, OPA_DISCLOSURE_ADMIN_RIGHTS } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
@@ -611,13 +611,19 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
         }
     }
 
-    redirectionBasedOnRights() {
+    checkFCOIRights(): boolean {
+        return this.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS) || this.isCoiReviewer || this.getAvailableRight(ADMIN_DASHBOARD_RIGHTS);
+    }
+    
+    checkOPARights(): boolean {
+        return this.getAvailableRight(OPA_DISCLOSURE_ADMIN_RIGHTS) || this.isOPAReviewer || this.getAvailableRight(OPA_DISCLOSURE_RIGHTS);
+    }
+    
+    redirectionBasedOnRights(): void {
         this.fetchPermissions(true).then((res) => {
-            const isAdministrator = this.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
-                || this.isCoiReviewer || this.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
-            const isOPAAdmin = this.getAvailableRight(['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA'])
-                || this.isOPAReviewer || this.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
-            this._router.navigate([isAdministrator ? '/coi/admin-dashboard' : isOPAAdmin ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
+            const CAN_VIEW_FCOI_DASHBOARD  = this.checkFCOIRights();
+            const CAN_VIEW_OPA_DASHBOARD = this.checkOPARights();
+            this._router.navigate([CAN_VIEW_FCOI_DASHBOARD  ? '/coi/admin-dashboard' : CAN_VIEW_OPA_DASHBOARD ? '/coi/opa-dashboard' : 'coi/user-dashboard']);
         });
     }
 
