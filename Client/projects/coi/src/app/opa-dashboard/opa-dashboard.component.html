@@ -41,26 +41,26 @@
                         </li>
                         <li class="separator" *ngIf="isShowAdminDashboard"></li>
                         <ng-container *ngIf="isShowAdminDashboard || isOPAReviewer">
-                        <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabIndex="0" id="coi-opa-dashboard-my-reviews"
-                            (keyup.space)="changeTab('MY_REVIEWS')"
-                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
-                            class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all disclosures under my review"
-                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'My Reviews' : 'Click here to view My Reviews'"
-                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'My Reviews'">
-                            My Reviews
-                        </li>
-                        <li class="separator"></li>
-                        <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabIndex="0" id="coi-admin-dashboard-all-reviews"
-                            (keyup.space)="changeTab('ALL_REVIEWS')"
-                            [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'"
-                            class="p-3 fs-6 align-self-center"
-                            aria-label="Click to view the list of all disclosures under all reviews"
-                            [attr.title]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'All Reviews' : 'Click here to view All Reviews'"
-                            [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'All Reviews'">
-                            All Reviews
-                        </li>
-                    </ng-container>
+                            <li (click)="changeTab('MY_REVIEWS')" (keyup.enter)="changeTab('MY_REVIEWS')" tabIndex="0" id="coi-opa-dashboard-my-reviews"
+                                (keyup.space)="changeTab('MY_REVIEWS')"
+                                [class.active]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS'"
+                                class="p-3 fs-6 align-self-center"
+                                aria-label="Click to view the list of all disclosures under my review"
+                                [attr.title]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'My Reviews' : 'Click here to view My Reviews'"
+                                [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='MY_REVIEWS' ? 'Selected tab is My Reviews' : 'My Reviews'">
+                                My Reviews
+                            </li>
+                            <li class="separator"></li>
+                            <li (click)="changeTab('ALL_REVIEWS')" (keyup.enter)="changeTab('ALL_REVIEWS')" tabIndex="0" id="coi-admin-dashboard-all-reviews"
+                                (keyup.space)="changeTab('ALL_REVIEWS')"
+                                [class.active]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS'"
+                                class="p-3 fs-6 align-self-center"
+                                aria-label="Click to view the list of all disclosures under all reviews"
+                                [attr.title]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'All Reviews' : 'Click here to view All Reviews'"
+                                [attr.aria-label]="_opaDashboardService.opaRequestObject.tabType=='ALL_REVIEWS' ? 'Selected tab is All Reviews' : 'All Reviews'">
+                                All Reviews
+                            </li>
+                        </ng-container>
                     </ul>
                     <div class="mx-1 py-2 d-inline-flex align-items-center pe-2">
                         <span role="button" class="btn btn-tertiary d-flex fs-14 align-items-center mt-0 adv-search" id="advanced-search" tabindex="0"
