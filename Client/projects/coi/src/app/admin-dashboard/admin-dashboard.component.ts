@@ -12,7 +12,8 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService } from './admin-dashboard.service';
 import {
-    CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
+    CONSULTING_DISCLOSURE_RIGHTS, PROJECT_OVERVIEW_RIGHTS, TRAVEL_DISCLOSURE_RIGHTS,
+    CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, DISCLOSURE_TYPE, FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
 } from '../app-constants';
@@ -149,6 +150,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     lookupValuesForProjectOverview = [];
     lookupArrayForProjectStatus: any[] = [];
     coiCountModal = new COICountModal();
+    DISCLOSURE_TYPE = DISCLOSURE_TYPE;
 
     constructor(public coiAdminDashboardService: AdminDashboardService,
                 private _router: Router,
@@ -320,7 +322,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
                     this.coiList = this.getAdminDashboardList();
                     this.isLoading = false;
                     this.coiList.map(ele => {
-                        ele.projectHeader = ele.fcoiTypeCode === '2' ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
+                        ele.projectHeader = ele.fcoiTypeCode === DISCLOSURE_TYPE.PROJECT ? `#${ele.projectNumber} - ${ele.projectTitle}` : '';
                     });
                 }
                 this.setEventTypeFlag();
@@ -458,13 +460,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.localCOIRequestObject.property9 = country ? country.countryCode : null;
     }
 
-    setSelectedModuleCode(moduleName: string, coi: CoiDashboardDisclosures, count: number | null = null, moduleCode: number = 0) {
+    openCountModal(coi: CoiDashboardDisclosures, count: number | null = null, moduleCode: number = 0): void {
         if (count > 0) {
             this.coiCountModal = {
                 personUnit: coi?.unit,
                 moduleCode: moduleCode,
                 personId: coi?.personId,
-                disclosureType: moduleName,
+                disclosureType: coi?.fcoiTypeCode === DISCLOSURE_TYPE.PROJECT ? coi?.projectType : coi?.fcoiType,
                 inputType: 'DISCLOSURE_TAB',
                 fcoiTypeCode: coi?.fcoiTypeCode,
                 disclosureId: coi?.coiDisclosureId,
@@ -682,23 +684,20 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getPermissions() {
-        this.hasFCOIDiscosureRights = this.commonService.rightsArray.some((right) => FCOI_PROJECT_DISCLOSURE_RIGHTS.includes(right));
+        this.hasFCOIDiscosureRights = this.commonService.getAvailableRight(FCOI_PROJECT_DISCLOSURE_RIGHTS);
         this.hasReviewerRight = this.commonService.isCoiReviewer;
     }
 
     checkTravelDisclosureRights() {
-        this.hasTravelDisclosureRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
+        this.hasTravelDisclosureRights = this.commonService.getAvailableRight(TRAVEL_DISCLOSURE_RIGHTS);
     }
 
     checkForConsultingDisclosureRight() {
-        this.hasConsultingDisclosureRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
+        this.hasConsultingDisclosureRights = this.commonService.getAvailableRight(CONSULTING_DISCLOSURE_RIGHTS);
     }
 
     async checkForProjectOverviewRight() {
-        this.hasProjectOverviewRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'].includes(right));
+        this.hasProjectOverviewRights = this.commonService.getAvailableRight(PROJECT_OVERVIEW_RIGHTS);
     }
 
     formatTravellerListValues(travellerTypes: string): string {
@@ -806,10 +805,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         const IS_FCOI_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_FCOI_DISCLOSURE');
         const IS_PROJECT_ADMINISTRATOR = this.commonService.getAvailableRight('MANAGE_PROJECT_DISCLOSURE');
         switch (fcoiTypeCode) {
-            case '1':
-            case '3':
+            case DISCLOSURE_TYPE.INITIAL:
+            case DISCLOSURE_TYPE.REVISION:
                 return IS_FCOI_ADMINISTRATOR;
-            case '2':
+            case DISCLOSURE_TYPE.PROJECT:
                 return IS_PROJECT_ADMINISTRATOR;
             default:
                 return ;

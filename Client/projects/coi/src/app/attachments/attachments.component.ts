@@ -18,6 +18,7 @@ export class AttachmentsComponent implements OnInit {
 
     @Input() personId: any = null;
     @Input() isViewMode: boolean = false;
+    @Input() gridClass: string = 'coi-grid-1 coi-grid-md-1 coi-grid-lg-1 coi-grid-xl-2 coi-grid-xxl-2';
 
     attachmentLists: COIAttachment[] = [];
     isLoading = false;

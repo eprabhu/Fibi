@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
+import com.polus.fibicomp.coi.clients.NotificationServiceClients;
+import com.polus.fibicomp.coi.clients.model.EmailNotificationDto;
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -163,6 +166,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Autowired
 	private FCOIDisclProjectService projectService;
 
+	@Autowired
+	private NotificationServiceClients notificationServiceClients;
+
+	@Autowired
+	private CustomExceptionService exceptionService;
+
 	private static final String DISPOSITION_STATUS_TYPE_CODE = "1";
 	private static final String DISPOSITION_STATUS_PENDING = "1";
 	private static final String REVIEW_STATUS_TYPE_CODE = "1";
@@ -206,19 +215,9 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	private static final String TAB_TYPE_APPROVED_DISCLOSURES = "APPROVED_DISCLOSURES";
 	private static final String FCOI_DISCLOSURE = "FCOI_DISCLOSURE";
 	private static final String PROJECT_DISCLOSURE = "PROJECT_DISCLOSURE";
-
-	private static final String PROJECT_NOTIFY = "PROJECT_NOTIFY";
-	private static final String SINGLE_PERSON = "S";
-	private static final String NOTIFICATION_RECIPIENTS = "NOTIFICATION_RECIPIENTS";
-	private static final String ALL_PERSON = "A";
-
-	private static final String PROJECT_ID = "PROJECT_ID";
-
-	private static final String PROJECT_TITLE = "PROJECT_TITLE";
-
-	private static final String DISCLOSURE_STATUS = "DISCLOSURE_STATUS";
-
-	private static final String REPORTER_NAME = "REPORTER_NAME";
+	private static final String NOTIFICATION_RECIPIENT_OBJECTS = "NOTIFICATION_RECIPIENT_OBJECTS";
+	private static final String NOTIFICATION_SUBJECT = "NOTIFICATION_SUBJECT";
+	private static final String NOTIFICATION_BODY = "NOTIFICATION_BODY";
 
 	@Override
 	public List<Entity> searchEntity(ConflictOfInterestVO vo) {
@@ -319,11 +318,13 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
 					.reviewerStatusType(coiReview.getReviewerStatusType())
 					.reviewLocationType(coiReview.getReviewLocationType())
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 			coiReview.setCoiDisclosure(disclosure);
 		} catch (Exception e) {
 			logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		fcoiDisclosureDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		/*Need clarification*/
@@ -399,10 +400,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.reviewername(reviewerName)
 					.reviewLocationType(coiReview.getReviewLocationType())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.fcoiTypeDescription(coiReview.getCoiDisclosure().getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("startReview : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		Timestamp updateTimestamp = fcoiDisclosureDao.updateDisclosureUpdateDetails(coiReview.getDisclosureId());
 		coiReview.setUpdateTimestamp(updateTimestamp);
@@ -470,10 +473,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.reviewername(reviewerName)
 					.reviewLocationType(coiReview.getReviewLocationType())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("completeReview : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(coiReview, HttpStatus.OK);
 	}
@@ -529,10 +534,12 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.reviewername(reviewerName)
 						.reviewLocationType(coiReview.getReviewLocationType())
 						.administratorName(AuthenticatedUser.getLoginUserFullName())
+						.fcoiTypeDescription(coiReview.getCoiDisclosure().getCoiDisclosureFcoiType().getDescription())
 						.build();
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
 				logger.error("saveOrUpdateCoiReview : {}", e.getMessage());
+				exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 			}
 			return new ResponseEntity<>(coiDisclosure, HttpStatus.OK);
 		} catch(Exception e) {
@@ -877,6 +884,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
 				logger.error("createTravelDisclosure : {}", e.getMessage());
+				exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 			}
 		}
 		return new ResponseEntity<>(coiTravelDisclosure, HttpStatus.OK);
@@ -894,6 +902,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					personEntityService.saveOrUpdatePersonEntityRelationship(personEntityRelationship);
 				} catch (Exception e) {
 					logger.error("Exception on saveOrUpdatePersonEntityRelationship from create travel", e.getMessage());
+					exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 				}
 			} else {
 				PersonEntity personEntity = new PersonEntity();
@@ -962,6 +971,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			saveTravelDisclosureAssignAdminActionLog(dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		} catch (Exception e) {
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		conflictOfInterestDao.assignTravelDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getTravelDisclosureId());
 		if (dto.getAdminGroupId() != null) {
@@ -1194,6 +1204,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("submitTravelDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(coiTravelDosclosureObject, HttpStatus.OK);
 	}
@@ -1225,6 +1236,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 			} catch (Exception e) {
 				logger.error("withdrawDisclosure : {}", e.getMessage());
+				exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 			}
 			return new ResponseEntity<>(setDtoForAdminActions("WITHDRAW", coiTravelDisclosure, Constants.TRAVEL_VERSION_STATUS_PENDING,
 					coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
@@ -1263,6 +1275,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("approveTravelDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(setDtoForAdminActions("APPROVE", coiTravelDisclosure, Constants.TRAVE_VERSION_STATUS_ACTIVE,
 				coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
@@ -1297,6 +1310,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			actionLogService.saveTravelDisclosureActionLog(actionLogDto);
 		} catch (Exception e) {
 			logger.error("returnTravelDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(setDtoForAdminActions("RETURN", coiTravelDisclosure, Constants.TRAVEL_VERSION_STATUS_PENDING,
 				coiTravelDocumentStatusType, coiTravelReviewStatusType, currentTimestamp), HttpStatus.OK);
@@ -1509,6 +1523,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
 					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
 	                .reporter(AuthenticatedUser.getLoginUserFullName())
+	                .fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
 			Map<String, String> actionTypes = new HashMap<>();
@@ -1517,6 +1532,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			processCoiMessageToQ(getDisclosureActionType(disclosure.getFcoiTypeCode(), actionTypes), disclosure.getDisclosureId(), null, additionalDetails);
 		} catch (Exception e) {
 			logger.error("Exception on withdrawDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
         return new ResponseEntity<>(withdrawDisclosureDto, HttpStatus.OK);
     }
@@ -1541,6 +1557,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_RETURNED)
 					.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
 					.fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(description)
+					.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 					.administratorName(AuthenticatedUser.getLoginUserFullName())
 					.build();
 			actionLogService.saveDisclosureActionLog(actionLogDto);
@@ -1554,6 +1571,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 			processCoiMessageToQ(getDisclosureActionType(disclosure.getFcoiTypeCode(), actionTypes), disclosure.getDisclosureId(), null, additionalDetails);
 		} catch (Exception e) {
 			logger.error("returnDisclosure : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -1937,6 +1955,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 						.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_REVIEW_COMPLETED).disclosureId(disclosure.getDisclosureId())
 						.disclosureNumber(disclosure.getDisclosureNumber()).fcoiTypeCode(disclosure.getFcoiTypeCode())
 						.administratorName(AuthenticatedUser.getLoginUserFullName())
+						.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription())
 						.build();
 				actionLogService.saveDisclosureActionLog(actionLogDto);
 				Map<String, String> actionTypes = new HashMap<>();
@@ -1946,6 +1965,7 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 				processCoiMessageToQ(getDisclosureActionType(disclosure.getFcoiTypeCode(), actionTypes), disclosure.getDisclosureId(), null, additionalDetails);
 			} catch (Exception e) {
 				logger.error("completeDisclosureReview : {}", e.getMessage());
+				exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 			}
 			return isBatch ? new ResponseEntity<>("Approved successfully", HttpStatus.OK) : new ResponseEntity<>(disclosure, HttpStatus.OK);
 //			return new ResponseEntity<>(loadDisclosure(disclosureId), HttpStatus.OK);
@@ -2010,19 +2030,10 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 	@Override
 	public ResponseEntity<Object> projectPersonNotify(NotificationDto notificationDto) {
 		Map<String, String> additionalDetails = new HashMap<>();
-		CoiDisclosure disclosure = fcoiDisclosureDao.loadDisclosure(notificationDto.getDisclosureId());
-		String recipientPersonIds = notificationDto.getRecipients().stream()
-				.map(NotificationRecipient::getRecipientPersonId).map(String::valueOf).collect(Collectors.joining(","));
-		additionalDetails.put(NOTIFICATION_RECIPIENTS, recipientPersonIds);
-		List<DisclosureDetailDto> projectDetails = conflictOfInterestDao.getProjectsBasedOnParams(
-				notificationDto.getProjectTypeCode(), null, null, String.valueOf(notificationDto.getProjectId()));
-		DisclosureDetailDto disclProjectDetail = projectDetails.get(0);
-		additionalDetails.put("notificationTypeId", notificationDto.getNotificationTypeId());
-		additionalDetails.put("PROJECT_ID", disclProjectDetail.getModuleItemKey());
-		additionalDetails.put("PROJECT_TITLE", disclProjectDetail.getTitle());
-		additionalDetails.put("DISCLOSURE_STATUS", disclosure.getCoiReviewStatusType().getDescription());
-		additionalDetails.put("REPORTER_NAME", personDao.getPersonFullNameByPersonId(disclosure.getPersonId()));
-		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, 0, null, additionalDetails);
+		additionalDetails.put(NOTIFICATION_RECIPIENT_OBJECTS, commonDao.convertObjectToJSON(notificationDto.getRecipients()));
+		additionalDetails.put(NOTIFICATION_SUBJECT, notificationDto.getSubject());
+		additionalDetails.put(NOTIFICATION_BODY, notificationDto.getMessage());
+		processCoiMessageToQ(ActionTypes.PROJECT_NOTIFY, notificationDto.getDisclosureId(), null, additionalDetails);
 		return new ResponseEntity<>("Notification send successfully", HttpStatus.OK);
 	}
 
@@ -2032,6 +2043,11 @@ public class ConflictOfInterestServiceImpl implements ConflictOfInterestService 
 		Map<String, List<FileType>> response = new HashMap<>();
 	    response.put("fileTypes", fileTypes);
 	    return response;
+	}
+
+	@Override
+	public ResponseEntity<Object> getEmailPreview(EmailNotificationDto emailNotificationDto) {
+		return new ResponseEntity<>(notificationServiceClients.previewEmail(emailNotificationDto), HttpStatus.OK);
 	}
 
 }

@@ -164,9 +164,9 @@
                             </div>
                             
                             <div class="col-md-4 col-lg-2 mb-2 justify-content-center">
-                                <!-- submission status -->
+                                <!-- FCOI submission status -->
                                 <div class="col mb-2">
-                                    <div class="coi-text-lighter fw-semibold">Submission Status</div>
+                                    <div class="coi-text-lighter fw-semibold">FCOI Submission Status</div>
                                     <app-no-data-label
                                         [valueToShow]="projectData?.projectDetails?.submissionStatus">
                                     <span [attr.aria-label]="projectData?.projectDetails?.submissionStatus">
@@ -181,9 +181,9 @@
                                     </app-no-data-label>
                                 </div>
 
-                                <!-- review Status -->
+                                <!-- FCOI review Status -->
                                 <div class="col">
-                                    <div class="coi-text-lighter fw-semibold">Review Status</div>
+                                    <div class="coi-text-lighter fw-semibold">FCOI Review Status</div>
                                     <app-no-data-label
                                         [valueToShow]="projectData?.projectDetails?.disclosureReviewStatus">
                                     <span [attr.aria-label]="projectData?.projectDetails?.disclosureReviewStatus">
@@ -503,8 +503,8 @@
     </ng-container>
 
     <!-- notification slider -->
-     <ng-container *ngIf="isShowNotificationSlider">
-        <app-project-overview-notification-slider [dataForNotificationSlider]="projectDetailsForSlider" [keypersonIndex]="selectedKeyPersonIndex"
+     <ng-container *ngIf="projectOverviewService.isShowNotificationSlider">
+        <app-project-overview-notification-slider [NotificationSliderData]="projectOverviewService.notificationSliderData"
         (closePage)="closeHeaderSlider()" ></app-project-overview-notification-slider>
      </ng-container>
 

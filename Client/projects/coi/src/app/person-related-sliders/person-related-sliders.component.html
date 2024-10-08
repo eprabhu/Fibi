@@ -16,7 +16,7 @@
                 <app-notes-attachments [coiPersonId]="personId"></app-notes-attachments>
             </ng-container>
             <ng-container *ngIf="sliderType === 'ATTACHMENTS'">
-                <app-attachments [personId]="personId" [isViewMode]="isAttachmentViewMode"></app-attachments>
+                <app-attachments [personId]="personId" [isViewMode]="isAttachmentViewMode" [gridClass]="gridClass"></app-attachments>
             </ng-container>
         </div>
     </ng-container>

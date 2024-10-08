@@ -13,6 +13,7 @@ import com.polus.fibicomp.coi.dao.ConflictOfInterestDao;
 import com.polus.fibicomp.coi.dto.*;
 import com.polus.fibicomp.coi.pojo.CoiConflictHistory;
 import com.polus.fibicomp.coi.service.ConflictOfInterestService;
+import com.polus.fibicomp.config.CustomExceptionService;
 import com.polus.fibicomp.constants.ActionTypes;
 import com.polus.fibicomp.constants.StaticPlaceholders;
 import com.polus.fibicomp.fcoiDisclosure.dto.IntegrationRequestDto;
@@ -21,6 +22,7 @@ import com.polus.fibicomp.fcoiDisclosure.dto.SFIJsonDetailsDto;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjectEntityRel;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclProjects;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosure;
+import com.polus.fibicomp.fcoiDisclosure.pojo.CoiDisclosureFcoiType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiConflictStatusType;
 import com.polus.fibicomp.fcoiDisclosure.pojo.CoiRiskCategory;
 import com.polus.fibicomp.coi.service.ActionLogService;
@@ -93,6 +95,9 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
     @Autowired
     private FCOIDisclProjectService projectService;
 
+    @Autowired
+    private CustomExceptionService exceptionService;
+
     @Override
     public ResponseEntity<Object> createDisclosure(CoiDisclosureDto vo) throws JsonProcessingException {
         Map<String, Object> validatedObject = disclosureDao.validateProjectDisclosure(vo.getPersonId(), vo.getModuleCode(), vo.getModuleItemKey());
@@ -132,6 +137,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                 .updatedBy(vo.getPersonId())
                 .build();
         disclosureDao.saveOrUpdateCoiDisclosure(coiDisclosure);
+        CoiDisclosureFcoiType coiDisclosureFcoiType = disclosureDao.getCoiDisclosureFcoiTypeByCode(vo.getFcoiTypeCode());
         List<CoiDisclProjects> disclosureProjects = new ArrayList<>();
         String loginPersonId = vo.getPersonId();
         if (vo.getFcoiTypeCode().equals(Constants.PROJECT_DISCL_FCOI_TYPE_CODE)) {
@@ -173,11 +179,12 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     .disclosureId(coiDisclosure.getDisclosureId()).disclosureNumber(coiDisclosure.getDisclosureNumber())
                     .fcoiTypeCode(coiDisclosure.getFcoiTypeCode()).revisionComment(coiDisclosure.getRevisionComment())
                     .reporter(personDao.getPersonFullNameByPersonId(loginPersonId))
+                    .fcoiTypeDescription(coiDisclosureFcoiType.getDescription())
                     .build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             logger.error("createDisclosure : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
@@ -213,11 +220,34 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
 
     @Override
     public List<DisclosureProjectDto> getDisclProjectsByDispStatus(Integer disclosureId) {
-        List<DisclosureProjectDto> disclProjects;
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)){
-            disclProjects = projectService.getDisclProjectDetailsFromSnapshot(disclosureId);
+        CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
+                CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(disclosureId));
+        CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, disclosureId)) {
+            projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(disclosureId));
         } else {
-            disclProjects = disclosureDao.getDisclosureProjects(disclosureId);
+            projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(disclosureId));
+        }
+        CompletableFuture<Void> allOf = CompletableFuture.allOf( disclosureDetailsFuture, projectsFuture);
+        List<DisclosureProjectDto> disclProjects;
+        try {
+            allOf.get();
+            List<CoiConflictStatusType> disclConflictStatusTypes = disclosureDao.getCoiConflictStatusTypes();
+            List<CoiDisclEntProjDetailsDto> disclProjEntRelations = disclosureDetailsFuture.get();
+            disclProjects = projectsFuture.get();
+            Map<Integer, List<CoiDisclEntProjDetailsDto>> disclEntityRelations = disclProjEntRelations.stream()
+                    .collect(Collectors.groupingBy(CoiDisclEntProjDetailsDto::getCoiDisclProjectId));
+            disclProjects.parallelStream().forEach(disclosureProject -> {
+                List<CoiDisclEntProjDetailsDto> disclEntProjDetails = disclEntityRelations.get(disclosureProject.getCoiDisclProjectId());
+                Map<String, Object> returnedObj = getRelationConflictCount(disclEntProjDetails, disclConflictStatusTypes);
+                if(returnedObj.get("conflictStatus") != null) {
+                    String conflictStatus = (String) returnedObj.get("conflictStatus");
+                    disclosureProject.setConflictStatus(conflictStatus.isEmpty() ? null : conflictStatus);
+                    disclosureProject.setConflictStatusCode(conflictStatus.isEmpty() ? null : returnedObj.get("conflictStatusCode").toString());
+                }
+            });
+        } catch (Exception e) {
+            throw new ApplicationException("Unable to fetch data", e, CoreConstants.JAVA_ERROR);
         }
         return disclProjects;
     }
@@ -255,6 +285,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("Error in saveConflictHistory: {}", e.getMessage());
+                exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
             }
         });
         executorService.shutdown();
@@ -273,10 +304,18 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             additionalDetails.put(StaticPlaceholders.DISCLOSURE_STATUS, riskCategory != null ? riskCategory.getDescription() : RISK_CATEGORY_LOW_DESCRIPTION);
             coiService.processCoiMessageToQ(coiService.getDisclosureActionType(coiDisclosureObj.getFcoiTypeCode(), actionTypes), coiDisclosureObj.getDisclosureId(), null, additionalDetails);
 
-            DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED).disclosureId(coiDisclosureObj.getDisclosureId()).disclosureNumber(coiDisclosureObj.getDisclosureNumber()).riskCategory(riskCategory != null ? riskCategory.getDescription() : RISK_CATEGORY_LOW_DESCRIPTION).fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).reporter(AuthenticatedUser.getLoginUserFullName()).build();
+			DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+					.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_SUBMITTED)
+					.disclosureId(coiDisclosureObj.getDisclosureId())
+					.disclosureNumber(coiDisclosureObj.getDisclosureNumber())
+					.riskCategory(riskCategory != null ? riskCategory.getDescription() : RISK_CATEGORY_LOW_DESCRIPTION)
+					.fcoiTypeCode(coiDisclosureObj.getFcoiTypeCode()).reporter(AuthenticatedUser.getLoginUserFullName())
+					.fcoiTypeDescription(coiDisclosureObj.getCoiDisclosureFcoiType().getDescription())
+					.build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } catch (Exception e) {
             logger.error("certifyDisclosure : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         return new ResponseEntity<>(coiDisclosureObj, HttpStatus.OK);
     }
@@ -351,7 +390,15 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         checkDispositionStatusIsVoid(disclosure.getDispositionStatusCode());
         CoiRiskCategory risk = disclosureDao.getRiskCategoryStatusByCode(disclosureDto.getRiskCategoryCode());
         disclosureDto.setUpdateTimestamp(disclosureDao.updateDisclosureRiskCategory(disclosureDto));
-        DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber()).riskCategory(disclosure.getCoiRiskCategory().getDescription()).riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription()).newRiskCategoryCode(risk.getRiskCategoryCode()).actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK).administratorName(AuthenticatedUser.getLoginUserFullName()).fcoiTypeCode(disclosure.getFcoiTypeCode()).revisionComment(disclosureDto.getRevisionComment()).build();
+		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+				.disclosureId(disclosure.getDisclosureId()).disclosureNumber(disclosure.getDisclosureNumber())
+				.riskCategory(disclosure.getCoiRiskCategory().getDescription())
+				.riskCategoryCode(disclosure.getRiskCategoryCode()).newRiskCategory(risk.getDescription())
+				.newRiskCategoryCode(risk.getRiskCategoryCode())
+				.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_MODIFY_RISK)
+				.administratorName(AuthenticatedUser.getLoginUserFullName()).fcoiTypeCode(disclosure.getFcoiTypeCode())
+				.revisionComment(disclosureDto.getRevisionComment())
+				.fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription()).build();
         actionLogService.saveDisclosureActionLog(actionLogDto);
         return new ResponseEntity<>(disclosureDto, HttpStatus.OK);
     }
@@ -400,7 +447,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         CompletableFuture<List<CoiDisclEntProjDetailsDto>> disclosureDetailsFuture =
                 CompletableFuture.supplyAsync(() -> disclosureDao.getDisclEntProjDetails(vo.getDisclosureId()));
         CompletableFuture<List<DisclosureProjectDto>> projectsFuture;
-        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())){
+        if (disclosureDao.isDisclDispositionInStatus(Constants.COI_DISCL_DISPOSITION_STATUS_APPROVED, vo.getDisclosureId())) {
             projectsFuture = CompletableFuture.supplyAsync(() -> projectService.getDisclProjectDetailsFromSnapshot(vo.getDisclosureId()));
         } else {
             projectsFuture = CompletableFuture.supplyAsync(() -> disclosureDao.getDisclosureProjects(vo.getDisclosureId()));
@@ -637,8 +684,14 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
                     }));
         } catch (Exception e) {
             logger.info("Unable to sync SFIs : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
-        DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED).disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber()).fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment()).reporter(AuthenticatedUser.getLoginUserFullName()).build();
+		DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder()
+				.actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REVISED)
+				.disclosureId(copyDisclosure.getDisclosureId()).disclosureNumber(copyDisclosure.getDisclosureNumber())
+				.fcoiTypeCode(copyDisclosure.getFcoiTypeCode()).revisionComment(copyDisclosure.getRevisionComment())
+				.reporter(AuthenticatedUser.getLoginUserFullName())
+				.build();
         actionLogService.saveDisclosureActionLog(actionLogDto);
         return new ResponseEntity<>(vo, HttpStatus.OK);
     }
@@ -753,9 +806,10 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
             return new ResponseEntity<>("Assign admin not allowed", HttpStatus.METHOD_NOT_ALLOWED);
         }
         try {
-            saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId(), disclosure.getDisclosureNumber(), disclosure.getAdminPersonId());
+            saveAssignAdminActionLog(dto.getAdminPersonId(), dto.getDisclosureId(), disclosure);
         } catch (Exception e) {
             logger.error("assignDisclosureAdmin : {}", e.getMessage());
+            exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
         }
         dto.setUpdateTimestamp(disclosureDao.assignDisclosureAdmin(dto.getAdminGroupId(), dto.getAdminPersonId(), dto.getDisclosureId()));
         if (disclosure.getReviewStatusCode().equalsIgnoreCase(SUBMITTED_FOR_REVIEW)) {
@@ -774,7 +828,7 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         } else {
             actionTypes.put(FCOI_DISCLOSURE, ActionTypes.FCOI_REASSIGN_ADMIN);
             actionTypes.put(PROJECT_DISCLOSURE, ActionTypes.PROJECT_REASSIGN_ADMIN);
-            additionalDetails.put(StaticPlaceholders.NOTIFICATION_RECIPIENTS, disclosure.getAdminPersonId());
+            additionalDetails.put("NOTIFICATION_RECIPIENTS", disclosure.getAdminPersonId());
             additionalDetails.put(StaticPlaceholders.ADMINISTRATOR_NAME, personDao.getPersonFullNameByPersonId(disclosure.getAdminPersonId()));
         }
         additionalDetails.put(StaticPlaceholders.ADMIN_ASSIGNED_BY, personDao.getPersonFullNameByPersonId(AuthenticatedUser.getLoginPersonId()));
@@ -793,24 +847,28 @@ public class FcoiDisclosureServiceImpl implements FcoiDisclosureService {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    public void saveAssignAdminActionLog(String adminPersonId, Integer disclosureId, Integer disclosureNumber, String oldAdminPersonId) {
+    public void saveAssignAdminActionLog(String adminPersonId, Integer disclosureId, CoiDisclosure disclosure) {
 
-        String oldAdminPerson = oldAdminPersonId != null ? personDao.getPersonFullNameByPersonId(oldAdminPersonId) : null;
+        String oldAdminPerson = disclosure.getAdminPersonId() != null ? personDao.getPersonFullNameByPersonId(disclosure.getAdminPersonId()) : null;
         String newAdminPerson = personDao.getPersonFullNameByPersonId(adminPersonId);
         if (oldAdminPerson != null) {
             DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_REASSIGN_ADMIN)
                     .disclosureId(disclosureId)
-                    .disclosureNumber(disclosureNumber)
+                    .disclosureNumber(disclosure.getDisclosureNumber())
                     .oldAdmin(oldAdminPerson)
                     .coiAdmin(AuthenticatedUser.getLoginUserFullName())
-                    .newAdmin(newAdminPerson).build();
+                    .newAdmin(newAdminPerson)
+                    .fcoiTypeCode(disclosure.getFcoiTypeCode())
+                    .fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription()).build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         } else {
             DisclosureActionLogDto actionLogDto = DisclosureActionLogDto.builder().actionTypeCode(Constants.COI_DISCLOSURE_ACTION_LOG_ASSIGN_ADMIN)
                     .disclosureId(disclosureId)
-                    .disclosureNumber(disclosureNumber)
+                    .disclosureNumber(disclosure.getDisclosureNumber())
                     .coiAdmin(AuthenticatedUser.getLoginUserFullName())
-                    .newAdmin(newAdminPerson).build();
+                    .newAdmin(newAdminPerson)
+                    .fcoiTypeCode(disclosure.getFcoiTypeCode())
+                    .fcoiTypeDescription(disclosure.getCoiDisclosureFcoiType().getDescription()).build();
             actionLogService.saveDisclosureActionLog(actionLogDto);
         }
     }

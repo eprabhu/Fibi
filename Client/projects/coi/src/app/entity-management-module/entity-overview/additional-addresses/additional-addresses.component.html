@@ -25,7 +25,7 @@
                 <div class="col-md-3 col-lg-2 d-flex align-items-center">
                     <span class="d-flex  ms-auto" *ngIf="isEditMode">
                     <mat-icon aria-hidden="true" (click)="editAddress(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                    title="Click here to edit additional address" aria-label="Click here to edit additional address" (keypress.enter)="editAddress(address, i)">edit</mat-icon>
+                    title="Click here to update additional address" aria-label="Click here to update additional address" (keypress.enter)="editAddress(address, i)">edit</mat-icon>
                     <mat-icon aria-hidden="true" (click)="confirmDelete(address, i)" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                     title="Click here to delete additional address" aria-lable="Click here to delete additional address" (keypress.enter)="confirmDelete(address, i)">delete</mat-icon>
                 </span>
@@ -40,7 +40,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">{{isEditIndex !=null ? 'Edit': 'Add'}} Additional Address</h4>
+				<h4 class="modal-title">{{isEditIndex != null ? 'Update': 'Add'}} Additional Address</h4>
 				<button type="button" class="btn-close" id="coi-add-additional-address-close-btn" title="Click here to close" data-bs-dismiss="modal"
 					aria-label="Click here to close" (click)="clearAdditionalAddress()"></button>
 			</div>
@@ -69,7 +69,7 @@
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-add-address-1"
                         [ngClass]="(mandatoryList?.has('addressLine1')) ? 'is-invalid d-block' : ''"
-                        [(ngModel)]="additionalAddressObj.addressLine1" appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                        [(ngModel)]="additionalAddressObj.addressLine1" appLengthValidator [limit]="500" [styleList]="'float-end word-count'">
                         <span *ngIf="mandatoryList?.has('addressLine1')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('addressLine1')}}
                         </span>
@@ -83,7 +83,7 @@
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-add-address-2"
                         [ngClass]="(mandatoryList?.has('addressLine2')) ? 'is-invalid d-block' : ''"
-                        [(ngModel)]="additionalAddressObj.addressLine2" appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                        [(ngModel)]="additionalAddressObj.addressLine2" appLengthValidator [limit]="500" [styleList]="'float-end word-count'">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -123,7 +123,7 @@
                         </label>
                         <input type="text" class="form-control fs-13" id="coi-entity-add-postCode" [(ngModel)]="additionalAddressObj.postCode"
                         [ngClass]="(mandatoryList?.has('postCode')) ? 'is-invalid d-block' : ''"
-                        appLengthValidator [limit]=500 [styleList]="'float-end word-count'">
+                        appLengthValidator [limit]="30" [styleList]="'float-end word-count'">
                         <span *ngIf="mandatoryList?.has('postCode')" class="invalid-feedback d-inline fs-13">
                             {{mandatoryList?.get('postCode')}}
                         </span>
@@ -156,8 +156,9 @@
 				title="Click to cancel" (click)="clearAdditionalAddress()">Cancel
 				</button>
 				<button class="btn btn-primary me-0" id="coi-add-additional-address-add-btn" type="button"
-					title="Click here to add additional address" aria-label="Click here to add additional address"
-                    (click)="isEditIndex !=null ? editIndustry(): addIndustry()">{{isEditIndex !=null ? 'Edit': 'Add'}} Additional Address
+					title="Click here to {{isEditIndex != null ? 'update': 'add'}} additional address"
+                    attr.aria-label="Click here to {{isEditIndex != null ? 'update': 'add'}} additional address"
+                    (click)="isEditIndex != null ? editIndustry(): addIndustry()">{{isEditIndex != null ? 'Update': 'Add'}} Additional Address
 				</button>
 			</div>
 		</div>
@@ -169,6 +170,6 @@
         <span>Confirmation</span>
     </ng-container>
     <ng-container modal-body>
-        <p>Do you want to delete <strong></strong>?</p>
+        <p>Do you want to delete <strong>{{addressTypeDefaultValue}}</strong>?</p>
     </ng-container>
 </app-coi-modal>

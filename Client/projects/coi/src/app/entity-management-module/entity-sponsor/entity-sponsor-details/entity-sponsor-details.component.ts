@@ -185,7 +185,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     private setServiceVariable(entitySponsorFields: SponsorFields): void {
-        const SUB_AWARD_DTO = this.entitySponsorService.entitySponsorDetails.sponsorDetailsResponseDTO;
+        const SUB_AWARD_DTO = this.entitySponsorService?.entitySponsorDetails?.sponsorDetailsResponseDTO;
         SUB_AWARD_DTO.sponsorType ??= new SponsorType();
         Object.entries(entitySponsorFields).forEach(([key, value]) => {
             key === 'sponsorTypeCode'
@@ -209,7 +209,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
     }
 
     private updateCompletionFlag(): void {
-        if (this.entitySponsorService?.entitySponsorDetails.sponsorDetailsResponseDTO.sponsorType.code) {
+        if (this.entitySponsorService?.entitySponsorDetails?.sponsorDetailsResponseDTO?.sponsorType?.code) {
             this.entityTabStatus.entity_sponsor_info = true;
             this._dataStoreService.updateStore(['entityTabStatus'], { 'entityTabStatus': this.entityTabStatus });
         }

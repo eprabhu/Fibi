@@ -6,8 +6,8 @@
         </div>
         <div class="col-auto" *ngIf="entityIndustryClassifications.length && isEditMode">
             <button id="additional-address-add-button"
-                class="btn btn-primary fs-14 d-inline-flex" title="Click here to industry details"
-                aria-label="Click here to industry details" (click)="addIndustryDetails(true)">
+                class="btn btn-primary fs-14 d-inline-flex" title="Click here to add industry details"
+                aria-label="Click here to add industry details" (click)="addIndustryDetails(true)">
                 <mat-icon>add</mat-icon>Add Industry Details
             </button>
         </div>
@@ -16,12 +16,12 @@
         <app-no-information [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Industry Details'" (buttonAction)="addIndustryDetails($event)"></app-no-information>
     </div>
     <div *ngIf="entityIndustryClassifications.length">
-        <div class="card mx-3 px-2 py-1 coi-entity-details-card" *ngFor="let subsection of entityIndustryClassificationsGrouping | keyvalue;let isLast = last;let i = index" [ngClass]="isLast ? 'mb-3' : 'mb-2'">
+        <div class="card mx-3 px-2 py-1 coi-entity-details-card" *ngFor="let subsection of entityIndustryClassificationsGrouping;let isLast = last;let i = index" [ngClass]="isLast ? 'mb-3' : 'mb-2'">
             <div class="d-flex">
-                <div class="col-md-9 col-lg-10 fs-14" [attr.aria-label]="subsection?.key">
-                    <span class="coi-text-light">{{subsection?.key}}</span>
+                <div class="col-md-9 col-lg-10 fs-14" [attr.aria-label]="subsection?.[0]">
+                    <span class="coi-text-light">{{subsection?.[0]}}</span>
                     <span class="d-block coi-text-light fw-600">
-                    <ng-container *ngFor="let classification of subsection.value;let isLast = last;">
+                    <ng-container *ngFor="let classification of subsection?.[1];let isLast = last;">
                         {{classification?.industryCategoryCode?.description}}
                         <span *ngIf="classification?.isPrimary" class="badge primary-pill fs-13 fw-500 mx-1 rounded-4 text-primary">Primary</span>
                         <span class="ms-1 me-1" *ngIf="!isLast">|</span>
@@ -29,9 +29,9 @@
                 </span>
                 </div>
                 <div class="col-md-3 col-lg-2 d-flex align-items-center">
-                    <span class="d-flex  ms-auto" *ngIf="isEditMode">
+                    <span class="d-flex mb-auto ms-auto" *ngIf="isEditMode">
                     <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                    title="Click here to edit industry details" aria-label="Click here to edit industry details" (keypress.enter)="editAddress(address, i)"
+                    title="Click here to update industry details" aria-label="Click here to update industry details" (keypress.enter)="editAddress(address, i)"
                     (click)="editIndustry(subsection, i)">edit</mat-icon>
                     <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
                     title="Click here to delete industry details" aria-label="Click here to delete industry details" (keypress.enter)="editAddress(address, i)"
@@ -49,7 +49,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="addIndustryDetails-header">{{isEditIndex != null ? 'Edit':'Add'}} Industry Details</h4>
+				<h4 class="modal-title" id="addIndustryDetails-header">{{isEditIndex != null ? 'Update':'Add'}} Industry Details</h4>
 				<button type="button" class="btn-close" id="coi-add-industry-details-close-btn" title="Click here to close" data-bs-dismiss="modal"
 					aria-label="Click here to close" (click)="clearIndustryDetails()"></button>
 			</div>
@@ -141,8 +141,9 @@
             title="Click to cancel" (click)="clearIndustryDetails()">Cancel
             </button>
             <button class="btn btn-primary me-0" id="coi-add-industry-details-add-btn" type="button"
-                title="Click here to {{isEditIndex != null ? 'edit':'add'}} industry"
-                    [attr.aria-label]="'Click here to '+ isEditIndex != null ? 'edit':'add'" (click)="addIndustry()">{{isEditIndex != null ? 'Edit':'Add'}} Industry
+                title="Click here to {{isEditIndex != null ? 'update':'add'}} industry details"
+                [attr.aria-label]="'Click here to '+ isEditIndex != null ? 'update':'add' + ' industry details'"
+                (click)="addIndustry()">{{isEditIndex != null ? 'Update':'Add'}} Industry Details
             </button>
         </div>
 	</div>
@@ -154,6 +155,6 @@
         <span>Confirmation</span>
     </ng-container>
     <ng-container modal-body>
-        <p>Do you want to delete <strong>{{selectedIndustry?.key}}</strong>?</p>
+        <p>Do you want to delete <strong>{{selectedIndustry?.[0]}}</strong>?</p>
     </ng-container>
 </app-coi-modal>

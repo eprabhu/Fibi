@@ -91,6 +91,9 @@ export interface ProjectDetails {
     updateTimestamp: any
     proposalCount: any
     commentCount: number;
+    projectIcon: string;
+    documentNumber: string;
+    accountNumber: any
 }
 
 export class CoiProjectOverviewRequest {
@@ -313,7 +316,22 @@ export class NotificationObject {
   projectId: string;  
 }
 
-export class GetNotificationsRO{
+export class NotificationTypeRO{
     moduleCode: number = 8;
     subModuleCode: number = 0;
+    showTemplateInModule = true
 }
+
+export interface ContactPersonDetails {
+    phone_nbr: string
+    directory_title: string
+    email_addr: string
+    unit_name: string
+    prncpl_nm: string
+    addr_line_1: any
+    unit_number: string
+    primary_title: string
+    prncpl_id: string
+    full_name: string
+  }
+  

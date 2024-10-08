@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.polus.core.common.dao.CommonDao;
+import com.polus.core.constants.CoreConstants;
 import com.polus.core.person.dao.PersonDao;
 import com.polus.core.person.pojo.Person;
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,9 @@ public class OPAServiceImpl implements OPAService {
 
 	@Autowired
 	private ConflictOfInterestDao conflictOfInterestDao;
+
+	@Autowired
+	private CustomExceptionService exceptionService;
 
 	@Override
 	public Boolean canCreateOpaDisclosure(String personId) {
@@ -185,6 +190,7 @@ public class OPAServiceImpl implements OPAService {
 			saveAssignAdminActionLog(assignAdminDto.getAdminPersonId(), assignAdminDto.getOpaDisclosureId(), assignAdminDto.getOpaDisclosureNumber());
 		} catch (Exception e) {
 			logger.error("assignDisclosureAdmin : {}", e.getMessage());
+			exceptionService.saveErrorDetails(e.getMessage(), e, CoreConstants.JAVA_ERROR);
 		}
 		assignAdminDto.setOpaDisclosureStatus(Boolean.TRUE.equals(opaDao.isAdminAssigned(assignAdminDto.getOpaDisclosureId())) 
 						? null

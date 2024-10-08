@@ -54,13 +54,8 @@ public class ActionLogServiceImpl implements ActionLogService {
 
     @Autowired
 	private PersonDao personDao;
-
-    private static final String DISCLOSURE_TYPE_FCOI = "FCOI";
-	private static final String DISCLOSURE_TYPE_PROJECT = "Project";
+ 
 	private static final String DISCLOSURE_TYPE_TRAVEL = "Travel";
-	private static final String TYPE_CODE_FCOI = "1";
-	private static final String TYPE_CODE_PROPOSAL = "2";
-	private static final String TYPE_CODE_AWARD = "3";
 
     private String renderPlaceholders(String message, Map<String, String> replacementParameters) {
         if (replacementParameters != null) {
@@ -88,13 +83,10 @@ public class ActionLogServiceImpl implements ActionLogService {
 	}
 
 	private String buildDisclosureLogMessage(DisclosureActionLogDto actionLogDto, String message) {
-        Map<String, String> placeholdersAndValues = new HashMap<>();
-        if(TYPE_CODE_FCOI.equals(actionLogDto.getFcoiTypeCode())) {
-			message = message.replace("{FCOI /Project /Travel}", DISCLOSURE_TYPE_FCOI);
-		}
-		else if(TYPE_CODE_PROPOSAL.equals(actionLogDto.getFcoiTypeCode())||TYPE_CODE_AWARD.equals(actionLogDto.getFcoiTypeCode())){
-			message = message.replace("{FCOI /Project /Travel}", DISCLOSURE_TYPE_PROJECT);
-		}
+        Map<String, String> placeholdersAndValues = new HashMap<>(); 
+        if(actionLogDto.getFcoiTypeDescription() != null) {
+		message = message.replace("{FCOI /Project /Travel}", actionLogDto.getFcoiTypeDescription());
+        }
         if(actionLogDto.getOldAdmin()!=null) {
         	placeholdersAndValues.put("{ADMIN_ONE}", actionLogDto.getOldAdmin());
             placeholdersAndValues.put("{ADMIN_TWO}", actionLogDto.getNewAdmin());
@@ -142,7 +134,8 @@ public class ActionLogServiceImpl implements ActionLogService {
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITH_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEWER_COMPLETE_REVIEW,
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_START_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITH_REVIEWER,
 				Constants.COI_DISCLOSURE_ACTION_LOG_ADMIN_COMPLETE_REVIEW_WITHOUT_REVIEWER,Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITH_REVIEWER,
-				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER);
+				Constants.COI_DISCLOSURE_ACTION_LOG_REVIEW_REMOVED_WITHOUT_REVIEWER, Constants.COI_DIS_ACTION_LOG_MODIFIED_REVIEW_WITH_REVIEWER,
+				Constants.COI_DIS_ACTION_LOG_DISCLOSURE_SYNCED);
 		List<DisclosureActionLog> disclsouretActionLogs = actionLogDao.fetchDisclosureActionLogsBasedOnDisclosureId(disclosureId, reviewActionTypeCodes);
 		List<HistoryDto> disclosureHistories = new ArrayList<>();
 		disclsouretActionLogs.forEach(disclsouretActionLog -> {

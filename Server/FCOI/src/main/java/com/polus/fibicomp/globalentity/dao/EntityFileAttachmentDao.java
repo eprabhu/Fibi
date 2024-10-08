@@ -99,7 +99,9 @@ public class EntityFileAttachmentDao {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaUpdate<EntityAttachment> updateQuery = builder.createCriteriaUpdate(EntityAttachment.class);
 		Root<EntityAttachment> rootEntityAttachment = updateQuery.from(EntityAttachment.class);
-		updateQuery.set(rootEntityAttachment.get("comment"), description); 
+		updateQuery.set(rootEntityAttachment.get("comment"), description);
+		updateQuery.set(rootEntityAttachment.get("updateTimestamp"), commonDao.getCurrentTimestamp()); 
+		updateQuery.set(rootEntityAttachment.get("updatedBy"), AuthenticatedUser.getLoginPersonId()); 
 		updateQuery.where(rootEntityAttachment.get("entityAttachmentId").in(attachmentId));
 		session.createQuery(updateQuery).executeUpdate();
 	}
@@ -128,6 +130,8 @@ public class EntityFileAttachmentDao {
 		CriteriaUpdate<EntityAttachment> updateQuery = builder.createCriteriaUpdate(EntityAttachment.class);
 		Root<EntityAttachment> rootEntityAttachment = updateQuery.from(EntityAttachment.class);
 		updateQuery.set(rootEntityAttachment.get("attachmentStatusCode"), statusCode); 
+		updateQuery.set(rootEntityAttachment.get("updateTimestamp"), commonDao.getCurrentTimestamp()); 
+		updateQuery.set(rootEntityAttachment.get("updatedBy"), AuthenticatedUser.getLoginPersonId()); 
 		updateQuery.where(rootEntityAttachment.get("entityAttachmentId").in(attachmentId));
 		session.createQuery(updateQuery).executeUpdate();
 	}

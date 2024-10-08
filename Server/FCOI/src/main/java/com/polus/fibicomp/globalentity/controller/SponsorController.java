@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
@@ -37,19 +38,30 @@ public class SponsorController {
 	@Qualifier(value = "entityRiskService")
 	private GlobalEntityService entityRiskService;
 
+	@Autowired
+	@Qualifier(value = "globalEntityService")
+	private GlobalEntityService globalEntityService;
+
 	@PostMapping(value = "/save")
 	public ResponseEntity<Map<String, Integer>> saveDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for saveDetails");
 		Map<String, Integer> response = sponosrService.saveDetails(dto);
 		dto.setAcType(ACTION_TYPE_SAVE);
 		sponosrService.logAction(dto);
+		if (dto.getEntitySponsorFields().get(EntitySponsorField.feedStatusCode) != null) {
+			globalEntityService.processEntityMessageToQ(dto.getEntityId());
+		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PatchMapping(value = "/update")
 	public ResponseEntity<String> updateDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for updateDetails");
-		return sponosrService.updateDetails(dto);
+		ResponseEntity<String> response = sponosrService.updateDetails(dto);
+		if (dto.getEntitySponsorFields().get(EntitySponsorField.feedStatusCode) != null) {
+			globalEntityService.processEntityMessageToQ(dto.getEntityId());
+		}
+		return response;
 	}
 
 	@GetMapping(value = "/fetch/{entityId}")

@@ -51,7 +51,7 @@ SELECT
         LEFT JOIN `sponsor` `t5` ON ((`t5`.`SPONSOR_CODE` = `t1`.`PRIME_SPONSOR_CODE`)))
         JOIN `proposal_persons` `t6` ON ((`t6`.`PROPOSAL_ID` = `t1`.`PROPOSAL_ID`)))
         JOIN `person` `t7` ON ((`t6`.`PERSON_ID` = `t7`.`PERSON_ID`)))
-    WHERE `t1`.`STATUS_CODE` IN (1 , 8, 3, 5, 6, 11)
+    WHERE `t1`.`STATUS_CODE` IN (1 , 8, 3, 5, 6, 11) AND `t1`.`PROPOSAL_SEQUENCE_STATUS` = 'ACTIVE'
 
     UNION ALL
 

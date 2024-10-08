@@ -24,6 +24,8 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
     isDuplicateEntityAvailable = false;
     isAlreadyMarkedAsDuplicate = false;
 
+    @Input() customClass = '';
+    @Input() isShowDuplicateMark = false;
     @Input() detailsSource: 'DUNS' | 'LOCAL' = 'LOCAL';
     @Input() entityDetailsObj = new EntityCardDetails();
     @Output() emitCardNextAction = new EventEmitter<'USE' | 'OPEN_MODAL'>();

@@ -20,8 +20,11 @@ import com.polus.fibicomp.globalentity.dto.SubAwardOrgField;
 import com.polus.fibicomp.globalentity.dto.SubAwdOrgRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntitySubOrgInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
 @Transactional
+@Slf4j
 public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 
 	@Autowired
@@ -47,8 +50,9 @@ public class SubAwdOrgDAOImpl implements SubAwdOrgDAO {
 	public void updateDetails(SubAwdOrgRequestDTO dto) {
 		Map<SubAwardOrgField, Object> subAwardOrgFields = dto.getSubAwardOrgFields();
 
-		if (subAwardOrgFields == null) {
-			throw new IllegalArgumentException("subAwardOrgFields map is null.");
+		if (subAwardOrgFields == null || subAwardOrgFields.isEmpty()) {
+			log.info("subAwardOrgFields map is null or empty.");
+			return;
 		}
 
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();

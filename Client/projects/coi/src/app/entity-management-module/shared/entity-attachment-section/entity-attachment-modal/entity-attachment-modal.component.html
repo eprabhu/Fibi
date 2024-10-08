@@ -1,7 +1,7 @@
 <app-coi-modal [modalConfig]="entityAttachmentModalConfig" (modalAction)="attachmentModalActions($event)">
     <!-- header -->
     <ng-container modal-header>
-        <span>{{attachmentInputType === 'DESCRIPTION_CHANGE' ? 'Edit' : attachmentInputType === 'ADD' ? 'Add' : 'Replace'}}</span>
+        <span>{{attachmentInputType === 'DESCRIPTION_CHANGE' ? 'Update' : attachmentInputType === 'ADD' ? 'Add' : 'Replace'}}</span>
         <span class="ms-1">Attachment(s)<app-common-help-text [subSectionId]="subSectionId"
                             [elementId]="'coi-sub-modal-head-' + subSectionId"></app-common-help-text></span>
     </ng-container>
@@ -21,9 +21,8 @@
                         <div class="col-6">
                             <label for="coi-add-attachment-type{{i}}" class="d-block coi-text-dark">
                                 <span class="mandatory">*</span>
-                                <span>Attachment Type<app-common-help-text [subSectionId]="subSectionId"
-                            [elementId]="'coi-attach-type-' + subSectionId"></app-common-help-text>
-                                </span>
+                                <span>Attachment Type</span>
+                                <app-common-help-text [subSectionId]="subSectionId" [elementId]="'coi-attach-type-' + subSectionId"></app-common-help-text>
                             </label>
                             <!-- add case -->
                             <ng-container *ngIf="attachmentInputType === 'ADD'">
@@ -36,7 +35,7 @@
                             <!-- replace case -->
                             <ng-container *ngIf="attachmentInputType === 'REPLACE'">
                                 <span id="coi-add-attachment-type"
-                                    class="coi-text-light">{{currentAttachment?.attachmentType?.description}}</span>
+                                    class="coi-text-light">{{currentAttachment?.attachmentType}}</span>
                             </ng-container>
                         </div>                        
                         <!-- file name -->
@@ -88,30 +87,29 @@
                     <div class="col-6">
                         <label for="coi-add-attachment-type" class="d-block coi-text-dark">
                             <span class="mandatory">*</span>
-                            <span>Attachment Type
-                                <app-common-help-text [subSectionId]="subSectionId"
+                            <span>Attachment Type</span>
+                            <app-common-help-text [subSectionId]="subSectionId"
                                 [elementId]="'coi-attach-type-' + subSectionId"></app-common-help-text>
-                            </span>
                         </label>
                         <span id="coi-add-attachment-type"
-                            class="coi-text-light">{{currentAttachment?.attachmentType?.description}}</span>
+                            class="coi-text-light">{{currentAttachment?.attachmentType}}</span>
                     </div>                    
                     <!-- File Name -->
                     <div class="col-6">
                         <label for="coi-attachment-filename" class="coi-text-dark">
                             <span class="mandatory">*</span>
-                            <span>File Name
-                                <app-common-help-text [subSectionId]="subSectionId"
-                                    [elementId]="'coi-attach-filename-' + subSectionId"></app-common-help-text>
-                            </span>
+                            <span>File Name</span>
+                            <app-common-help-text [subSectionId]="subSectionId"
+                                [elementId]="'coi-attach-filename-' + subSectionId"></app-common-help-text>
                         </label>
                         <span id="coi-attachment-filename" class="d-block fs-14">{{currentAttachment?.fileName}}</span>
                     </div>
                     <!-- Description -->
                     <div class="col-12 mt-3">
-                        <label for="coi-add-attachment-description" class="d-block coi-text-dark">Description
+                        <label for="coi-add-attachment-description" class="d-block coi-text-dark">
+                            <span>Description</span>
                             <app-common-help-text [subSectionId]="subSectionId"
-                            [elementId]="'coi-attach-desc-' + subSectionId"></app-common-help-text>
+                                [elementId]="'coi-attach-desc-' + subSectionId"></app-common-help-text>
                         </label>
                         <textarea id="coi-add-attachment-description" rows="1" id="external-review-doc-popup-desc"
                             [(ngModel)]="currentAttachment.comment" placeholder="Please enter the description."

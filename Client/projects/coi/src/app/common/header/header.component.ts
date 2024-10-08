@@ -5,8 +5,8 @@ import {CommonService} from '../services/common.service';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { HeaderService } from './header.service';
-import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL } from '../../app-constants';
-import { LoginPersonDetails } from '../services/coi-common.interface';
+import { ADMIN_DASHBOARD_RIGHTS, CONSULTING_REDIRECT_URL, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_REDIRECT_URL, COMMON_ERROR_TOAST_MSG } from '../../app-constants';
+import { FcoiType, LoginPersonDetails } from '../services/coi-common.interface';
 
 declare const $: any;
 class ChangePassword {
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     timer: any = {password: null, confirmPassword: null};
     $subscriptions: Subscription[] = [];
     homeNavigation: string = '';
-    isAdministrator: boolean = false;
+    canViewFCOIDashboard = false;
     noteComment: any;
     isShowCreateOrReviseModal = false;
     triggeredFrom = '';
@@ -74,14 +74,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fullName = this.commonService.getCurrentUserDetail('fullName');
-        this.isAdministrator = this.commonService.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS)
-            || this.commonService.isCoiReviewer || this.commonService.rightsArray.some((right) => ADMIN_DASHBOARD_RIGHTS.has(right));
+        this.canViewFCOIDashboard = this.commonService.checkFCOIRights();
         this.navigateForHomeIcon();
         this.openModalTriggeredFromChild();
     }
 
     navigateForHomeIcon(): void {
-        this.homeNavigation = this.isAdministrator ? '#/coi/admin-dashboard' : '#/coi/user-dashboard/disclosures';
+        this.homeNavigation = this.canViewFCOIDashboard ? '#/coi/admin-dashboard' : '#/coi/user-dashboard/disclosures';
     }
 
     ngOnDestroy(): void {
@@ -233,8 +232,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     openModalTriggeredFromChild() {
-        this.$subscriptions.push(this.headerService.$openModal.subscribe((event: string) => {
-            if (event == 'FCOI') {
+        this.$subscriptions.push(this.headerService.$openModal.subscribe((type: FcoiType) => {
+            if (['INITIAL', 'REVISION'].includes(type)) {
                 this.openReviseModal();
             }
         }));
@@ -247,9 +246,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 if(res) {
                     this.router.navigate([OPA_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
                 } else {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
                 }
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')));
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG)));
     }
 
     createConsultingDisclosure() {
@@ -259,9 +258,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 if(res) {
                     this.router.navigate([CONSULTING_REDIRECT_URL], {queryParams: {disclosureId: res.disclosureId}});
                 } else {
-                    this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.');
+                    this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
                 }
-            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, please try again.')
+            }, err => this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG)
         ));
     }
 

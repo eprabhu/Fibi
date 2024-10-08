@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.polus.core.constants.CoreConstants;
+import com.polus.fibicomp.config.CustomExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +80,9 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	@Autowired
     private EntityActionLogService actionLogService;
 
+	@Autowired
+	private CustomExceptionService exceptionService;
+
 	protected static Logger logger = LogManager.getLogger(GlobalEntityServiceImpl.class.getName());
 	private static final Integer ENTITY_MODULE_CODE = 26;
 	private static final String DOCUMENT_STATUS_FLAG_DUPLICATE = "3";
@@ -145,6 +150,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			}
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in verifyEntityDetails");
+			exceptionService.saveErrorDetails(e.getMessage(), e, CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseEntity<>(entityDetailsDAO.getEntityTabStatus(entityId), HttpStatus.OK);
 	}
@@ -209,6 +215,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			actionLogService.saveEntityActionLog(DUPLICATE_ACTION_LOG_CODE, logDTO, dto.getDescription());
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in markDuplicate");
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseMessageDTO("Entity marked as duplicate successfully");
 	}
@@ -224,6 +231,7 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 			actionLogService.saveEntityActionLog(dto.getActionLogCode(), dto, null);
 		} catch (Exception e) {
 			logger.error("Exception in saveEntityActionLog in logAction");
+			exceptionService.saveErrorDetails(e.getMessage(), e,CoreConstants.JAVA_ERROR);
 		}
 		return new ResponseMessageDTO("Entity action log saved successfully");
 	}

@@ -8,8 +8,13 @@
             <div class="p-3 coi-box-red border border-secondary border-opacity-50 mx-0 rounded-3 shadow-medium position-sticky z-2 custom-stickytop">
                 <div class="row align-items-start">
                     <div class="col d-flex coi-card-notch-ribbon-container">
-                        <span *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == '2'" class="coi-card-notch-ribbon shadow-sm me-3" [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
-                        <span *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != '2'" class="coi-card-notch-ribbon shadow-sm me-3 bg-fcoi-clip">FCOI</span>
+                        <!-- badge - project -->
+                        <span *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode == DISCLOSURE_TYPE.PROJECT" 
+                            [style.backgroundColor]="coiData?.coiDisclosure?.coiProjectType?.badgeColor"
+                            class="coi-card-notch-ribbon shadow-sm me-3">{{ coiData?.coiDisclosure?.coiProjectType?.description }}</span>
+                        <!-- badge - fcoi -->
+                        <span *ngIf="coiData?.coiDisclosure?.coiDisclosureFcoiType?.fcoiTypeCode != DISCLOSURE_TYPE.PROJECT"
+                            class="coi-card-notch-ribbon shadow-sm me-3 bg-fcoi-clip">{{ coiData?.coiDisclosure?.coiDisclosureFcoiType?.description }}</span>
                         <div class="col mt-2">
                             <div class="col d-flex mb-2 ps-md-1 mt-md-1 mt-xl-0">
                                 <h4 class="mb-0 d-flex label-text f-16 coi-ms-n15px align-self-baseline flex-column">

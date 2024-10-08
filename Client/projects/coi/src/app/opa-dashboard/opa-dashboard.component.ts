@@ -9,7 +9,7 @@ import { CommonService } from '../common/services/common.service';
 import { deepCloneObject, isEmptyObject } from '../../../../fibi/src/app/common/utilities/custom-utilities';
 import { NavigationService } from '../common/services/navigation.service';
 import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/subscription-handler';
-import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DASHBOARD_RIGHTS, OPA_REDIRECT_URL } from '../app-constants';
+import { DATE_PLACEHOLDER, HTTP_ERROR_STATUS, OPA_DISCLOSURE_RIGHTS, OPA_REDIRECT_URL } from '../app-constants';
 import { getPersonLeadUnitDetails } from '../common/utilities/custom-utilities';
 import { ElasticConfigService } from '../common/services/elastic-config.service';
 import { compareDatesWithoutTimeZone, getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../common/utilities/date-utilities';
@@ -73,7 +73,7 @@ export class OpaDashboardComponent implements OnInit {
     ) {  document.addEventListener('mouseup', this.offClickMainHeaderHandler.bind(this)); }
 
     async ngOnInit() {
-        this.isShowAdminDashboard = this.commonService.getAvailableRight(['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOSURE']);
+        this.isShowAdminDashboard = this.commonService.getAvailableRight(OPA_DISCLOSURE_RIGHTS);
         this.isOPAReviewer = this.commonService.isOPAReviewer;
         this.setDashboardTab();
         this.setSearchOptions();

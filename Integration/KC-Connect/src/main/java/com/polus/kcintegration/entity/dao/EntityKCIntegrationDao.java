@@ -59,7 +59,6 @@ public class EntityKCIntegrationDao {
 			log.error("SQLException in feedEntityDetailsToSponsorAndOrg for entityId {}: {}", entityDTO.getEntityId(), e.getMessage(), e);
 			throw new IntegrationCustomException("Database error during feedEntityDetailsToSponsorAndOrg", e, entityDTO.getEntityId());
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error("Unexpected exception in feedEntityDetailsToSponsorAndOrg for entityId {}: {}", entityDTO.getEntityId(), e.getMessage(), e);
 			throw new IntegrationCustomException("Unexpected error during feedEntityDetailsToSponsorAndOrg", e, entityDTO.getEntityId());
 		} finally {

@@ -33,7 +33,7 @@ const routes: Routes = [
             {
                 path: 'entity-dashboard',
                 loadChildren: () => import('./entity-dashboard/entity-dashboard.module').then(m => m.EntityDashboardModule),
-
+                canActivate: [AdminRouteGuardService]
             },
             {
                 path: 'entity-details', loadChildren: () => import('../app/disclosure/entity-details/entity-details.module').then(m => m.EntityDetailsModule)
@@ -59,8 +59,9 @@ const routes: Routes = [
                 loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)
             },
             {
-              path: 'configuration',
-              loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule)
+                path: 'configuration',
+                loadChildren: () => import('./configuration/configuration.module').then(m => m.ConfigurationModule),
+                canActivate: [AdminRouteGuardService]
             },
             {
                 path: 'create-sfi',
@@ -76,7 +77,8 @@ const routes: Routes = [
             },
             {
                 path: 'opa-dashboard',
-                loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule)
+                loadChildren: () => import('./opa-dashboard/opa-dashboard.module').then(m => m.OpaDashboardModule),
+                canActivate: [AdminRouteGuardService]
             },
             {
                 path: 'form-builder-create',
@@ -87,7 +89,7 @@ const routes: Routes = [
                 loadChildren: () => import('./entity-management-module/entity-management-module.module').then(m => m.EntityManagementModuleModule),
 
             }
-          ]
+        ]
     },
     { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule), canActivate: [LoginGuard] },
     { path: 'error-handler', loadChildren: () => import('./error-handler/error-handler.module').then(m => m.ErrorHandlerModule)},

@@ -32,7 +32,7 @@
                     <div class="card coi-card-regular p-3 shadow-sm">
                         <div class="row mx-0 gap-2">
                             <!-- file icon -->
-                            <div class="col-auto d-flex align-items-center h-100 justify-content-center attachment-icon-container p-3 rounded-2">
+                            <div class="col-auto d-flex align-items-center justify-content-center attachment-icon-container p-3 rounded-2">
                                 <mat-icon aria-hidden="true" class="fs-24 flex-shrink-0">description</mat-icon>
                             </div>
                             <!-- files -->
@@ -46,9 +46,9 @@
                                     </app-no-data-label>
                                     <div class="ms-1 d-inline-flex coi-text-light fs-13">
                                         <span>(</span>
-                                        <span class="fw-500">{{attachment?.updateUserFullname}}</span>
+                                        <span class="fw-500 text-nowrap">{{attachment?.updateUserFullname}}</span>
                                         <span class="mx-1">On</span>
-                                        <span>{{attachment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
+                                        <span class="text-nowrap">{{attachment?.updateTimestamp | dateFormatterWithTimeZone: 'long'}}</span>
                                         <span>)</span>
                                     </div>
                                 </div>
@@ -69,20 +69,8 @@
                             </div>
                             <!-- actions -->
                             <div class="col-auto d-flex justify-content-center align-items-center">
-                                <!-- edit -->
-                                <button id="coi-entity-attachment-edit-{{i}}" *ngIf="isEditMode"
-                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                    title="Click here to edit attachment" aria-label="Click here to edit attachment"
-                                    (click)="editEntityAttachment(attachment, i)">
-                                    <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
-                                </button>
-                                <!-- delete -->
-                                <button id="coi-entity-attachment-delete-{{i}}" *ngIf="isEditMode"
-                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                    title="Click here to delete attachment" aria-label="Click here to delete attachment"
-                                    (click)="openDeleteConfirmModal(attachment, i)">
-                                    <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
-                                </button>
+                                
+                               
                                 <!-- download -->
                                 <button id="coi-entity-attachment-download-{{i}}"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
@@ -90,13 +78,7 @@
                                     (click)="downloadAttachment(attachment)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">download</mat-icon>
                                 </button>
-                                <!-- replace -->
-                                <button id="coi-entity-attachment-replace-{{i}}" *ngIf="isEditMode"
-                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
-                                    title="Click here to replace attachment" aria-label="Click here to replace attachment"
-                                    (click)="replaceAttachmentModal(attachment, i)">
-                                    <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
-                                </button>
+                               
                                 <!-- version -->
                                 <button id="coi-entity-attachment-version-{{i}}"
                                     class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1"
@@ -104,6 +86,34 @@
                                     (click)="openVersionModal(attachment, i)">
                                     <mat-icon aria-hidden="true" class="flex-shrink-0">difference</mat-icon>
                                 </button>
+                                <!-- more options button -->
+                                <button *ngIf="isEditMode" [matMenuTriggerFor]="beforeMenu" aria-label="Click here for more action" title="Click here for more action"
+                                    class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1">
+                                    <mat-icon aria-hidden="true" class="moreActionIcon">more_vert</mat-icon>
+                                </button>
+                                <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                    <!-- edit -->
+                                    <button  mat-menu-item id="coi-entity-attachment-edit-{{i}}"
+                                        title="Click here to update attachment" aria-label="Click here to edit attachment"
+                                        (click)="editEntityAttachment(attachment, i)">
+                                        <mat-icon aria-hidden="true" class="flex-shrink-0">edit</mat-icon>
+                                        <span class="ms-2 fw-medium fs-14">Update</span>
+                                    </button>
+                                     <!-- replace -->
+                                    <button  mat-menu-item id="coi-entity-attachment-replace-{{i}}"
+                                        title="Click here to replace attachment" aria-label="Click here to replace attachment"
+                                        (click)="replaceAttachmentModal(attachment, i)">
+                                        <mat-icon aria-hidden="true" class="flex-shrink-0">autorenew</mat-icon>
+                                        <span class="ms-2 fw-medium fs-14">Replace</span>
+                                    </button>
+                                     <!-- delete -->
+                                    <button  mat-menu-item id="coi-entity-attachment-delete-{{i}}"
+                                        title="Click here to delete attachment" aria-label="Click here to delete attachment"
+                                        (click)="openDeleteConfirmModal(attachment, i)">
+                                        <mat-icon aria-hidden="true" class="flex-shrink-0">delete</mat-icon>
+                                        <span class="ms-2 fw-medium fs-14">Delete</span>
+                                    </button>
+                                </mat-menu>
                             </div>
                         </div>
                     </div>

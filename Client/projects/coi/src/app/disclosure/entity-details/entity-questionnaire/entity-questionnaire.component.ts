@@ -3,7 +3,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CommonService } from '../../../common/services/common.service';
 import { EntityDetailsService, groupBy } from '../entity-details.service';
 import { subscriptionHandler } from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS, OPA_DISCLOSURE_RIGHTS, TRAVEL_DISCLOSURE_RIGHTS } from '../../../app-constants';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 
 @Component({
@@ -74,12 +74,11 @@ export class EntityQuestionnaireComponent implements OnInit, OnDestroy {
     hasRightToView(disclosureTypeCode) {
         switch (disclosureTypeCode) {
             case '1':
-                return this._commonService.getAvailableRight(['VIEW_FCOI_DISCLOSURE', 'MANAGE_FCOI_DISCLOSURE',
-                    'VIEW_PROJECT_DISCLOSURE', 'MANAGE_PROJECT_DISCLOSURE']);
+                return this._commonService.getAvailableRight(FCOI_PROJECT_DISCLOSURE_RIGHTS);
             case '2':
-                return this._commonService.getAvailableRight(['VIEW_OPA_DISCLOSURE', 'MANAGE_OPA_DISCLOSURE']);
+                return this._commonService.getAvailableRight(OPA_DISCLOSURE_RIGHTS);
             case '3':
-                return this._commonService.getAvailableRight(['VIEW_TRAVEL_DISCLOSURE', 'MANAGE_TRAVEL_DISCLOSURE']);
+                return this._commonService.getAvailableRight(TRAVEL_DISCLOSURE_RIGHTS);
         }
     }
 
