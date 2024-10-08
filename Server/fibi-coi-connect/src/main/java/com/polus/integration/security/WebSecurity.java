@@ -4,21 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.polus.integration.constant.Constant;
-import com.polus.integration.login.dao.LoginDao;
-import com.polus.integration.service.CommonService;
+import com.polus.integration.security.service.UserTokensService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -26,46 +23,35 @@ import com.polus.integration.service.CommonService;
 public class WebSecurity {
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserTokensService userTokensService;
 
-	@Autowired
-	private LoginDao loginDao;
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+		.authorizeHttpRequests(authz -> authz.requestMatchers("/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated())
+				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(new CustomHttp403ForbiddenEntryPoint()));
 
-	@Autowired
-	private CommonService commonService;
+		http.addFilterBefore((request, response, chain) -> {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			if (!httpRequest.getServletPath().equals("/**")) {
+				new ConnectAuthorizationFilter(userTokensService).doFilter(request, response, chain);
+			} else {
+				chain.doFilter(request, response);
+			}
+		}, UsernamePasswordAuthenticationFilter.class);
 
-	public WebSecurity(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
+		return http.build();
 	}
 
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers(HttpMethod.POST, Constant.SIGN_UP_URL).permitAll()
-                .anyRequest().authenticated()
-            )
-            .addFilter(new JWTAuthenticationFilter(authenticationManager, loginDao, commonService))
-            .addFilter(new JWTAuthorizationFilter(authenticationManager))
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(new CustomHttp403ForbiddenEntryPoint()));
-        
-        return http.build();
-    }
-
-    @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = 
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService);
-        return authenticationManagerBuilder.build();
-    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
+	CorsConfigurationSource corsConfigurationSource() {
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
 
 }

@@ -22,5 +22,4 @@ public class EntityKCIntegrationService {
 		return kcIntegrationDao.feedEntityDetailsToSponsorAndOrg(entityDTO);
 	}
 
-
 }

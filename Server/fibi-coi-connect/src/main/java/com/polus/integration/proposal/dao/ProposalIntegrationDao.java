@@ -3,6 +3,7 @@ package com.polus.integration.proposal.dao;
 
 import org.springframework.stereotype.Service;
 
+import com.polus.integration.proposal.dto.DisclosureResponse;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
 import com.polus.integration.proposal.pojo.COIIntegrationProposal;
 import com.polus.integration.proposal.pojo.COIIntegrationProposalPerson;
@@ -83,6 +84,9 @@ public interface ProposalIntegrationDao {
 	 * @return
 	 */
 	public Boolean canMarkDisclosureAsVoid(Integer questionnaireId, String personId, String moduleItemId);	
-	
-	
+
+	public DisclosureResponse feedProposalDisclosureStatus(String proposalNumber, String personId);
+
+	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber);
+
 }
