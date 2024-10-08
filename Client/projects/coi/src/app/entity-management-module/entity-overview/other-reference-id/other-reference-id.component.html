@@ -8,13 +8,13 @@
                 <span class="fs-16 fw-medium" id="coi-entity-other-ref-id">{{sectionName}}<app-common-help-text [subSectionId]="2608" [elementId]="'coi-entity-other-ref-id'"></app-common-help-text></span>
                 <div class="col-auto ms-auto" *ngIf="externalReferences.length && isEditMode">
                     <button id="additional-address-add-button"
-                            class="btn btn-primary fs-14 d-inline-flex" title="Click here to Add Other Reference Id"
-                            aria-label="Click here to add other reference id" (click)="addOtherRefId(true)">
-                        <mat-icon>add</mat-icon>Add Other Reference Id
+                            class="btn btn-primary fs-14 d-inline-flex" title="Click here to Add Reference ID"
+                            aria-label="Click here to add reference id" (click)="addOtherRefId(true)">
+                        <mat-icon>add</mat-icon>Add Reference ID
                     </button>
                 </div>
             </div>
-            <app-no-information *ngIf="!externalReferences.length" [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Other Reference Id'" (buttonAction)="addOtherRefId($event)"></app-no-information>
+            <app-no-information *ngIf="!externalReferences.length" [isBorderNeeded]="false" [canShowAddButton]="isEditMode" [buttonName]="'Add Reference ID'" (buttonAction)="addOtherRefId($event)"></app-no-information>
             <div *ngIf="externalReferences.length">
                 <div class="card px-2 py-1 bg-white" *ngFor="let ref of externalReferences; let isFirst = first; let isLast = last; let i = index" [ngClass]="isFirst ? 'mt-2 mb-2' : !isLast ? 'mb-2' : ''" >
                    <div class="d-flex">
@@ -26,9 +26,9 @@
                        <div class="col-md-3 col-lg-2 d-flex align-items-center">
                         <span class="d-flex  ms-auto" *ngIf="isEditMode">
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="editRef(ref, i)"
-                            title="Click here to update other reference id" aria-label="Click here to update other reference id" (keypress.enter)="editRef(ref, i)">edit</mat-icon>
+                            title="Click here to update reference id" aria-label="Click here to update reference id" (keypress.enter)="editRef(ref, i)">edit</mat-icon>
                             <mat-icon aria-hidden="true" class="btn btn-primary-icon d-flex align-items-center justify-content-center rounded-circle p-2 m-1" (click)="confirmDeleteRef(ref, i)"
-                            title="Click here to delete other reference id" aria-label="Click here to delete other reference id" (keypress.enter)="confirmDeleteRef(ref, i)">delete</mat-icon>
+                            title="Click here to delete reference id" aria-label="Click here to delete reference id" (keypress.enter)="confirmDeleteRef(ref, i)">delete</mat-icon>
                         </span>
                        </div>
                    </div>
@@ -43,7 +43,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">{{isEditIndex != null ? 'Update':'Add'}} Other Reference Id</h4>
+				<h4 class="modal-title">{{isEditIndex != null ? 'Update':'Add'}} Reference ID</h4>
 				<button type="button" class="btn-close" id="coi-other-reference-id-close-btn" (click)="clearOtherReferenceID()"
                         title="Click here to close" data-bs-dismiss="modal"
 					aria-label="Click here to close"></button>
@@ -52,7 +52,7 @@
 				<div class="row mb-3">
 					<div class="col-sm-12 col-lg-6">
                         <label class="fs-14 fw-500 pb-1 coi-label-help" for="coi-refernece-id-type">
-                            <span class="mandatory me-1">*</span>Reference Id Type
+                            <span class="mandatory me-1">*</span>Reference ID Type
                             <app-common-help-text [subSectionId]="2608" [elementId]="'coi-refernece-id-type'"></app-common-help-text>
                         </label>
                         <app-look-up (selectedResult)="onReferenceIdTypeSelected($event)" [options]="coiCurrencyOptions"
@@ -86,7 +86,7 @@
                             [(ngModel)]="otherReferenceIdObj.description" appTailingSpaceRemover
                             [limit]=2000 appLengthValidator
                             [ngClass]="(mandatoryList?.has('description')) ? 'is-invalid d-block' : ''"
-                            [styleList]="'mt-2 float-end word-count'" title="Other Reference Id Description" aria-label="Other Reference Id Description">
+                            [styleList]="'mt-2 float-end word-count'" title="Reference ID Description" aria-label="Reference ID Description">
                         </textarea>
                         <div *ngIf="mandatoryList?.has('description')" class="invalid-feedback d-block fs-13" tabindex="-1"
                             aria-label="Entity Registration Type">
@@ -100,9 +100,9 @@
 				title="Click to cancel" (click)="clearOtherReferenceID()">Cancel
 				</button>
 				<button class="btn btn-primary me-0" id="coi-other-reference-id-add-btn" type="button"
-					title="Click here to {{isEditIndex != null ? 'update':'add'}} other reference id"
-                    [attr.aria-label]="'Click here to ' + (isEditIndex != null ? 'update':'add') + ' other reference id'"
-                    (click)="addOtherReferenceID()">{{isEditIndex != null ? 'Update':'Add'}} Other Reference Id
+					title="Click here to {{isEditIndex != null ? 'update':'add'}} reference id"
+                    [attr.aria-label]="'Click here to ' + (isEditIndex != null ? 'update':'add') + ' reference id'"
+                    (click)="addOtherReferenceID()">{{isEditIndex != null ? 'Update':'Add'}} Reference ID
 				</button>
 			</div>
 		</div>
