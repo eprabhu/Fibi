@@ -7,3 +7,5 @@ UPDATE `notification_type` SET `MESSAGE` = '<p>Dear {COI_DISCLOSURE#REPORTER_NAM
 
 UPDATE DISCLOSURE_ACTION_TYPE SET MESSAGE = 'Revised Disclosure has been <b>amended</b> by <b>{REPORTER}</b>' WHERE (ACTION_TYPE_CODE = '28');
 
+UPDATE coi_disclosure_fcoi_type SET DESCRIPTION = 'Project' WHERE (FCOI_TYPE_CODE = 2);
+
