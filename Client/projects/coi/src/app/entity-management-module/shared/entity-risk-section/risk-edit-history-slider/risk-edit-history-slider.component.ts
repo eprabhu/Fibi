@@ -5,7 +5,7 @@ import { getEntityFullAddress } from '../../../entity-management.service';
 import { Subscription } from 'rxjs';
 import { EntityRiskSectionService } from '../entity-risk-section.service';
 import { CommonService } from 'projects/coi/src/app/common/services/common.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/coi/src/app/app-constants';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/coi/src/app/app-constants';
 import { EntityDataStoreService } from '../../../entity-data-store.service';
 import { deepCloneObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -25,20 +25,15 @@ export class RiskEditHistorySlider implements OnInit {
     @Input() sectionName: any;
     @Input() sectionId: any;
     @Input() subSectionId: any;
+
     entityCardDetails = new EntityDetailsInPopup();
     entityRiskModalDetails = new EntityRiskModalDetails();
     $subscriptions: Subscription[] = [];
     entityRiskLevelList: RiskLevel[] = [];
     entityRiskLevelOption = 'Empty#Empty#false#false';
-    oldRiskLevelCode: any;
-    oldRiskLevel: any;
-    oldDescription: any;
     mandatoryList = new Map();
-    openEditSlider = false;
-    isEditMode = true;
     riskHistory = [];
     coiEntityDetails: any = {};
-    updatedRiskDetails = new EntityRisk();
 
     constructor(private _entityRiskSectionService: EntityRiskSectionService, private _commonService: CommonService,
         private _dataStoreService: EntityDataStoreService
@@ -48,9 +43,8 @@ export class RiskEditHistorySlider implements OnInit {
         this.getDataFromStore();
         this.listenDataChangeFromStore();
         this.loadRiskHistory();
-        this.setValuesForHeader();
-        this.setDefaultValues();
-        this.setRiskTypeCode();
+        this.setEntityCardDetails();
+        this.setDefaultEntityValues();
         setTimeout(() => {
             openCoiSlider('risk-edit-history-slider');
         });
@@ -71,53 +65,39 @@ export class RiskEditHistorySlider implements OnInit {
         );
     }
 
-    setValuesForHeader() {
-        this.entityCardDetails.entityName = this.coiEntityDetails.entityName;
-        this.entityCardDetails.email = this.coiEntityDetails.certifiedEmail;
-        this.entityCardDetails.phone = this.coiEntityDetails.phoneNumber;
-        this.entityCardDetails.website = this.coiEntityDetails.websiteAddress;
-        this.entityCardDetails.entityId = this.coiEntityDetails.entityId;
-        this.entityCardDetails.fullAddress = getEntityFullAddress(this.coiEntityDetails);
+    setEntityCardDetails() {
+        const { entityName, certifiedEmail, phoneNumber, websiteAddress, entityId } = this.coiEntityDetails;
+        this.entityCardDetails = {
+            entityName,
+            email: certifiedEmail,
+            phone: phoneNumber,
+            website: websiteAddress,
+            entityId,
+            fullAddress: getEntityFullAddress(this.coiEntityDetails),
+        };
     }
 
-    setDefaultValues() {
-        if (this.currentRiskDetails) {
-            this.entityRiskModalDetails.entityRisk = { ...this.currentRiskDetails };
-            this.entityRiskModalDetails.entityRisk.description = this.currentRiskDetails.description;
-            this.entityRiskModalDetails.entityRisk.riskLevel.description = this.currentRiskDetails.riskLevel.description;
-            this.entityRiskModalDetails.entityRisk.riskTypeCode = this.currentRiskDetails.riskTypeCode;
-        }
-        this.oldRiskLevelCode = this.currentRiskDetails.riskLevelCode;
-        this.oldRiskLevel = this.currentRiskDetails.riskLevel.description;
-        this.oldDescription = this.currentRiskDetails.description;
-    }
-
-    /**
-     * This method is used to retrieve the risk level based on the risk type.
-     */
-    setRiskTypeCode() {
+    setDefaultEntityValues() {
+        this.entityRiskModalDetails.entityRisk = deepCloneObject(this.currentRiskDetails);
         this.fetchRiskLevels(this.entityRiskModalDetails.entityRisk.riskTypeCode);
     }
 
-    private fetchRiskLevels(riskTypeCode: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            if (riskTypeCode) {
-                this.$subscriptions.push(this._entityRiskSectionService.fetchRiskLevels(riskTypeCode).subscribe((riskLevelList: RiskLevel[]) => {
-                                this.entityRiskLevelList = riskLevelList;
-                                resolve(this.entityRiskLevelList);
-                            },
-                            (err) => {
-                                this.entityRiskLevelList = [];
-                                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                                reject(err);
-                            }
-                        )
-                );
-            } else {
-                this.entityRiskLevelList = [];
-                resolve([]);
-            }
-        });
+    private fetchRiskLevels(riskTypeCode: string): void {
+        if (!riskTypeCode) {
+            this.entityRiskLevelList = [];
+            return;
+        }
+        this.$subscriptions.push(
+            this._entityRiskSectionService.fetchRiskLevels(riskTypeCode).subscribe(
+                (riskLevelList: RiskLevel[]) => {
+                    this.entityRiskLevelList = riskLevelList;
+                },
+                (_err) => {
+                    this.entityRiskLevelList = [];
+                    this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                }
+            )
+        );
     }
 
     onRiskLevelSelected(event: any[] | null): void {
@@ -129,19 +109,15 @@ export class RiskEditHistorySlider implements OnInit {
 
     updateEntityRisk(): void {
         if (this.entityMandatoryValidation()) {
-            this.$subscriptions.push(this._entityRiskSectionService.updateEntityRisk(this.getEntityRO(), this.getProxyController()).subscribe((data: any) => {
+            this.$subscriptions.push(this._entityRiskSectionService.updateEntityRisk(this.getUpdateRiskRO(), this.getProxyController()).subscribe((data: any) => {
                 this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Risk updated successfully.');
                 this._dataStoreService.enableModificationHistoryTracking();
-                const updatedRisk = deepCloneObject(this.entityRiskModalDetails.entityRisk);
-                this.updatedRiskDetails = deepCloneObject(updatedRisk);
-                this.riskUpdated.emit(updatedRisk);
-                setTimeout(() => {
-                    this.mandatoryList.clear();
-                }, 100);
+                this.currentRiskDetails = deepCloneObject(this.entityRiskModalDetails.entityRisk);
+                this.riskUpdated.emit(this.currentRiskDetails);
+                this.mandatoryList.clear();
                 this.loadRiskHistory();
-            },
-            (_err) => {
-                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in Updating Risk. Please try again.');
+            }, (_err) => {
+                this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in updating risk, please try again.');
             }));
         }
     }
@@ -159,29 +135,34 @@ export class RiskEditHistorySlider implements OnInit {
     hideConflictNavBar(): void {
         setTimeout(() => {
             this.closePage.emit();
-            this.openEditSlider = false;
         }, 500);
     }
 
-    private getEntityRO(): EntityRiskRO {
-        const entityRO: any = {
-            description: this.entityRiskModalDetails.entityRisk.description,
-            entityId: this.entityRiskModalDetails.entityRisk.entityId,
-            riskTypeCode: this.entityRiskModalDetails.entityRisk.riskTypeCode,
-            entityRiskId: this.entityRiskModalDetails.entityRisk.entityRiskId,
-            riskType: this.currentRiskDetails.riskType.description
+    private getUpdateRiskRO(): EntityRiskRO {
+        const NEW_RISK_DETAILS = this.entityRiskModalDetails.entityRisk;
+        const OLD_RISK_DETAILS = this.currentRiskDetails;
+        const ENTITY_RO: any = {
+            description: NEW_RISK_DETAILS.description,
+            entityId: NEW_RISK_DETAILS.entityId,
+            riskTypeCode: NEW_RISK_DETAILS.riskTypeCode,
+            entityRiskId: NEW_RISK_DETAILS.entityRiskId,
+            riskType: NEW_RISK_DETAILS.riskType.description
         };
-        if (this.entityRiskModalDetails.entityRisk.riskLevelCode !== this.oldRiskLevelCode) {
-            entityRO.riskLevel = this.entityRiskModalDetails.entityRisk.riskLevel.description;
-            entityRO.riskLevelCode = this.entityRiskModalDetails.entityRisk.riskLevelCode;
-            entityRO.oldRiskLevelCode = this.oldRiskLevelCode;
-            entityRO.oldRiskLevel = this.oldRiskLevel;
+
+        // This condition checks whether the risk level has changed between the new (NEW_RISK_DETAILS) and old (OLD_RISK_DETAILS) risk details.
+        if (NEW_RISK_DETAILS.riskLevelCode !== OLD_RISK_DETAILS.riskLevelCode) {
+            ENTITY_RO.riskLevel = NEW_RISK_DETAILS.riskLevel.description;
+            ENTITY_RO.riskLevelCode = NEW_RISK_DETAILS.riskLevelCode;
+            ENTITY_RO.oldRiskLevelCode = OLD_RISK_DETAILS.riskLevelCode;
+            ENTITY_RO.oldRiskLevel = OLD_RISK_DETAILS.riskLevel.description;
         }
-        if (this.entityRiskModalDetails.entityRisk.description !== this.oldDescription) {
-            entityRO.oldDescription = this.oldDescription;
+        
+        // This condition checks whether the risk description has changed between the new and old risk details.
+        if (NEW_RISK_DETAILS.description !== OLD_RISK_DETAILS.description) {
+            ENTITY_RO.oldDescription = OLD_RISK_DETAILS.description;
         }
 
-        return entityRO;
+        return ENTITY_RO;
     }
 
     private entityMandatoryValidation(): boolean {
@@ -196,10 +177,8 @@ export class RiskEditHistorySlider implements OnInit {
         if (!description) {
             this.mandatoryList.set('riskDescription', 'Please enter risk description.');
         }
-        if (((this.entityRiskModalDetails.entityRisk.description === this.currentRiskDetails.description &&
-            this.entityRiskModalDetails.entityRisk.riskLevel.description === this.currentRiskDetails.riskLevel.description) ||
-            (this.entityRiskModalDetails.entityRisk.description === this.updatedRiskDetails.description &&
-                this.entityRiskModalDetails.entityRisk.riskLevel.description === this.updatedRiskDetails.riskLevel.description))) {
+        if ((this.entityRiskModalDetails.entityRisk.description === this.currentRiskDetails.description &&
+            this.entityRiskModalDetails.entityRisk.riskLevel.description === this.currentRiskDetails.riskLevel.description)) {
             this.mandatoryList.set('duplicateStatus', 'You are trying to update the Risk Description with the current Risk Description of the Entity.');
         }
         return this.mandatoryList.size === 0;
@@ -209,7 +188,7 @@ export class RiskEditHistorySlider implements OnInit {
         this.$subscriptions.push(
             this._entityRiskSectionService.loadRiskHistory(this.currentRiskDetails.entityRiskId).subscribe((data: any) => {
                 this.riskHistory = data;
-            }, _err => {
+            }, (_err) => {
                 this._commonService.showToast(HTTP_ERROR_STATUS, 'Error in fetching conflict status history. Please try again.');
             }));
     }

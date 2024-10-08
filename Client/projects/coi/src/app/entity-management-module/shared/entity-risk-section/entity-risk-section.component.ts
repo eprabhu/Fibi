@@ -7,7 +7,7 @@ import { CommonService } from '../../../common/services/common.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { COIModalConfig, ModalActionEvent } from '../../../shared-components/coi-modal/coi-modal.interface';
 import { EntityRiskSectionService } from './entity-risk-section.service';
-import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../../app-constants';
 import { closeCommonModal, openCommonModal } from '../../../common/utilities/custom-utilities';
 
 @Component({
@@ -71,29 +71,25 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             }));
     }
 
-    private fetchRiskLevels(riskTypeCode: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            if (riskTypeCode) {
-                this.$subscriptions.push(
-                    this._entityRiskSectionService.fetchRiskLevels(riskTypeCode)
-                        .subscribe(
-                            (riskLevelList: RiskLevel[]) => {
-                                this.entityRiskLevelList = riskLevelList;
-                                resolve(this.entityRiskLevelList);
-                            },
-                            (err) => {
-                                this.entityRiskLevelList = [];
-                                this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
-                                reject(err);
-                            }
-                        )
-                );
-            } else {
-                this.entityRiskLevelList = [];
-                resolve([]); // Resolving with an empty array if `riskTypeCode` is not provided
-            }
-        });
+    private fetchRiskLevels(riskTypeCode: string): void {
+        if (!riskTypeCode) {
+            this.entityRiskLevelList = [];
+            return;
+        }
+    
+        this.$subscriptions.push(
+            this._entityRiskSectionService.fetchRiskLevels(riskTypeCode).subscribe(
+                (riskLevelList: RiskLevel[]) => {
+                    this.entityRiskLevelList = riskLevelList;
+                },
+                (err) => {
+                    this.entityRiskLevelList = [];
+                    this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
+                }
+            )
+        );
     }
+    
 
     private fetchRiskTypes(): void {
         this.$subscriptions.push(
@@ -101,7 +97,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
                 .subscribe((riskTypeList: RiskType[]) => {
                     this.entityRiskTypeList = riskTypeList;
                 }, err => {
-                    this._commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');
+                    this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
                 }));
     }
 
