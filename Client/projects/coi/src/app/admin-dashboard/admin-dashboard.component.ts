@@ -12,6 +12,7 @@ import { subscriptionHandler } from '../../../../fibi/src/app/common/utilities/s
 import { CommonService } from '../common/services/common.service';
 import { AdminDashboardService } from './admin-dashboard.service';
 import {
+    CONSULTING_DISCLOSURE_RIGHTS, PROJECT_OVERVIEW_RIGHTS, TRAVEL_DISCLOSURE_RIGHTS,
     CONSULTING_REDIRECT_URL,DATE_PLACEHOLDER, DISCLOSURE_TYPE, FCOI_PROJECT_DISCLOSURE_RIGHTS, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS,
     POST_CREATE_DISCLOSURE_ROUTE_URL,
     POST_CREATE_TRAVEL_DISCLOSURE_ROUTE_URL
@@ -683,23 +684,20 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     }
 
     getPermissions() {
-        this.hasFCOIDiscosureRights = this.commonService.rightsArray.some((right) => FCOI_PROJECT_DISCLOSURE_RIGHTS.includes(right));
+        this.hasFCOIDiscosureRights = this.commonService.getAvailableRight(FCOI_PROJECT_DISCLOSURE_RIGHTS);
         this.hasReviewerRight = this.commonService.isCoiReviewer;
     }
 
     checkTravelDisclosureRights() {
-        this.hasTravelDisclosureRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_TRAVEL_DISCLOSURE', 'VIEW_TRAVEL_DISCLOSURE'].includes(right));
+        this.hasTravelDisclosureRights = this.commonService.getAvailableRight(TRAVEL_DISCLOSURE_RIGHTS);
     }
 
     checkForConsultingDisclosureRight() {
-        this.hasConsultingDisclosureRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_CONSULTING_DISCLOSURE', 'VIEW_CONSULTING_DISCLOSURE'].includes(right));
+        this.hasConsultingDisclosureRights = this.commonService.getAvailableRight(CONSULTING_DISCLOSURE_RIGHTS);
     }
 
     async checkForProjectOverviewRight() {
-        this.hasProjectOverviewRights = this.commonService.rightsArray.some((right) =>
-            ['MANAGE_PROJECT_DISCLOSURE_OVERVIEW'].includes(right));
+        this.hasProjectOverviewRights = this.commonService.getAvailableRight(PROJECT_OVERVIEW_RIGHTS);
     }
 
     formatTravellerListValues(travellerTypes: string): string {

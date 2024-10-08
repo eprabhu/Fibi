@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.polus.fibicomp.globalentity.dto.EntityRiskRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.SponsorRequestDTO;
 import com.polus.fibicomp.globalentity.dto.SponsorResponseDTO;
 import com.polus.fibicomp.globalentity.service.GlobalEntityService;
@@ -47,7 +48,7 @@ public class SponsorController {
 		Map<String, Integer> response = sponosrService.saveDetails(dto);
 		dto.setAcType(ACTION_TYPE_SAVE);
 		sponosrService.logAction(dto);
-		if (dto.getFeedStatusCode() != null) {
+		if (dto.getEntitySponsorFields().get(EntitySponsorField.feedStatusCode) != null) {
 			globalEntityService.processEntityMessageToQ(dto.getEntityId());
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -57,7 +58,7 @@ public class SponsorController {
 	public ResponseEntity<String> updateDetails(@RequestBody SponsorRequestDTO dto) {
 		logger.info("Requesting for updateDetails");
 		ResponseEntity<String> response = sponosrService.updateDetails(dto);
-		if (dto.getFeedStatusCode() != null) {
+		if (dto.getEntitySponsorFields().get(EntitySponsorField.feedStatusCode) != null) {
 			globalEntityService.processEntityMessageToQ(dto.getEntityId());
 		}
 		return response;
