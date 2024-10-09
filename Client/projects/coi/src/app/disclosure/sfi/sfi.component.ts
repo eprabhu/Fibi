@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject, Subscription, interval } from 'rxjs';
 import { SfiService } from './sfi.service';
 import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/subscription-handler";
@@ -9,7 +9,6 @@ import { debounce, switchMap } from 'rxjs/operators';
 import { RO } from '../coi-interface';
 import { fadeInOutHeight, leftSlideInOut, listAnimation } from '../../common/utilities/animations';
 import { jumpToSection, openCoiSlider } from '../../common/utilities/custom-utilities';
-import { CoiService } from '../services/coi.service';
 
 @Component({
     selector: 'app-sfi',
@@ -26,6 +25,8 @@ export class SfiComponent implements OnInit, OnDestroy {
     @Input()  personId: any;
     @Input()  focusSFIId: any;
     @Input() dispositionStatusCode: string = null;
+    @Output() sfiActions = new EventEmitter<any>(); 
+
     $subscriptions: Subscription[] = [];
     coiFinancialEntityDetails: any[] = [];
     searchText: string;
@@ -56,8 +57,7 @@ export class SfiComponent implements OnInit, OnDestroy {
         private _sfiService: SfiService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
-        private _commonService: CommonService,
-        private _coiService: CoiService) {
+        private _commonService: CommonService) {
     }
 
     ngOnInit() {
@@ -93,7 +93,7 @@ export class SfiComponent implements OnInit, OnDestroy {
             }
         }, (_error: any) => {
             if (_error.status === 405) {
-                this._coiService.concurrentUpdateAction = 'Disclosure';
+                this.sfiActions.emit({concurrentUpdateAction: 'Disclosure'});
             } else {
                 this._commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
             }

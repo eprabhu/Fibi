@@ -488,7 +488,7 @@
 </div>
 
 <ng-container *ngIf="showSlider">
-    <app-person-related-sliders (closePage)="closeHeaderSlider()" for="FCOI_DISCLOSURE"
+    <app-person-related-sliders (closePage)="closeHeaderSlider($event)" for="FCOI_DISCLOSURE"
         [personId]="coiData.coiDisclosure?.personId" [sliderType]="selectedType"
         [personName]="coiData.coiDisclosure?.person.fullName">
     </app-person-related-sliders>

@@ -154,7 +154,7 @@ export class EntityHistroyLogService {
             case path.includes('entity-sponsor'):
                return 'Sponsor';
             case path.includes('entity-subaward'):
-               return 'Subward-Organisation';
+               return 'Sub-award Organization';
             case path.includes('entity-compliance'):
                return 'Compliance';
             case path.includes('entity-notes'):

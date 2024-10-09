@@ -8,7 +8,7 @@
     <ng-container content>
         <div>
             <ng-container *ngIf="sliderType === 'ENTITY'">
-                <app-sfi [isTriggeredFromSlider]="true" [reviewStatus]="reviewStatusCode" [isEditMode]="false" [personId]="personId"></app-sfi>
+                <app-sfi [isTriggeredFromSlider]="true" [reviewStatus]="reviewStatusCode" [isEditMode]="false" [personId]="personId" (sfiActions)="concurrencyAction($event)"></app-sfi>
             </ng-container>
         </div>
         <div class="px-2">
