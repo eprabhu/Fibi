@@ -9,3 +9,6 @@ UPDATE DISCLOSURE_ACTION_TYPE SET MESSAGE = 'Revised Disclosure has been <b>amen
 
 UPDATE coi_disclosure_fcoi_type SET DESCRIPTION = 'Project' WHERE (FCOI_TYPE_CODE = 2);
 
+UPDATE `coi_disclosure_fcoi_type` SET `DESCRIPTION` = 'Initial' WHERE (`FCOI_TYPE_CODE` = '1');
+
+ALTER TABLE COI_PROJECT_TYPE DROP COLUMN IS_ACTIVE;
