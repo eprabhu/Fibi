@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.polus.integration.proposal.dto.DisclosureResponse;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.vo.QuestionnaireVO;
 
@@ -22,5 +23,9 @@ public interface ProposalIntegrationService {
 	 * @param quetionnaireVOs
 	 */
 	public void feedPersonQuestionnaireAndCreateDisclosure(List<QuestionnaireVO> quetionnaireVOs);
+
+	public DisclosureResponse feedProposalPersonDisclosureStatus(String proposalNumber, String personId);
+
+	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber);
 
 }

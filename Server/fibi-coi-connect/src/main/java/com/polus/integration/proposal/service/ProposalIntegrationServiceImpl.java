@@ -16,6 +16,7 @@ import com.polus.integration.constant.Constant;
 import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.proposal.dao.ProposalIntegrationDao;
+import com.polus.integration.proposal.dto.DisclosureResponse;
 import com.polus.integration.proposal.dto.ProposalDTO;
 import com.polus.integration.proposal.dto.ProposalPersonDTO;
 import com.polus.integration.proposal.pojo.COIIntegrationPropQuestAns;
@@ -464,6 +465,16 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 						 .remark(remark)
 						 .personId(personId)
 						 .build();
+	}
+
+	@Override
+	public DisclosureResponse feedProposalPersonDisclosureStatus(String proposalNumber, String personId) {
+		return proposalIntegrationDao.feedProposalDisclosureStatus(proposalNumber, personId);
+	}
+
+	@Override
+	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber) {
+		return proposalIntegrationDao.checkProposalDisclosureStatus(proposalNumber);
 	}
 
 }
