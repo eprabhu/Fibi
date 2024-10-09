@@ -272,9 +272,13 @@ export class OpaComponent implements OnInit {
         }
     }
 
-    closeHeaderSlider() {
-        this.showSlider = false;
-        this.selectedType = '';
+    closeHeaderSlider(event: any): void {
+        if (event?.concurrentUpdateAction) {
+            this.opaService.concurrentUpdateAction = event.concurrentUpdateAction;
+        } else {
+            this.showSlider = false;
+            this.selectedType = '';
+        }
     }
 
     openReviewComment() {

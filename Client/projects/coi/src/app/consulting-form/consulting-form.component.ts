@@ -110,9 +110,13 @@ export class ConsultingFormComponent {
         }
     }
 
-    closeHeaderSlider(): void {
-        this.showSlider = false;
-        this.selectedType = '';
+    closeHeaderSlider(event: any): void {
+        if (event?.concurrentUpdateAction) {
+            this.consultingService.concurrentUpdateAction = event.concurrentUpdateAction;
+        } else {
+            this.showSlider = false;
+            this.selectedType = '';
+        }
     }
 
     collapseHeader(): void {

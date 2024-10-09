@@ -513,7 +513,7 @@
 <app-concurrency-warning-modal *ngIf="service.concurrentUpdateAction" [sectionName]="service.concurrentUpdateAction" (closePage)="cancelConcurrency()"></app-concurrency-warning-modal>
 
 <ng-container *ngIf="isShowPersonSlider">
-    <app-person-related-sliders (closePage)="closePersonSlider()" for="TRAVEL_DISCLOSURE"
+    <app-person-related-sliders (closePage)="closePersonSlider($event)" for="TRAVEL_DISCLOSURE"
         [personId]="userDetails.personId" [sliderType]="selectedPersonSliderType" [personName]="userDetails.fullName">
     </app-person-related-sliders>
 </ng-container>

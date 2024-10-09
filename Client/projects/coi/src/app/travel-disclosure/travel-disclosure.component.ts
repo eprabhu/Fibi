@@ -513,9 +513,13 @@ export class TravelDisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    closePersonSlider(): void {
-        this.isShowPersonSlider = false;
-        this.selectedPersonSliderType = '';
+    closePersonSlider(event): void {
+        if (event?.concurrentUpdateAction) {
+            this.service.concurrentUpdateAction = event.concurrentUpdateAction;
+        } else {
+            this.isShowPersonSlider = false;
+            this.selectedPersonSliderType = '';
+        }
     }
 
 }
