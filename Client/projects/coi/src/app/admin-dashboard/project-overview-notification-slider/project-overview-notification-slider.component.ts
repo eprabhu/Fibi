@@ -1,10 +1,10 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { getFormattedSponsor, openCoiSlider } from '../../common/utilities/custom-utilities';
+import { closeCoiSlider, getFormattedSponsor, openCoiSlider } from '../../common/utilities/custom-utilities';
 import { ProjectOverviewService } from '../project-overview.service';
 import { CommonService } from '../../common/services/common.service';
 import * as DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
 import { EDITOR_CONFIURATION, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from 'projects/fibi/src/app/app-constants';
-import { NotificationTypeRO, NotificationObject, ProjectOverviewDetails, ContactPersonDetails } from '../admin-dashboard.interface';
+import { NotificationTypeRO, NotificationObject, ProjectOverviewDetails, ContactPersonDetails, PROJECT_NOTIFICATION_SLIDER_ID, Recipient, RecipientGroup } from '../admin-dashboard.interface';
 import { Subscription } from 'rxjs';
 import { deepCloneObject, removeUnwantedTags } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { ElasticConfigService } from '../../common/services/elastic-config.service';
@@ -18,19 +18,11 @@ import { subscriptionHandler } from '../../common/utilities/subscription-handler
 })
 export class ProjectOverviewNotificationSliderComponent implements OnInit {
 
-    @Input() NotificationSliderData: { projectDetailsForSlider: ProjectOverviewDetails, keyPersonIndex: number };
+    @Input() notificationSliderData: { projectDetailsForSlider: ProjectOverviewDetails, keyPersonIndex: number };
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
     notificationTypeRO: NotificationTypeRO = new NotificationTypeRO();
     notificationObject: NotificationObject = new NotificationObject();
-    defaultKeypersonDetails: {
-        recipientName: string;
-        recipientPersonId: string;
-        recipientType: string;
-    } = {
-            recipientName: '',
-            recipientPersonId: '',
-            recipientType: 'TO',
-        };
+    defaultKeypersonDetails = new Recipient(); 
     getFormattedSponsor = getFormattedSponsor;
     public Editor = DecoupledEditor;
     editorConfig = EDITOR_CONFIURATION;
@@ -47,15 +39,14 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     elasticSearchOptionsForBcc: any = {};
     clearField: String;
     $subscriptions: Subscription[] = [];
-    recipientGroup: 'TO' | 'CC' | 'BCC' | null = 'TO';
-
+    recipientGroup: RecipientGroup = 'TO';
 
     constructor(private _projectOverviewService: ProjectOverviewService, private _commonService: CommonService,
         private _elasticConfig: ElasticConfigService
     ) { }
 
     ngOnInit(): void {
-        openCoiSlider('coi-project-notification-slider');
+        openCoiSlider(PROJECT_NOTIFICATION_SLIDER_ID);
         this.fetchAllNotificationTemplates();
         this.setElasticPersonOptions();
         this.setDefaultKeypersonDetails();
@@ -68,14 +59,14 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     }
 
     private setDefaultDetails(): void {
-        const { projectTypeCode, projectId } = this.NotificationSliderData?.projectDetailsForSlider?.projectDetails || {};
-        const disclosureId = this.NotificationSliderData?.projectDetailsForSlider?.keyPersonDetails[this.NotificationSliderData?.keyPersonIndex]?.disclosureId;
+        const { projectTypeCode, projectId } = this.notificationSliderData?.projectDetailsForSlider?.projectDetails || {};
+        const disclosureId = this.notificationSliderData?.projectDetailsForSlider?.keyPersonDetails[this.notificationSliderData?.keyPersonIndex]?.disclosureId;
         Object.assign(this.notificationObject, { projectTypeCode, projectId, disclosureId });
         this.setProjectCardDetails();
     }
 
     private setProjectCardDetails(): void {
-        const PROJECT_DETAILS = this.NotificationSliderData?.projectDetailsForSlider?.projectDetails;
+        const PROJECT_DETAILS = this.notificationSliderData?.projectDetailsForSlider?.projectDetails;
         if (PROJECT_DETAILS) {
             const {
                 projectNumber, sponsorCode, primeSponsorCode, sponsorName, leadUnitName: homeUnitName, leadUnitNumber: homeUnitNumber, primeSponsorName, projectStatus, piName,
@@ -90,12 +81,13 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     }
 
     private setDefaultKeypersonDetails(): void {
-        const KEYPERSON = this.NotificationSliderData?.projectDetailsForSlider?.keyPersonDetails[this.NotificationSliderData.keyPersonIndex];
+        const KEYPERSON = this.notificationSliderData?.projectDetailsForSlider?.keyPersonDetails[this.notificationSliderData.keyPersonIndex];
         this.defaultKeypersonDetails.recipientName = KEYPERSON.keyPersonName;
         this.defaultKeypersonDetails.recipientPersonId = KEYPERSON.keyPersonId;
     }
 
-    CloseSlider(): void {
+    closeSlider(): void {
+        closeCoiSlider(PROJECT_NOTIFICATION_SLIDER_ID);
         setTimeout(() => {
             this.clearNotificationFields();
             this.closePage.emit();
@@ -131,7 +123,7 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
             this.$subscriptions.push(
                 this._projectOverviewService.sendNotification(this.notificationObject).subscribe(response => {
                     if (response.includes('successfully')) {
-                        this.CloseSlider();
+                        this.closeSlider();
                         this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Notification sent successfully.');
                     } else {
                         this._commonService.showToast(HTTP_ERROR_STATUS, 'Notification failed.');

@@ -166,11 +166,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     }
 
     toggleNotificationSlider(projectDetailsForSlider: ProjectOverviewDetails, index: number): void{
-        const NOTIFICATION_SLIDER_DATA = {
+        this.projectOverviewService.notificationSliderData = {
             projectDetailsForSlider: projectDetailsForSlider,
             keyPersonIndex: index
         };
-        this.projectOverviewService.notificationSliderData = NOTIFICATION_SLIDER_DATA;
         this.projectOverviewService.isShowNotificationSlider = true;
     }
 
