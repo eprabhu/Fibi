@@ -64,6 +64,7 @@
                 <div class="col-auto d-flex gap-2">
                     <!-- back -->
                     <button id="coi-entity-verify-match-btn" (click)="navigateToBack()"
+                        [disabled]="commonService?.autoSaveSavingLoader !== 'HIDE'"
                         class="btn btn-outline-grey fs-14 d-flex align-items-center btn-sm"
                         title="Click here to navigate back" aria-label="Click here to navigate back">
                         <mat-icon aria-hidden="true">reply</mat-icon>
@@ -71,7 +72,7 @@
                     <!-- verify -->
                     <button *ngIf="isEditMode && entityDetails?.entityStatusType?.entityStatusTypeCode !== ENTITY_VERIFIED && canVerifyEntity" id="coi-entity-verify-btn"
                         class="btn btn-primary fs-14 d-flex align-items-center btn-sm"
-                        (click)="openVerifyEntityModal()"
+                        (click)="openVerifyEntityModal()" [disabled]="commonService?.autoSaveSavingLoader !== 'HIDE'"
                         title="Click here to verify entity" aria-label="Click here to verify entity">
                         Verify
                     </button>
@@ -94,7 +95,7 @@
                 <span>Check for DUNS Matches</span>
                 <button id="coi-entity-duns-check-match-btn"
                     class="btn btn-primary ms-auto fs-14 d-flex align-items-center"
-                    (click)="viewSlider(true)"
+                    (click)="viewSlider(true)" [disabled]="commonService?.autoSaveSavingLoader !== 'HIDE'"
                     title="Click here to check for DUNS match" aria-label="Click here to check for DUNS match">
                     <mat-icon aria-hidden="true" class="me-1 flex-shrink-0">check_circle</mat-icon>Check for DUNS match
                 </button>
@@ -127,9 +128,9 @@
         </li>
         <li [routerLink]="['/coi/manage-entity/entity-subaward']" class="mr-2 cursor-pointer d-flex align-items-center"
             role="tab" (click)="onClickMenuBar()" queryParamsHandling='merge' routerLinkActive="active"
-            [attr.title]="router.url.includes('entity-subaward') ? 'Sub-award Organisation' : 'Go to Sub-award Organisation'"
+            [attr.title]="router.url.includes('entity-subaward') ? 'Sub-award Organization' : 'Go to Sub-award Organization'"
             aria-description="Goto my home">
-            <span class="me-2">Sub-award Organisation</span>
+            <span class="me-2">Sub-award Organization</span>
             <span *ngIf="entityTabStatus?.entity_sub_org_info"><mat-icon aria-hidden="true" class="fs-16 text-success">check_circle</mat-icon></span>
             <span *ngIf="router.url.includes('entity-subaward')" class="active-color"></span>
         </li>

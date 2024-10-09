@@ -15,6 +15,7 @@ export class PersonRelatedSlidersComponent implements OnInit {
     @Input() reviewStatusCode: any = null;
     @Input() isAttachmentViewMode: boolean = true;
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
+
     gridClass: string = 'coi-grid-1 coi-grid-md-1 coi-grid-lg-1 coi-grid-xl-1 coi-grid-xxl-2';
 
     constructor() { }
@@ -27,8 +28,12 @@ export class PersonRelatedSlidersComponent implements OnInit {
 
     validateSliderClose() {
         setTimeout(() => {
-            this.closePage.emit();
+            this.closePage.emit(null);
         }, 500);
+    }
+
+    concurrencyAction(event: any): void {
+        this.closePage.emit(event);
     }
 
 }

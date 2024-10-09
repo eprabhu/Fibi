@@ -47,6 +47,7 @@ export class EnitityVerifyModalComponent implements OnInit {
     ngOnInit(): void {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
+        this.loadEntityDetails();
     }
 
     ngOnDestroy(): void {
@@ -92,7 +93,6 @@ export class EnitityVerifyModalComponent implements OnInit {
         this.entityDetails = ENTITY_DATA.entityDetails;
         this.modalSection.entity = this._dataStoreService.getIsEntityMandatoryFilled();
         this.updateVerifyButtonState();
-        this.loadEntityDetails();
     }
 
     private listenDataChangeFromStore(): void {

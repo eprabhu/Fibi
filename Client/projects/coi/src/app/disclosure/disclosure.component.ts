@@ -717,9 +717,13 @@ export class DisclosureComponent implements OnInit, OnDestroy {
         }
     }
 
-    closeHeaderSlider() {
-        this.showSlider = false;
-        this.selectedType = '';
+    closeHeaderSlider(event: any): void {
+        if (event?.concurrentUpdateAction) {
+            this.coiService.concurrentUpdateAction = event.concurrentUpdateAction;
+        } else {
+            this.showSlider = false;
+            this.selectedType = '';
+        }
     }
 
     @HostListener('window:resize', ['$event'])
