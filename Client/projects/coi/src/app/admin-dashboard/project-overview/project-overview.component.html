@@ -504,10 +504,9 @@
 
     <!-- notification slider -->
      <ng-container *ngIf="projectOverviewService.isShowNotificationSlider">
-        <app-project-overview-notification-slider [NotificationSliderData]="projectOverviewService.notificationSliderData"
-        (closePage)="closeHeaderSlider()" ></app-project-overview-notification-slider>
+        <app-project-overview-notification-slider [notificationSliderData]="projectOverviewService.notificationSliderData"
+        (closePage)="closeHeaderSlider()"></app-project-overview-notification-slider>
      </ng-container>
-
     <!-- notifications modal -->
     
 </div>

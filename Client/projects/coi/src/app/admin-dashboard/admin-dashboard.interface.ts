@@ -1,5 +1,8 @@
 import { DashboardProjectCount } from "../common/services/coi-common.interface";
 
+export const PROJECT_NOTIFICATION_SLIDER_ID = 'coi-project-notification-slider';
+export type RecipientGroup = 'TO' | 'CC' | 'BCC' | null;
+
 export class ProjectOverview {
     projectOverviewDetails: ProjectOverviewDetails[] = [];
     proposalCount: number | null = null;
@@ -302,11 +305,17 @@ export interface Unit {
     organizationName: any;
 }
 
+export class Recipient {
+    recipientName = '';
+    recipientPersonId = '';
+    recipientType: RecipientGroup = 'TO';
+}
+
 export class NotificationObject {
   subject: string;
   message: string = '';
   moduleItemKey: string;
-  recipients = [];
+  recipients: Recipient[]= [];
   description: string;
   disclosureId: number;
   notifyType: string;
