@@ -71,12 +71,14 @@ export class EntityCommonQuestionnaireComponent implements OnInit {
     ngOnInit() {
         this.listenDataChangeFromStore();
         this.getDataFromStore();
+        this.setQuestionnaireConfiguration();
     }
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
             this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
                 this.getDataFromStore();
+                this.updateQuestionnaireEdit();
             })
         );
     }
@@ -91,9 +93,23 @@ export class EntityCommonQuestionnaireComponent implements OnInit {
 
     private checkUserHasRight(): void {
         this.isEditMode = this._dataStoreService.getEditMode() && this._commonService.getAvailableRight(this.getTabBasedRights(), 'SOME');
+    }
+
+    setQuestionnaireConfiguration() {
         this.configuration.moduleItemKey = this.entityDetails.entityId;
         this.configuration.moduleSubitemCodes = [this.getSubItemCode()];
         this.configuration.enableViewMode = !this.isEditMode;
+        this.refreshQuestionnaireConfiguration();
+    }
+
+    updateQuestionnaireEdit() {
+        if (this.configuration.enableViewMode === this.isEditMode) {
+            this.configuration.enableViewMode = !this.isEditMode;
+            this.refreshQuestionnaireConfiguration();
+        }
+    }
+
+    refreshQuestionnaireConfiguration() {
         this.configuration = deepCloneObject(this.configuration);
     }
 
@@ -111,9 +127,5 @@ export class EntityCommonQuestionnaireComponent implements OnInit {
 
     markQuestionnaireAsEdited(event) {
         this._commonService.setChangesAvailable(true);
-    }
-
-    getElementId() {
-
     }
 }

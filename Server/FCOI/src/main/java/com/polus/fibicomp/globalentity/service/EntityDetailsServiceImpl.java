@@ -245,7 +245,7 @@ public class EntityDetailsServiceImpl implements EntityDetailsService {
 			dto.setCountryCode(commonDao.fetchCountryByCountryTwoCode(dto.getCountryCode()).getCountryCode());
 		}
 		entityDetailsDAO.updateEntity(dto);
-		return new ResponseEntity<>(commonDao.convertObjectToJSON("Entity updated successfully"), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(commonDao.convertObjectToJSON("Entity updated successfully"), HttpStatus.OK);
 	}
 
 	@Override
