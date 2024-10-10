@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { SponsorTabSection } from '../shared/entity-constants';
+import {
+    SPONSOR_QUESTIONNAIRE_SUB_SECTION_ID,
+    SponsorTabSection
+} from '../shared/entity-constants';
 import { Subscription } from 'rxjs';
 import { EntitySponsorService } from './entity-sponsor.service';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
@@ -26,6 +29,7 @@ export class EntitySponsorComponent {
     sponsorDetails = new EntitySectionDetails();
     riskSectionDetails = new EntitySectionDetails();
     attachmentSectionDetails = new EntitySectionDetails();
+    questionnaireSectionDetails = new EntitySectionDetails();
 
     constructor(public commonService: CommonService, public dataStore: EntityDataStoreService,
         private _entitySponsorService: EntitySponsorService, private _dataStoreService: EntityDataStoreService
@@ -52,7 +56,10 @@ export class EntitySponsorComponent {
         this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SPONSOR_RISK');
         this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'SPONSOR_ATTACHMENTS');
         this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'SPONSOR_ATTACHMENTS');
-    } 
+        this.questionnaireSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab, 'SPONSOR_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab, 'SPONSOR_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.subSectionId = this.commonService.getSubSectionId(this.overViewTab, 'SPONSOR_QUESTIONNAIRE');
+    }
 
     private getDataFromStore(): void {
         const ENTITY_DATA: EntireEntityDetails = this._dataStoreService.getData();
@@ -70,13 +77,13 @@ export class EntitySponsorComponent {
             })
         );
     }
-    
+
     fetchEntitySponsorDetails(entityId: string | number): void{
         this.$subscriptions.push(this._entitySponsorService.fetchEntitySponsorDetails(entityId).subscribe((data: any)=>{
             this._entitySponsorService.entitySponsorDetails = data;
             this.entitySponsorRiskList = data?.entityRisks ? data.entityRisks : [];
             this.entitySponsorAttachmentList = data?.attachments ? data.attachments : [];
-            this.isLoading = false;      
+            this.isLoading = false;
         }, (_error: any) => {
             this.isLoading = false;
             this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong, Please try again.');

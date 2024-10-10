@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { CommonService } from '../../common/services/common.service';
+import { QuestionnaireRequestObject } from './questionnaire.interface';
+import { HTTP_SUCCESS_STATUS } from '../../app-constants';
 
 @Injectable()
 export class QuestionnaireService {
@@ -33,14 +35,32 @@ export class QuestionnaireService {
   }
 
   generateQuestionnaireReport(params) {
-    return this._http.post(this._commonService.baseUrl + '/generateQuestionnaireReport', params, {
+    return this._http.post(this._commonService.fibiUrl + '/generateQuestionnaireReport', params, {
       observe: 'response',
       responseType: 'blob'
     });
   }
 
   evaluateBusinessRule(data) {
-    return this._http.post(this._commonService.baseUrl + '/ruleEvaluateQuestionnaire', data );
+    return this._http.post(this._commonService.fibiUrl + '/ruleEvaluateQuestionnaire', data );
   }
+
+    /**
+     * API call for the autosave feature in questionnaires, applicable to all question types except attachments
+     * - Shows a toaster with the below content till the API response is received
+     */
+    autoSaveQuestionnaire(data: QuestionnaireRequestObject) {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving...');
+        return this._http.post(this._commonService.fibiUrl + '/saveQuestionnaire/v1', data);
+    }
+
+    /**
+     * API call for the autosave feature in questionnaires, applicable to attachment type questions
+     * - Shows a toaster with the below content till the API response is received
+     */
+    autoSaveQuestionnaireAttachment(formData: FormData) {
+        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving...');
+        return this._http.post(this._commonService.fibiUrl + '/saveAttachmentQuestionnaire/v1', formData);
+    }
 
 }

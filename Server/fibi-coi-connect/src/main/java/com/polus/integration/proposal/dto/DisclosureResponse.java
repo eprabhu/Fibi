@@ -13,7 +13,8 @@ public class DisclosureResponse {
 
 	private String disclosureStatus;
 	private Integer disclosureId;
-	private Integer disclosureSubmitted;
+	private Boolean disclosureSubmitted;
+	private String expirationDate;
 	private String message;
 	private String error;
 

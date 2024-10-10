@@ -60,6 +60,9 @@ export const OPA_DISCLOSURE_RIGHTS = ['MANAGE_OPA_DISCLOSURE', 'VIEW_OPA_DISCLOS
 export const OPA_DISCLOSURE_ADMIN_RIGHTS = ['OPA_ADMINISTRATOR', 'VIEW_ADMIN_GROUP_OPA'];
 
 export const ENTITY_RIGHTS = ['MANAGE_ENTITY', 'VIEW_ENTITY', 'MANAGE_ENTITY_SPONSOR', 'MANAGE_ENTITY_ORGANIZATION', 'MANAGE_ENTITY_COMPLIANCE', 'VERIFY_ENTITY'];
+export const ENTITY_SPONSOR_RIGHT = ['MANAGE_ENTITY_SPONSOR'];
+export const ENTITY_ORGANIZATION_RIGHT = ['MANAGE_ENTITY_ORGANIZATION'];
+export const ENTITY_COMPLIANCE_RIGHT = ['MANAGE_ENTITY_COMPLIANCE'];
 
 export const SFI_ADDITIONAL_DETAILS_SECTION_NAME = 'SFI Details';
 
@@ -98,6 +101,10 @@ export const COI_MODULE_CODE = 8;
 export const OPA_MODULE_CODE = 23;
 export const TRAVEL_MODULE_CODE = 24;
 export const CONSULTING_MODULE_CODE = 27;
+export const GLOBAL_ENTITY_MODULE_CODE = 26;
+export const GLOBAL_ENTITY_SPONSOR_SUBMODULE_CODE = 1;
+export const GLOBAL_ENTITY_ORGANIZATION_SUBMODULE_CODE = 2;
+export const GLOBAL_ENTITY_COMPLIANCE_SUBMODULE_CODE = 3;
 // Proposal Certification Questionaire Sub Module Code
 export const EXTERNAL_QUESTIONAIRE_MODULE_SUB_ITEM_CODE = 802;
 
@@ -135,6 +142,9 @@ export const SSO_LOGOUT_URL = '';
 export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={projectId}';
 export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={projectId}';
 export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={projectId}';
+
+export const PERSON_EXTERNAL_RESOURCE_URL = '#/fibi/person/person-details?personId={personId}';
+export const ROLODEX_PERSON_EXTERNAL_RESOURCE_URL = '#/fibi/rolodex';
 
 export const URL_FOR_DISCLOSURE_PROJECT = '/fcoiDisclosure/projects/{disclosureId}';
 

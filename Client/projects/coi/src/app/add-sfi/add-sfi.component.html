@@ -194,7 +194,7 @@
 				</div>
 				<ng-container *ngIf="canShowEntityFields">
                     <app-entity-creation [isCreateView]="true" [$performAction]="$performAction"
-                     [createEntityObj]="entityDetails" (emitEntityDetails)="setEntityId($event)" [canNavigateToEntity]="false"></app-entity-creation>
+                     [entityDetails]="entityDetails" (emitEntityDetails)="setEntityId($event)" [canNavigateToEntity]="false"></app-entity-creation>
 				</ng-container>
 				<ng-container *ngIf="isResultFromSearch">
 					<div class="mb-2">

@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.polus.integration.entity.cleansematch.dto.DnBEntityCleanseMatchRequestDTO;
-import com.polus.integration.entity.cleansematch.dto.EntityCleanseMatchAPIResponse;
-import com.polus.integration.entity.cleansematch.service.EntityCleanseMatchService;
 import com.polus.integration.entity.enrich.dto.DnBEntityEnrichRequestDTO;
 import com.polus.integration.entity.enrich.dto.EntityEnrichAPIResponse;
 import com.polus.integration.entity.enrich.service.EntityEnrichService;
