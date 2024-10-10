@@ -12,3 +12,14 @@ UPDATE coi_disclosure_fcoi_type SET DESCRIPTION = 'Project' WHERE (FCOI_TYPE_COD
 UPDATE `coi_disclosure_fcoi_type` SET `DESCRIPTION` = 'Initial' WHERE (`FCOI_TYPE_CODE` = '1');
 
 ALTER TABLE COI_PROJECT_TYPE DROP COLUMN IS_ACTIVE;
+INSERT INTO `coeus_sub_module` (`COEUS_SUB_MODULE_ID`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `REQUIRE_UNIQUE_QUESTIONNAIRE`, `IS_ACTIVE`) VALUES ('2601', '26', '1', 'Sponsor Questionnaire', now(), 'admin', 'N', 'Y');
+INSERT INTO `coeus_sub_module` (`COEUS_SUB_MODULE_ID`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `REQUIRE_UNIQUE_QUESTIONNAIRE`, `IS_ACTIVE`) VALUES ('2602', '26', '2', 'Organization Questionnaire', now(), 'admin', 'N', 'Y');
+INSERT INTO `coeus_sub_module` (`COEUS_SUB_MODULE_ID`, `MODULE_CODE`, `SUB_MODULE_CODE`, `DESCRIPTION`, `UPDATE_TIMESTAMP`, `UPDATE_USER`, `REQUIRE_UNIQUE_QUESTIONNAIRE`, `IS_ACTIVE`) VALUES ('2603', '26', '3', 'Compliance Questionnaire', now(), 'admin', 'N', 'Y');
+
+INSERT INTO `dyn_subsection_config` (`SUB_SECTION_CODE`, `SECTION_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2624', 'GE2602', 'Sponsor Questionnaire', 'Y', now(), 'admin');
+INSERT INTO `dyn_subsection_config` (`SUB_SECTION_CODE`, `SECTION_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2625', 'GE2603', 'Subaward Organization Questionnaire', 'Y', now(), 'admin');
+INSERT INTO `dyn_subsection_config` (`SUB_SECTION_CODE`, `SECTION_CODE`, `DESCRIPTION`, `IS_ACTIVE`, `UPDATE_TIMESTAMP`, `UPDATE_USER`) VALUES ('2626', 'GE2604', 'Compliance Questionnaire', 'Y', now(), 'admin');
+
+INSERT INTO `dyn_element_config` (`UI_REFERENCE_ID`, `DESCRIPTION`, `SUB_SECTION_CODE`, `SECTION_CODE`, `HELP`, `UPDATE_USER`, `UPDATE_TIMESTAMP`) VALUES ('coi-sponsor-ques-head-2624', 'Entity Name', '2624', 'GE2602', 'entity sponsor questionnaire', 'admin', now());
+INSERT INTO `dyn_element_config` (`UI_REFERENCE_ID`, `DESCRIPTION`, `SUB_SECTION_CODE`, `SECTION_CODE`, `HELP`, `UPDATE_USER`, `UPDATE_TIMESTAMP`) VALUES ('coi-sub-ques-head-2625', 'Entity Name', '2625', 'GE2603', 'entity organization questionnaire', 'admin', now());
+INSERT INTO `dyn_element_config` (`UI_REFERENCE_ID`, `DESCRIPTION`, `SUB_SECTION_CODE`, `SECTION_CODE`, `HELP`, `UPDATE_USER`, `UPDATE_TIMESTAMP`) VALUES ('coi-compl-ques-head-2626', 'Entity Name', '2626', 'GE2604', 'entity sponsor questionnaire', 'admin', now());
