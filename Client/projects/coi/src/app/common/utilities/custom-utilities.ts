@@ -1,3 +1,4 @@
+import * as bootstrap from 'bootstrap';
 import { DEFAULT_UNIT_FORMAT } from '../../app-constants';
 
 /**
@@ -284,4 +285,12 @@ export function isEmptyObject(obj: any): boolean {
     return obj && Object.keys(obj).length === 0 && Object.getPrototypeOf(obj) === Object.prototype;
 }
 
-
+export function openModal(elementId: string, options = null) {
+    options = options || {
+      backdrop: 'static',
+      keyboard: true,
+      focus: true
+    }
+    let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
+    myModal?.show();
+  }

@@ -161,7 +161,7 @@
     </ul>
     <div class="saved-toast invisible py-1 align-items-center badge d-inline-flex fw-normal fs-13 px-2 rounded-5 text-bg-light-success"
         id="success-toast">
-        <span class="me-1">Last saved at {{autoSaveService.lastSavedTime}}</span>
+        <span class="me-1">Last saved at {{autoSaveService.lastSavedTime ? autoSaveService.lastSavedTime : getCurrentTime()}}</span>
         <mat-icon aria-hidden="true" class="success-icon">cloud_done</mat-icon>
     </div>
     <div class="saved-toast py-1 align-items-center d-inline-flex fw-normal px-2 rounded-5"

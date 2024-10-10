@@ -31,7 +31,7 @@
                 <ng-container *ngIf="canShowEntityFields">
                     <a *ngIf="isNewEntityFromSearch" class="search-again-action fs-13 cursor-pointer mb-3" (click)="backToSearch()">
                         Back to Search </a>
-                    <app-entity-creation [isCreateScreen]="true" [createEntityObj]="newCreateEntityObj" [isEditMode]="true"
+                    <app-entity-creation [isCreateScreen]="true" [entityDetails]="newCreateEntityObj" [isEditMode]="true"
                                          [saveEntity]="triggerSaveEntity" (emitSaveObj)="postEntitySave($event)" [canNavigateToEntity]="false"></app-entity-creation>
                 </ng-container>
             </div>
