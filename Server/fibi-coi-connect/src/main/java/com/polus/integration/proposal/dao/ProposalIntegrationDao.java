@@ -89,4 +89,6 @@ public interface ProposalIntegrationDao {
 
 	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber);
 
+	public DisclosureResponse feedDisclosureExpirationDate(String disclosureType, String personId);
+
 }

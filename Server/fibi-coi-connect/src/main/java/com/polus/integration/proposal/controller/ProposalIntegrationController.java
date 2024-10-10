@@ -15,6 +15,7 @@ import com.polus.integration.proposal.dto.DisclosureResponse;
 import com.polus.integration.proposal.service.ProposalIntegrationService;
 import com.polus.integration.proposal.vo.ProposalIntegrationVO;
 
+import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.HttpServletRequest;
 
 
@@ -41,36 +42,57 @@ public class ProposalIntegrationController {
 
 	@GetMapping("/coi/disclosure/status/proposals/{proposalNumber}/persons/{personId}")
 	public ResponseEntity<DisclosureResponse> feedProposalPersonDisclosureStatus(HttpServletRequest request,
-			@PathVariable(value = "proposalNumber", required = true) String proposalNumber,
-			@PathVariable(value = "personId", required = true) String personId) {
+			@PathVariable("proposalNumber") String proposalNumber, @PathVariable("personId") String personId) {
 
 		String clientIp = request.getRemoteAddr();
-		logger.info("Request received for feedProposalPersonDisclosureStatus from IP: {}, Proposal Number: {} and Person ID : {}", clientIp, proposalNumber, personId);
-		DisclosureResponse response = null;
-		try {
-			response = proposalIntegrationService.feedProposalPersonDisclosureStatus(proposalNumber, personId);
-		} catch (Exception e) {
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		logger.info("Request received from IP: {}, Proposal Number: {}, Person ID: {}", clientIp, proposalNumber, personId);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		try {
+			DisclosureResponse response = proposalIntegrationService.feedProposalPersonDisclosureStatus(proposalNumber, personId);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error fetching disclosure status for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
+			return new ResponseEntity<>(
+					DisclosureResponse.builder().error("An internal server error occurred.").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@GetMapping("/coi/disclosure/proposals/{proposalNumber}/validate")
 	public ResponseEntity<DisclosureResponse> checkProposalDisclosureStatus(HttpServletRequest request,
-			@PathVariable(value = "proposalNumber", required = true) String proposalNumber) {
+			@PathVariable("proposalNumber") String proposalNumber) {
 
 		String clientIp = request.getRemoteAddr();
-		logger.info("Request received for checkProposalDisclosureStatus from IP: {}, Proposal Number: {}", clientIp, proposalNumber);
-		DisclosureResponse response = null;
+		logger.info("Request received from IP: {}, Proposal Number: {}", clientIp, proposalNumber);
 
 		try {
-			response = proposalIntegrationService.checkProposalDisclosureStatus(proposalNumber);
+			DisclosureResponse response = proposalIntegrationService.checkProposalDisclosureStatus(proposalNumber);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (PersistenceException e) {
+			logger.error("Database error for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			return new ResponseEntity<>(DisclosureResponse.builder().error("Database error occurred.").build(), HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("Error processing request for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			return new ResponseEntity<>(DisclosureResponse.builder().error("An unexpected error occurred.").build(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+	@GetMapping("/coi/disclosure/type/{disclosureType}/person/{personId}/expiration-date")
+	public ResponseEntity<DisclosureResponse> feedDisclosureExpirationDate(HttpServletRequest request,
+			@PathVariable("disclosureType") String disclosureType, @PathVariable("personId") String personId) {
+
+		String clientIp = request.getRemoteAddr();
+		logger.info("Request received from IP: {}, Disclosure Type: {}, Person ID: {}", clientIp, disclosureType, personId);
+
+		try {
+			DisclosureResponse response = proposalIntegrationService.feedDisclosureExpirationDate(disclosureType, personId);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (PersistenceException e) {
+			logger.error("Database error for personId {} and disclosureType {}: {}", personId, disclosureType, e.getMessage(), e);
+			return new ResponseEntity<>(DisclosureResponse.builder().error("Database error occurred.").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			logger.error("Error processing request for personId {} and disclosureType {}: {}", personId, disclosureType, e.getMessage(), e);
+			return new ResponseEntity<>(DisclosureResponse.builder().error("An unexpected error occurred.").build(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

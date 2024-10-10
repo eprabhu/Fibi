@@ -59,5 +59,7 @@ public interface Constant {
 
 	String DATE_FORMAT = "\\d{4}-\\d{2}-\\d{2}";
 	String STATIC_SALT = "$2a$10$IcWCnJIVz.4mgZbfSt2dY.";
+	String RUN_ENRICH_URL = "/enrich/entity/runEnrich";
+	String RUN_CLEANSE_MATCH_URL = "/cleansematch/entity/runCleanseMatch";
 
 }
