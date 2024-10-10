@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
+  imports: [MatIconModule],
   selector: 'app-person-card',
   template: `
       <div class="data-grid">
@@ -18,14 +20,10 @@ import { DataService } from '../data.service';
             <p class="sub-heading">Home Unit : {{data.home_unit}}</p>
         </div>
         <div class="align-items-end d-flex ms-auto">
-        <button (click)="openEntity(data.person_id)"
-        class="align-items-center btn btn-primary d-flex fs-14"
-        title="Click to view Person Details"
-        area-describedby="Click to view Person Details">
-        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-        View
-        </button>
-  </div>
+          <button (click)="openEntity(data.person_id)" class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click here to view person details" aria-label="Click here to view person details">
+          <mat-icon class="me-2">visibility</mat-icon>View</button>
+        </div>
       </div>
   `,
   styles: [

@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
   selector: 'app-award-card',
+  imports: [MatIconModule],
   template: `
       <div class="data-grid">
         <div class="mr-15">
@@ -14,14 +16,10 @@ import { DataService } from '../data.service';
             <p class="sub-heading">{{data.pi_name}} (PI)</p>
         </div>
         <div class="align-items-end d-flex ms-auto">
-        <button (click)="openAward(data.award_number)"
-        class="align-items-center btn btn-primary d-flex fs-14"
-        title="Click to view Award Details"
-        aria-describedby="Click to view Award Details">
-        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-        View
-        </button>
-      </div>
+          <button (click)="openAward(data.award_number)" class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click here to view award details" aria-label="Click here to view award details">
+          <mat-icon class="me-2">visibility</mat-icon>View</button>
+        </div>
       </div>
       <div>
           <p class="sub-heading">

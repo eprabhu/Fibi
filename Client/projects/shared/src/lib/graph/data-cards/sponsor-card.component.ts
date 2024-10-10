@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
+  imports: [MatIconModule],
   selector: 'app-sponsor-card',
   template: `
       <div class="data-grid">
@@ -13,13 +15,9 @@ import { DataService } from '../data.service';
             <h2 class="heading">{{data.sponsor_name}}({{data.sponsor_code}})</h2>
         </div>
         <div class="align-items-end d-flex ms-auto">
-          <button (click)="openSponsorDetails(data.sponsor_code)"
-          class="align-items-center btn btn-primary d-flex fs-14"
-          title="Click to view Sponsor Details"
-          area-describedby="Click to view Sponsor Details">
-          <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-          View
-          </button>
+          <button (click)="openSponsorDetails(data.sponsor_code)" class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click here to view sponsor details" aria-label="Click here to view sponsor details">
+          <mat-icon class="me-2">visibility</mat-icon>View</button>
         </div>
       </div>
   `,
