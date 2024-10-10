@@ -8,7 +8,7 @@
             <app-common-help-text [subSectionId]="2602" [elementId]="'entity-basic-details'"></app-common-help-text>
         </div>
     </div>
-    <app-entity-creation [isCreateView]="false" [isEditMode]="isEditMode" [saveMode]="'AUTO'"
-        [createEntityObj]="createEntityObj" [countryDetails]="entityCountryDetails"
+    <app-entity-creation [isCreateView]="false" [isEditMode]="isEditMode"
+        [entityDetails]="entityDetails"
         (emitAutoSaveObj)="updateStoreData($event)"></app-entity-creation>
 </div>

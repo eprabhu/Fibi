@@ -75,3 +75,5 @@ export const AUTO_SAVE_DEBOUNCE_TIME = 750;
 export const DUPLICATE_MARK_CONFIRMATION_TEXT = 'I confirm that the duplicates are not exact matches.';
 
 export const DUPLICATE_MARK_INFORMATION_TEXT = 'Potential duplicates have been found. If any of these matches are correct, please select the appropriate one and mark the current entity as a duplicate of the selected entity. If none of the matches are accurate, you can confirm that there are no exact duplicates and proceed with verification.';
+
+export const ENTITY_MANDATORY_FIELDS = ['entityName', 'primaryAddressLine1', 'countryCode', 'city', 'state', 'postCode', 'entityOwnershipTypeCode'];

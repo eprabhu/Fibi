@@ -62,7 +62,7 @@
                 <!-- Sub-award Organization Error List -->
                 <ng-container *ngIf="!modalSection.organization">
                     <ul class="m-0 p-0 list-unstyled">
-                        <li *ngIf="!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.organizationTypeCode" class="mt-1">
+                        <li *ngIf="!this.entitySubAwardOrganization?.subAwdOrgDetailsResponseDTO?.entityOrganizationType?.organizationTypeCode" class="mt-1">
                             <a tabindex="0" class="d-flex align-items-center link-primary"
                                 title="Click here to navigate to sub-award organization"
                                 aria-label="Click here to navigate to sub-award organization"

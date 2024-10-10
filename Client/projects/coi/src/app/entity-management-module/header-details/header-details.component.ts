@@ -21,7 +21,7 @@ import {subscriptionHandler} from "../../../../../fibi/src/app/common/utilities/
 import { EntityManagementService, getEntityFullAddress } from '../entity-management.service';
 import { CommonService } from '../../common/services/common.service';
 import { COIModalConfig } from '../../shared-components/coi-modal/coi-modal.interface';
-import { COMMON_ERROR_TOAST_MSG, ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE, HTTP_ERROR_STATUS } from '../../app-constants';
 import { DUPLICATE_MARK_CONFIRMATION_TEXT, DUPLICATE_MARK_INFORMATION_TEXT } from '../shared/entity-constants';
 
 @Component({
@@ -115,6 +115,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
 	  }
 
     onClickMenuBar() {
+        this.updateFeedStatus();
         const NAV_ELEMENT = document.getElementById('responsive-nav');
         const IS_MENU_SHOW = NAV_ELEMENT.classList.contains('show-menu');
         const IS_SCREEN = window.innerWidth <= 1300;
@@ -300,6 +301,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._entityManagementService.logFeedHistory(REQ_OBJ).subscribe((data: any) => {
             if (data) {
                 this.dataStore.updateModifiedFlag(this.entityDetails, true);
+                this.updateFeedStatus();
             }
         }, err => {
             this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
@@ -318,8 +320,24 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    getCurrentTime() {
+        return new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'});
+    }
+
     ngOnDestroy() {
         subscriptionHandler(this.$subscriptions);
     }
+
+    updateFeedStatus() {
+        if((this.entityTabStatus.sponsor_feed_status_code === FEED_STATUS_CODE.READY_TO_FEED || this.entityTabStatus.organization_feed_status_code === FEED_STATUS_CODE.READY_TO_FEED ) &&
+          this.entityDetails?.entityStatusType?.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.VERIFIED) {
+            this.$subscriptions.push(this._entityManagementService.getEntityDetails(this.entityDetails.entityId).subscribe((response: any) => {
+                if (response) {
+                    this.dataStore.setStoreData(response);
+                }
+            }));
+        }
+    }
+
 
 }
