@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedEntityManagementModule } from '../shared/shared-entity-management.module';
-import { Create_Entity, DuplicateCheckObj, EntityDupCheckConfig } from '../shared/entity-interface';
+import { DuplicateCheckObj, EntityDupCheckConfig } from '../shared/entity-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { CommonService } from '../../common/services/common.service';
@@ -26,7 +26,6 @@ export class CreateEntityComponent implements OnInit {
         public _commonService: CommonService,
         private _informationAndHelpTextService: InformationAndHelpTextService) { }
 
-    createEntityObj = new Create_Entity();
     $performAction = new Subject<'SAVE_AND_VALIDATE'|'VALIDATE_ONLY'>();
     dupCheckPayload: DuplicateCheckObj;
     entityDupCheckConfig = new EntityDupCheckConfig();

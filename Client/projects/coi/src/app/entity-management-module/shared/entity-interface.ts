@@ -8,32 +8,6 @@ export type VerifyModalAction = ModalActionEvent | { event?: any, action: Verify
 export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found_modal';
 export const ENTITY_DUPLICATE_MATCH_SLIDER_ID = 'duplicate_entity_match_found_slider';
 
-export class Create_Entity {
-    entityName: string = '';
-    entityType: EntityType;
-    primaryAddressLine1: string = '';
-    primaryAddressLine2: string = '';
-    city: string = '';
-    state: string = '';
-    postCode: number;
-    countryCode: string = '';
-    country: Country = new Country();
-    phoneNumber: any;
-    certifiedEmail: any = '';
-    websiteAddress: any = '';
-    dunsNumber: number;
-    ueiNumber: number;
-    cageNumber: number;
-    humanSubAssurance?: any;
-    anumalWelfareAssurance?: any;
-    animalAccreditation?: any;
-    isDunsMatched?: any;
-    entityOwnershipTypeCode: any;
-    businessTypeCode: any;
-    entityOwnerShip: EntityOwnerShip = new EntityOwnerShip();
-    entityStatusTypeCode: string;
-}
-
 export class EntityOwnerShip {
     description: string;
     isActive: boolean;
@@ -213,7 +187,7 @@ export class EntityDetails {
     foreignName?: any;
     priorName?: any;
     shortName?: string;
-    dunsNumber?: string;
+    dunsNumber?: any;
     ueiNumber?: any;
     cageNumber?: any;
     websiteAddress?: string;
@@ -500,7 +474,7 @@ export class EntityDupCheckConfig {
     confirmationText? = '';
     hasConfirmedNoDuplicate? = false;
     entityIdToFilter?: number = null;
-    triggeredFrom?: 'CREATE_ENTITY' | 'ENTITY_VERIFY' | '' = '' 
+    triggeredFrom?: 'CREATE_ENTITY' | 'ENTITY_VERIFY' | '' = ''
     infoText?: string = `The details you entered match the following entities in our system. Please review the list below. If you still wish to create a new entity, you can skip this step and click on '${this.primaryButton}'.`;
 }
 
@@ -570,3 +544,89 @@ export const ORGANISATION_FIELDS = [
     'incorporatedIn', 'incorporationDate', 'congressionalDistrict', 'phoneNumber', 'primaryAddressLine1', 'primaryAddressLine2', 'city', 'state', 'postCode', 'countryCode',
     'dunsNumber', 'organizationTypeCode'
 ]
+
+export class OtherDetailsUpdate {
+    entityId: any;
+    otherDetailsRequestFields? = new OtherDetailsClass();
+}
+
+export class OtherDetailsClass {
+    startDate?: string;
+    incorporationDate?: string;
+    incorporatedIn?: string;
+    congressionalDistrict?: string;
+    federalEmployerId?: string;
+    shortName?: string;
+    numberOfEmployees?: number;
+    businessTypeCode?: any;
+    activityText?: string;
+    currencyCode?: string;
+    entityBusinessType: any;
+}
+
+export class LookUpClass {
+    code: any;
+    description?: string;
+}
+
+export class EntityUpdateClass {
+    entityId: any;
+    entityRequestFields? = new EntityRequestFields();
+}
+
+export class EntityFields {
+    entityName?: string;
+    primaryAddressLine1?: any;
+    primaryAddressLine2?: any;
+    city?: string;
+    state?: string;
+    postCode?: number;
+    countryCode?: string;
+    phoneNumber?: any;
+    certifiedEmail?: any;
+    websiteAddress?: any;
+    dunsNumber?: any;
+    ueiNumber?: any;
+    cageNumber?: any;
+    humanSubAssurance?: any;
+    anumalWelfareAssurance?: any;
+    animalAccreditation?: any;
+    isDunsMatched?: any;
+    entityOwnershipTypeCode?: any;
+    businessTypeCode?: any;
+    entityStatusTypeCode?: any;
+}
+
+export class EntityRequestFields extends EntityFields {
+    entityOwnershipType? = new EntityOwnerShip();
+    country? = new Country();
+}
+
+export class Create_Entity {
+    entityId: any;
+    entityName: string = '';
+    entityType: EntityType;
+    primaryAddressLine1: string = '';
+    primaryAddressLine2: string = '';
+    city: string = '';
+    state: string = '';
+    postCode: number;
+    countryCode: string = '';
+    country: Country = new Country();
+    phoneNumber: any;
+    certifiedEmail: any = '';
+    websiteAddress: any = '';
+    dunsNumber: number;
+    ueiNumber: number;
+    cageNumber: number;
+    humanSubAssurance?: any;
+    anumalWelfareAssurance?: any;
+    animalAccreditation?: any;
+    isDunsMatched?: any;
+    entityOwnershipTypeCode: any;
+    businessTypeCode: any;
+    entityOwnershipType: EntityOwnerShip = new EntityOwnerShip();
+    entityStatusTypeCode: string;
+}
+
+export type EntityNumberFields = 'ueiNumber' | 'dunsNumber' | 'cageNumber';
