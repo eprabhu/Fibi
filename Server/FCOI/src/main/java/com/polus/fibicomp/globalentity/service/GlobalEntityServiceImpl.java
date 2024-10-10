@@ -29,6 +29,7 @@ import com.polus.fibicomp.globalentity.dao.SponsorDAO;
 import com.polus.fibicomp.globalentity.dao.SubAwdOrgDAO;
 import com.polus.fibicomp.globalentity.dto.ActionLogRequestDTO;
 import com.polus.fibicomp.globalentity.dto.EntityRequestDTO;
+import com.polus.fibicomp.globalentity.dto.EntityRequestField;
 import com.polus.fibicomp.globalentity.dto.EntityRiskActionLogResponseDTO;
 import com.polus.fibicomp.globalentity.dto.EntitySponsorField;
 import com.polus.fibicomp.globalentity.dto.MarkDuplicateRequestDTO;
@@ -118,9 +119,11 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 	@Override
 	public ResponseEntity<Map<String, Object>> verifyEntityDetails(Integer entityId) {
 		Map<String, Object> entityTabStatus = entityDetailsDAO.getEntityTabStatus(entityId);
+		Map<EntityRequestField, Object> entityRequestFields = Map.of(EntityRequestField.entityStatusTypeCode, "1", 
+				EntityRequestField.approvedBy, AuthenticatedUser.getLoginPersonId(), EntityRequestField.approvedTimestamp, commonDao.getCurrentTimestamp());
 		entityDetailsDAO.updateEntity(
 				EntityRequestDTO.builder().entityId(entityId).approvedBy(AuthenticatedUser.getLoginPersonId())
-						.approvedTimestamp(commonDao.getCurrentTimestamp()).entityStatusTypeCode("1").build());
+						.approvedTimestamp(commonDao.getCurrentTimestamp()).entityStatusTypeCode("1").entityRequestFields(entityRequestFields).build());
 		if (Boolean.TRUE.equals(entityTabStatus.get(ENTITY_SPONSOR_INFO_TAB))) {
 			Map<EntitySponsorField, Object> entitySponsorFields = Map.of(EntitySponsorField.feedStatusCode, "2");
 			sponsorDAO.updateDetails(SponsorRequestDTO.builder().entityId(entityId).entitySponsorFields(entitySponsorFields).build());
@@ -205,8 +208,10 @@ public class GlobalEntityServiceImpl implements GlobalEntityService {
 
 	@Override
 	public ResponseMessageDTO markDuplicate(MarkDuplicateRequestDTO dto) {
+		Map<EntityRequestField, Object> entityRequestFields = Map.of(EntityRequestField.documentStatusTypeCode, DOCUMENT_STATUS_FLAG_DUPLICATE, 
+				EntityRequestField.originalEntityId, dto.getOriginalEntityId());
 		entityDetailsDAO.updateEntity(EntityRequestDTO.builder().documentStatusTypeCode(DOCUMENT_STATUS_FLAG_DUPLICATE)
-				.entityId(dto.getDuplicateEntityId()).originalEntityId(dto.getOriginalEntityId()).build());
+				.entityId(dto.getDuplicateEntityId()).originalEntityId(dto.getOriginalEntityId()).entityRequestFields(entityRequestFields).build());
 		entityDetailsDAO.updateDocWithOriginalEntity(dto.getDuplicateEntityId(), dto.getOriginalEntityId());
 		try {
 			Entity entityDetails = entityRepository.findByEntityId(dto.getDuplicateEntityId());
