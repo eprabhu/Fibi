@@ -5,7 +5,7 @@
             "colour": "#dd7d33",
             "size": 10,
             "name": "Award",
-            "image": "/assets/images/g_award.png",
+            "image": "assets/images/g_award.png",
             "openLink": "#/fibi/award/overview?awardId=",
             "valueField": "award_number",
             "linkType": "FIBI"
@@ -14,7 +14,7 @@
             "colour": "#5ab008",
             "size": 6,
             "name": "Country",
-            "image": "/assets/images/g_country.png",
+            "image": "assets/images/g_country.png",
             "valueField": "country_code",
             "linkType": "FIBI"
         },
@@ -22,8 +22,8 @@
             "colour": "#b14403",
             "size": 10,
             "name": "Entity",
-            "image": "/assets/images/g_entity.png",
-            "openLink": "#/coi/entity-management/entity-details?entityManageId=",
+            "image": "assets/images/g_entity.png",
+            "openLink": "#/coi/manage-entity/entity-overview?entityManageId=",
             "valueField": "entity_number",
             "linkType": "COI"
         },
@@ -31,7 +31,7 @@
             "colour": "#f2aa20",
             "size": 8,
             "name": "Person",
-            "image": "/assets/images/g_person.png",
+            "image": "assets/images/g_person.png",
             "openLink": "#/fibi/person/person-details?personId=",
             "valueField": "person_id",
             "linkType": "FIBI"
@@ -40,7 +40,7 @@
             "colour": "#b0bef7",
             "size": 8,
             "name": "Proposal",
-            "image": "/assets/images/g_proposal.png",
+            "image": "assets/images/g_proposal.png",
             "openLink": "#/fibi/proposal/overview?proposalId=",
             "valueField": "title",
             "linkType": "FIBI"
@@ -50,7 +50,7 @@
             "colour": "#c69602",
             "size": 8,
             "name": "Sponsor",
-            "image": "/assets/images/g_sponsor.png",
+            "image": "assets/images/g_sponsor.png",
             "openLink": "#/fibi/sponsor-maintenance/sponsor-view?sponsorId=",
             "valueField": "sponsor_code",
             "linkType": "FIBI"
@@ -59,7 +59,7 @@
             "colour": "#eee",
             "size": 8,
             "name": "Travel Disclosure",
-            "image": "/assets/images/g_travel.png",
+            "image": "assets/images/g_travel.png",
             "openLink": "#/coi/create-travel-disclosure/travel-details?disclosureId=",
             "valueField": "travel_number",
             "linkType": "COI"
@@ -68,7 +68,7 @@
             "colour": "#7b936a",
             "size": 12,
             "name": "Unit",
-            "image": "/assets/images/g_unit.png",
+            "image": "assets/images/g_unit.png",
             "valueField": "unit_number",
             "linkType": "FIBI"
         }
@@ -193,7 +193,7 @@
             "COI": "http://10.199.100.35:2222/"
     },
     "additionalImages": [
-        {"id": "ESponsor", "image":"/assets/images/g_entity_sponsor.png"}
+        {"id": "ESponsor", "image":"assets/images/g_entity_sponsor.png"}
     ]
 
 }

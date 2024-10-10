@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
+  imports: [MatIconModule],
   selector: 'app-proposal-card',
   template: `
        <div class="data-grid">
@@ -14,13 +16,9 @@ import { DataService } from '../data.service';
             <p class="sub-heading">{{data.pi_name}} (PI)</p>
         </div>
         <div class="align-items-end d-flex ms-auto">
-          <button (click)="openProposalDetails(data.proposal_id)"
-          class="align-items-center btn btn-primary d-flex fs-14"
-          title="Click to view Proposal Details"
-          area-describedby="Click to view Proposal Details">
-          <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-          View
-          </button>
+          <button (click)="openProposalDetails(data.proposal_id)" class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click here to view proposal details" aria-label="Click here to view proposal details">
+          <mat-icon class="me-2">visibility</mat-icon>View</button>
         </div>
       </div>
       <div>

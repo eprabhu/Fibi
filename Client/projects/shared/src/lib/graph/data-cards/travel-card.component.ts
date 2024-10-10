@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { DataService } from '../data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   standalone: true,
+  imports: [MatIconModule],
   selector: 'app-travel-card',
   template: `
       <div class="data-grid">
@@ -13,14 +15,10 @@ import { DataService } from '../data.service';
             <h2 class="heading">Travel Number{{data.travel_number}}</h2>
         </div>
         <div class="align-items-end d-flex ms-auto">
-          <button (click)="openTravelDisclosure(data.travel_number)"
-          class="align-items-center btn btn-primary d-flex fs-14"
-          title="Click to view Travel Disclosure Details"
-          area-describedby="Click to view Travel Disclosure Details">
-          <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-          View
-          </button>
-      </div>
+          <button (click)="openTravelDisclosure(data.travel_number)" class="align-items-center btn btn-primary d-flex fs-14"
+          title="Click here to view travel disclosure details" aria-label="Click here to view travel disclosure details">
+          <mat-icon class="me-2">visibility</mat-icon>View</button>
+        </div>
       </div>
   `,
   styles: [
