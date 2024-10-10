@@ -20,6 +20,7 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
 
     @Input() notificationSliderData: { projectDetailsForSlider: ProjectOverviewDetails, keyPersonIndex: number };
     @Output() closePage: EventEmitter<any> = new EventEmitter<any>();
+
     notificationTypeRO: NotificationTypeRO = new NotificationTypeRO();
     notificationObject: NotificationObject = new NotificationObject();
     defaultKeypersonDetails = new Recipient(); 
@@ -104,12 +105,11 @@ export class ProjectOverviewNotificationSliderComponent implements OnInit {
     private validateMandatoryFields(): void {
         this.notificationObject.message = removeUnwantedTags(this.notificationObject.message);
         this.validationMap.clear();
-        const TRIMMED_SUBJECT = this.notificationObject.subject ? this.notificationObject.subject.trim() : '';
         const TO_RECIPIENTS = this.notificationObject.recipients.filter(e => e.recipientType === 'TO')
         if (TO_RECIPIENTS.length === 0) {
             this.validationMap.set('recipients', 'Please add at least one recipient.');
         }
-        if (!TRIMMED_SUBJECT) {
+        if (!this.notificationObject.subject) {
             this.validationMap.set('subject', 'Please provide a subject.');
         }
         if (!this.notificationObject.message) {
