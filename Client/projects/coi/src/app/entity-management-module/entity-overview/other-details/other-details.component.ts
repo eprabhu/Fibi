@@ -327,6 +327,13 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
             } else {
                 this.deleteForeignName();
             }
+        } else {
+            closeCommonModal(this.CONFIRMATIN_MODAL_ID);
+            setTimeout(() => {
+                this.deleteForgeinNameObj = null;
+                this.deletePriorNameObj = null;
+                this.isEditIndex = null;
+            });
         }
     }
 
