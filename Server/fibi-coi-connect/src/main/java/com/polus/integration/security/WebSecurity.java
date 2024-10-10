@@ -1,6 +1,7 @@
 package com.polus.integration.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -13,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.polus.integration.constant.Constant;
 import com.polus.integration.security.service.UserTokensService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +27,13 @@ public class WebSecurity {
 	@Autowired
 	private UserTokensService userTokensService;
 
+	@Value("${kc.integration.user.name}")
+	private String userName;
+
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-		.authorizeHttpRequests(authz -> authz.requestMatchers("/**")
+		.authorizeHttpRequests(authz -> authz.requestMatchers(Constant.RUN_ENRICH_URL, Constant.RUN_CLEANSE_MATCH_URL)
 				.permitAll()
 				.anyRequest()
 				.authenticated())
@@ -37,7 +42,18 @@ public class WebSecurity {
 
 		http.addFilterBefore((request, response, chain) -> {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			if (!httpRequest.getServletPath().equals("/**")) {
+			String servletPath = httpRequest.getServletPath();
+			if (servletPath.equals(Constant.RUN_ENRICH_URL) || servletPath.equals(Constant.RUN_CLEANSE_MATCH_URL)) {
+				new ConnectAuthenticationFilter(userTokensService, userName).doFilter(request, response, chain);
+			} else {
+				chain.doFilter(request, response);
+			}
+		}, UsernamePasswordAuthenticationFilter.class);
+
+		http.addFilterBefore((request, response, chain) -> {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			String servletPath = httpRequest.getServletPath();
+			if (!(servletPath.equals(Constant.RUN_ENRICH_URL)) && !(servletPath.equals(Constant.RUN_CLEANSE_MATCH_URL))) {
 				new ConnectAuthorizationFilter(userTokensService).doFilter(request, response, chain);
 			} else {
 				chain.doFilter(request, response);

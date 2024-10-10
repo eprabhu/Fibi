@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -161,11 +160,6 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 	@Override
 	public DisclosureResponse feedProposalDisclosureStatus(String proposalNumber, String personId) {
-		if (StringUtils.isBlank(proposalNumber) || StringUtils.isBlank(personId)) {
-			log.warn("Invalid proposal number or person ID provided.");
-			return DisclosureResponse.builder().error("Invalid proposal number or person ID.").build();
-		}
-
 		try {
 			log.info("Calling stored procedure COI_INT_PROP_PERSON_DISCL_STATUS with proposalNumber: {} and personId: {}", proposalNumber, personId);
 
@@ -193,49 +187,77 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 						}
 					}
 				} catch (SQLException ex) {
-					log.error("SQLException while executing stored procedure COI_INT_PROP_PERSON_DISCL_STATUS for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, ex.getMessage(), ex);
+					log.error("SQL error during procedure execution for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, ex.getMessage(), ex);
 					throw new RuntimeException("A SQL error occurred during the procedure call.", ex);
 				}
 			});
 		} catch (DataAccessException e) {
-			log.error("DataAccessException while executing stored procedure COI_INT_PROP_PERSON_DISCL_STATUS with proposalNumber: {} and personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
-			return DisclosureResponse.builder().error("A SQL error occurred while fetching the disclosure status. Please try again later.").build();
+			log.error("DataAccessException while fetching disclosure status for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
+			return DisclosureResponse.builder().error("Database access error occurred. Please try again later.").build();
 		} catch (Exception e) {
-			log.error("Unexpected error occurred while fetching person disclosure details for proposalNumber: {} and personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
-			return DisclosureResponse.builder().error("An error occurred while fetching the disclosure status. Please try again later.").build();
+			log.error("Unexpected error while fetching disclosure details for proposalNumber: {}, personId: {}: {}", proposalNumber, personId, e.getMessage(), e);
+			return DisclosureResponse.builder().error("An unexpected error occurred. Please try again later.").build();
 		}
 	}
 
 	@Override
 	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber) {
-		if (StringUtils.isBlank(proposalNumber)) {
-			log.warn("Invalid proposal number provided.");
-			return DisclosureResponse.builder().error("Invalid proposal number.").build();
-		}
+		log.info("Fetching disclosure status for proposalNumber: {}", proposalNumber);
 
 		try {
-			log.info("Calling database function COI_INT_PROP_DISCL_STATUS with proposalNumber: {}", proposalNumber);
-			Query query = entityManager.createNativeQuery("SELECT COI_INT_PROP_DISCL_STATUS(:proposalNumber)").setParameter("proposalNumber", proposalNumber);
+			Query query = entityManager.createNativeQuery("SELECT COI_INT_PROP_DISCL_STATUS(:proposalNumber)")
+					.setParameter("proposalNumber", proposalNumber);
 
 			Object result = query.getSingleResult();
-			log.info("Function result for proposalNumber {}: {}", proposalNumber, result);
+			log.info("Result from function COI_INT_PROP_DISCL_STATUS for proposalNumber {}: {}", proposalNumber, result);
 
 			if (result instanceof Number) {
 				Integer disclosureSubmitted = ((Number) result).intValue();
 				String message = (disclosureSubmitted == 1) ? "Disclosure Submitted." : "Disclosure Not Submitted.";
-				log.info("Proposal {} - {}", proposalNumber, message);
-				return DisclosureResponse.builder().disclosureSubmitted(disclosureSubmitted).message(message).build();
+				Boolean isSubmitted = (disclosureSubmitted == 1);
+
+				log.info("Proposal {} - {} - {}", proposalNumber, message, isSubmitted);
+				return DisclosureResponse.builder().disclosureSubmitted(isSubmitted).message(message).build();
+			} else {
+				log.warn("Unexpected result type for proposalNumber {}: {}", proposalNumber, result);
+				return DisclosureResponse.builder().error("Unexpected result from the database.").build();
 			}
 
-			log.warn("Unexpected result type from function for proposalNumber {}: {}", proposalNumber, result);
-			return DisclosureResponse.builder().error("Unexpected result from the database.").build();
+		} catch (PersistenceException e) {
+			log.error("Database error for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			throw e;
+		} catch (Exception e) {
+			log.error("Error fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
+			throw e;
+		}
+	}
+
+	@Override
+	public DisclosureResponse feedDisclosureExpirationDate(String disclosureType, String personId) {
+		log.info("Fetching disclosure expiration date for personId: {} and disclosureType: {}", personId, disclosureType);
+
+		try {
+			Query query = entityManager
+					.createNativeQuery("SELECT COI_INT_PRSN_DISCL_EXP_DATE(:personId, :disclosureType)")
+					.setParameter("personId", personId).setParameter("disclosureType", disclosureType);
+
+			Object result = query.getSingleResult();
+			log.info("Result from function COI_INT_PRSN_DISCL_EXP_DATE: {}", result);
+
+			if (result != null && result instanceof String expirationDate) {
+				log.info("Expiration Date for personId: {} and disclosureType: {}: {}", personId, disclosureType, expirationDate);
+				return DisclosureResponse.builder().expirationDate(expirationDate).build();
+			} else {
+				log.info("Expiration Date for personId: {} and disclosureType: {}: {}", personId, disclosureType, result);
+				return DisclosureResponse.builder().expirationDate("").build();
+			}
 
 		} catch (PersistenceException e) {
-			log.error("Database error while fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
-			return DisclosureResponse.builder().error("A database error occurred. Please try again later.").build();
+			log.error("Database error for personId: {} and disclosureType: {}: {}", personId, disclosureType, e.getMessage(), e);
+			throw e;
 		} catch (Exception e) {
-			log.error("Unexpected error while fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
-			return DisclosureResponse.builder().error("An unexpected error occurred. Please try again later.").build();
+			log.error("Error fetching expiration date for personId: {} and disclosureType: {}: {}", personId, disclosureType, e.getMessage(), e);
+			throw e;
 		}
 	}
 
