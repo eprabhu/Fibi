@@ -480,10 +480,10 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     /**
-     * 
-     * @param projectTypeCode 
+     *
+     * @param projectTypeCode
      * @param projectId
-     * 
+     *
      * 1: award, 2: institute proposal, 3: development proposal
      * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration
      * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
@@ -614,11 +614,11 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     checkFCOIRights(): boolean {
         return this.getAvailableRight(COI_DISCLOSURE_SUPER_ADMIN_RIGHTS) || this.isCoiReviewer || this.getAvailableRight(ADMIN_DASHBOARD_RIGHTS);
     }
-    
+
     checkOPARights(): boolean {
         return this.getAvailableRight(OPA_DISCLOSURE_ADMIN_RIGHTS) || this.isOPAReviewer || this.getAvailableRight(OPA_DISCLOSURE_RIGHTS);
     }
-    
+
     redirectionBasedOnRights(): void {
         this.fetchPermissions(true).then((res) => {
             const CAN_VIEW_FCOI_DASHBOARD  = this.checkFCOIRights();
@@ -636,16 +636,23 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     getSectionName(tabName, section) {
-        let sectionDetails = tabName.get(section);
-        if(sectionDetails) {
+        const sectionDetails = tabName.get(section);
+        if (sectionDetails) {
            return sectionDetails.sectionName;
         }
    }
 
    getSectionId(tabName, section) {
-       let sectionDetails = tabName.get(section);
-       if(sectionDetails) {
+       const sectionDetails = tabName.get(section);
+       if (sectionDetails) {
            return sectionDetails.sectionId;
+       }
+   }
+
+   getSubSectionId(tabName, section) {
+       const sectionDetails = tabName.get(section);
+       if (sectionDetails) {
+           return sectionDetails.subSectionId;
        }
    }
 

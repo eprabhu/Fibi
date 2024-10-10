@@ -60,6 +60,7 @@ import { VisibleInViewportDirective } from './directives/visibleInViewport.direc
 import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
 import { DATE_PICKER_FORMAT_MATERIAL } from '../app-constants';
 import { EntityCreationComponent } from './entity-creation/entity-creation.component';
+import { ModalDragDirective } from './directives/modal-drag.directive';
 
 @NgModule({
     imports: [
@@ -77,15 +78,14 @@ import { EntityCreationComponent } from './entity-creation/entity-creation.compo
         MatAutocompleteModule,
     ],
     declarations: [AppElasticComponent, FileDropComponent, DragNdropDirective, AppAutocompleterComponent, KeyboardListenerDirective,
-        AppEndpointSearchComponent, CustomElementComponent,
-        ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
+        AppEndpointSearchComponent, CustomElementComponent, ViewQuestionnaireComponent, LookUpComponent, LookupFilterPipe,
         ClickNdragDirective, AddressBookComponent, DateFormatPipe, SearchFilterPipe, ViewQuestionnaireListComponent,
-        LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent,
-        AutoGrowDirective, QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
+        LengthValidatorDirective, CurrencyFormatDirective, CustomCurrencyPipe, QuestionnaireListCompareComponent, AutoGrowDirective,
+        QuestionnaireCompareComponent, CustomElementCompareComponent, GrantDetailsViewComponent, AppTimePickerComponent,
         DateFormatPipeWithTimeZone, SafeHtmlPipe, CustomNumberPipe, CustomPreloaderDirective, OrderByPipe, OrderByIndexPipe,
-        DragNDragDirective, CustomTagRemoverPipe, PaginationComponent,
-        ActivityComponent, NoDataLabelComponent, RichTextComponent, HostContainerDirective, ReadMoreComponent,
-        TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent, VisibleInViewportDirective, SkeletonLoaderComponent, EntityCreationComponent],
+        DragNDragDirective, CustomTagRemoverPipe, PaginationComponent, ActivityComponent, NoDataLabelComponent, RichTextComponent,
+        HostContainerDirective, ReadMoreComponent, TailingSpaceRemoverDirective, CommonHelpTextComponent, CommonInformationComponent,
+        VisibleInViewportDirective, SkeletonLoaderComponent, EntityCreationComponent, ModalDragDirective],
     exports: [
         AppElasticComponent,
         FileDropComponent,
@@ -136,7 +136,8 @@ import { EntityCreationComponent } from './entity-creation/entity-creation.compo
         CommonInformationComponent,
         VisibleInViewportDirective,
         SkeletonLoaderComponent,
-        EntityCreationComponent
+        EntityCreationComponent,
+        ModalDragDirective
     ],
 
     providers: [
@@ -144,7 +145,7 @@ import { EntityCreationComponent } from './entity-creation/entity-creation.compo
             provide: DateAdapter, useClass: MomentDateAdapter,
             deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
         },
-        { provide: MAT_DATE_FORMATS, useValue: DATE_PICKER_FORMAT_MATERIAL },
+        {provide: MAT_DATE_FORMATS, useValue: DATE_PICKER_FORMAT_MATERIAL},
 
         CustomElementService,
         AppEndpointSearchService,

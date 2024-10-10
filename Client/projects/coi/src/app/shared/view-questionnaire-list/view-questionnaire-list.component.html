@@ -36,59 +36,69 @@
             </div>
         </h4>
     </div> -->
-            <div>
-                <div class=" w-100">
-                    <div class="px-4">
-                        <ul class="nav nav-tabs mb-0">
-                            <li class="nav-item hand-cursor mb-2" *ngFor='let questionnaire of questionnaireList; let i= index'
-                            id="questionnaire-tab{{i}}"
-                                [ngClass]="{'qst-success-nav':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
+    <div>
+        <div class=" w-100">
+            <div class="px-4">
+                <ul class="nav nav-tabs mb-0">
+                    <li class="nav-item hand-cursor mb-2" *ngFor='let questionnaire of questionnaireList; let i= index'
+                        id="questionnaire-tab{{i}}"
+                        [ngClass]="{'qst-success-nav':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                         (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null &&
                                                         isViewMode),
                                         'qst-warning-nav':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
                                                         questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode) }">
-                                <a (click)="isQuestionnaireChanged(i);" title="Go to {{ questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}"
-                                    class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
+                        <a (click)="isQuestionnaireChanged(i);"
+                           title="Go to {{ questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }}"
+                           class=" tab subTabLink nav-item nav-link txt-medium text-black hand-cursor" [ngClass]="{'active':selectedIndex === i,
                                                 'text-success fw-600':(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                                     (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null
-                                                                    && isViewMode)}" id="{{questionnaire?.QUESTIONNAIRE_ID}}">
-                                    <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
+                                                                    && isViewMode)}"
+                           id="{{questionnaire?.QUESTIONNAIRE_ID}}">
+                            <i [ngClass]="{'txt-green':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y',
                                                     'txt-red':questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
                                                                 questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null}"
-                                        aria-hidden="true"></i>
-                                    <span class="text-danger" *ngIf="questionnaire.IS_MANDATORY == 'Y'" title="Mandatory">*</span>
-                                    <span tabindex="0" [attr.aria-label]="questionnaire?.QUESTIONNAIRE_LABEL"> {{questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }} </span>
-                                    <span id="qnr-complete-msg"
-                                        *ngIf="(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
+                               aria-hidden="true"></i>
+                            <span class="text-danger" *ngIf="questionnaire.IS_MANDATORY == 'Y'"
+                                  title="Mandatory">*</span>
+                            <span tabindex="0"
+                                  [attr.aria-label]="questionnaire?.QUESTIONNAIRE_LABEL"> {{ questionnaire?.QUESTIONNAIRE_LABEL || questionnaire?.QUESTIONNAIRE }} </span>
+                            <span id="qnr-complete-msg"
+                                  *ngIf="(questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID == null) ||
                                                     (questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'Y' && questionnaire.NEW_QUESTIONNAIRE_ID != null && isViewMode)"
-                                        class="fa fa-check" title="Completed">
+                                  class="fa fa-check" title="Completed">
                                     </span>
-                                    <span id="qnr-incomplete-msg"
-                                        *ngIf="questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
+                            <span id="qnr-incomplete-msg"
+                                  *ngIf="questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == 'N' ||
                                                     questionnaire.QUESTIONNAIRE_COMPLETED_FLAG == null || (questionnaire.NEW_QUESTIONNAIRE_ID && !isViewMode)"
-                                        class="fa fa-exclamation-circle text-warning" title="Incomplete">
+                                  class="fa fa-exclamation-circle text-warning" title="Incomplete">
                                     </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                        </a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </div>
     <div class="tab-pane">
         <div class=" my-2 mb-3 mx-3">
             <div class="pt-0">
-                <app-view-questionnaire [questionnaireDetails]="activeQuestionnaire"
-                    (questionnaireSaveEvent)="updateParentData($event)" [isViewMode]="isViewMode"
-                    (questionnaireEditEvent)="markQuestionnaireAsEdited($event)" [isViewMode]="isViewMode"
-                    [moduleDetails]="requestObject" (flagUpdationEvent)="updateFlag($event)"
-                    [externalSaveEvent]="externalSaveEvent" [isShowSave]="isShowSave" [saveButtonLabel]="saveButtonLabel"
-                    [isShowQuestionnaireDock]="isShowQuestionnaireDock" [isQuestionnaireValidateMode]="isQuestionnaireValidateMode"></app-view-questionnaire>
+                <app-view-questionnaire [isAutoSaveEnabled]="isAutoSaveEnabled"
+                                        [questionnaireDetails]="activeQuestionnaire"
+                                        (questionnaireSaveEvent)="updateParentData($event)"
+                                        (questionnaireEditEvent)="markQuestionnaireAsEdited($event)"
+                                        [isViewMode]="isViewMode"
+                                        [moduleDetails]="requestObject" (flagUpdationEvent)="updateFlag($event)"
+                                        (isAPIRequestPending)="isAPIRequestPendingFlagUpdate($event)"
+                                        [externalSaveEvent]="externalSaveEvent" [isShowSave]="isShowSave"
+                                        [saveButtonLabel]="saveButtonLabel"
+                                        [isShowQuestionnaireDock]="isShowQuestionnaireDock"
+                                        [isQuestionnaireValidateMode]="isQuestionnaireValidateMode"></app-view-questionnaire>
             </div>
         </div>
     </div>
 </div>
 
-<ng-container *ngIf="isShowNoDatacard && questionnaireList.length == 0 && isShowQuestionnaire" class="no-data-container">
+<ng-container *ngIf="isShowNoDatacard && questionnaireList.length == 0 && isShowQuestionnaire"
+              class="no-data-container">
     <div class="no-data-container w-100">
         <span class="no-data-icon-outer">
             <div class="no-data-icon">
@@ -99,7 +109,7 @@
     </div>
 </ng-container>
 
-<div class="modal"  id="confirmVersionModal">
+<div class="modal" id="confirmVersionModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -112,17 +122,19 @@
             </div>
             <div class="modal-footer">
                 <button type="button" data-bs-dismiss="modal" class="btn btn-outline-primary fs-14"
-                    (click)="updateQuestionnaireVersion(questionnaireList[selectedIndex])">
-                    Continue </button>
+                        (click)="updateQuestionnaireVersion(questionnaireList[selectedIndex])">
+                    Continue
+                </button>
             </div>
         </div>
     </div>
 </div>
-<button tabindex="-1" class="d-none" id="confirmVersionModalButton" data-bs-toggle="modal" data-bs-target="#confirmVersionModal" aria-hidden="true"></button>
+<button tabindex="-1" class="d-none" id="confirmVersionModalButton" data-bs-toggle="modal"
+        data-bs-target="#confirmVersionModal" aria-hidden="true"></button>
 <button type="button" id="unsavedChangeModalButton" style="display: none" data-bs-toggle="modal"
-    data-bs-target="#unsavedChangeModal" aria-hidden="true" tabindex="-1"></button>
+        data-bs-target="#unsavedChangeModal" aria-hidden="true" tabindex="-1"></button>
 <div tabindex="-1" class="modal fade mySkinDialog" id="unsavedChangeModal"
-    role="dialog" aria-label="Are you sure you want to leave this page?">
+     role="dialog" aria-label="Are you sure you want to leave this page?">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,10 +149,14 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary fs-14" data-bs-dismiss="modal" id="coi-view-questionnaire-unsavedmodal-stay-btn">Stay on this
-                    Page</button>
+                <button type="button" class="btn btn-outline-primary fs-14" data-bs-dismiss="modal"
+                        id="coi-view-questionnaire-unsavedmodal-stay-btn">Stay on this
+                    Page
+                </button>
                 <button type="button" class="btn btn-primary fs-14" (click)="versionWarning(tempSelectedIndex)"
-                    data-bs-dismiss="modal" data-bs-toggle="modal" id="coi-view-questionnaire-unsavedmodal-leave-btn">Leave this Page</button>
+                        data-bs-dismiss="modal" data-bs-toggle="modal"
+                        id="coi-view-questionnaire-unsavedmodal-leave-btn">Leave this Page
+                </button>
             </div>
         </div>
     </div>

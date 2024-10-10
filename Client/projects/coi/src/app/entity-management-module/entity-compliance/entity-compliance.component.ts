@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { CommonService } from '../../common/services/common.service';
-import { ComplianceTab } from '../shared/entity-constants';
+import {COMPLIANCE_QUESTIONNAIRE_SUB_SECTION_ID, ComplianceTab} from '../shared/entity-constants';
 import { EntityComplianceService } from './entity-compliance.service';
 import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails, SubAwardOrganization } from '../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
@@ -15,7 +15,7 @@ import { subscriptionHandler } from '../../common/utilities/subscription-handler
     styleUrls: ['./entity-compliance.component.scss'],
     providers: [EntityComplianceService]
 })
-export class EntityComplianceComponent {
+export class EntityComplianceComponent implements OnInit, OnDestroy {
 
     overViewTab: any;
     isLoading = true;
@@ -25,6 +25,7 @@ export class EntityComplianceComponent {
     entityComplianceAttachmentList: EntityAttachment[] = [];
     riskSectionDetails = new EntitySectionDetails();
     attachmentSectionDetails = new EntitySectionDetails();
+    questionnaireSectionDetails = new EntitySectionDetails();
 
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _entityComplianceService: EntityComplianceService) { }
@@ -48,6 +49,9 @@ export class EntityComplianceComponent {
         this.attachmentSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'COMPLIANCE_ATTACHMENTS');
         this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'COMPLIANCE_ATTACHMENTS');
         this.attachmentSectionDetails.subSectionId = 2616;
+        this.questionnaireSectionDetails.sectionId = this.commonService.getSectionId(this.overViewTab,'COMPLIANCE_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.sectionName = this.commonService.getSectionName(this.overViewTab,'COMPLIANCE_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.subSectionId = this.commonService.getSubSectionId(this.overViewTab,'COMPLIANCE_QUESTIONNAIRE');
     }
 
     private getDataFromStore(): void {

@@ -179,6 +179,14 @@
         "target": "http://10.199.100.34:9090/",
         "secure": false
     },
+    "/saveQuestionnaire/v1": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
+    "/saveAttachmentQuestionnaire/v1": {
+        "target": "http://10.199.100.34:9090/",
+        "secure": false
+    },
     "/getActiveDisclosure": {
         "target": "http://10.199.100.34:9090/coi",
         "secure": false

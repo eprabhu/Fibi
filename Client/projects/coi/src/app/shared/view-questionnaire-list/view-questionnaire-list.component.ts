@@ -7,7 +7,7 @@ import {fileDownloader} from "../../../../../fibi/src/app/common/utilities/custo
 import {CommonService} from "../../common/services/common.service";
 import {HttpClient} from "@angular/common/http";
 import {ApplicableQuestionnaire} from '../../disclosure/coi-interface';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import {HTTP_ERROR_STATUS} from '../../app-constants';
 
 interface Configuration {
     moduleItemCode: number;
@@ -37,6 +37,11 @@ interface Configuration {
  * isEnableVersion: boolean = checks if we should show new version pop up this will be combined with view mode value;
  */
 
+/**
+ * Author - Sreejith T
+ * @Input() - isAutoSaveEnabled - Whether autosave feature is enabled
+ */
+
 @Component({
     selector: 'app-view-questionnaire-list',
     templateUrl: './view-questionnaire-list.component.html',
@@ -55,6 +60,7 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     @Input() questionnaireHeader = 'Questionnaire';
     @Input() isShowBackButton = false;
     @Input() isShowCollapse = false;
+    @Input() isAutoSaveEnabled = false;
     @Input() saveButtonLabel = 'Save';
     @Output() currentActiveQuestionnaire: EventEmitter<any> = new EventEmitter<any>();
     @Input() isQuestionnaireValidateMode: boolean = false;
@@ -79,6 +85,8 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     isSaving = false;
     isShowQuestionnaire = true;
     isShowNoDatacard = false;
+    private hasPendingAPIs = false;
+    private hasQueuedTabSwitch = false;
 
     constructor(private _http: HttpClient, private _questionnaireListService: QuestionnaireListService, public _commonService: CommonService,
                 private _router: Router, private _CDRef: ChangeDetectorRef) {
@@ -175,7 +183,45 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
     isQuestionnaireChanged(index) {
         this.clearPreviousActiveTabs();
         this.tempSelectedIndex = index;
-        this.configuration.isChangeWarning && this.activeQuestionnaire.isChanged ? this.openModalOnDataChange() : this.versionWarning(index);
+        if (this.isAutoSaveEnabled) {
+            if (this.hasPendingAPIs) {
+                this.showLoaderMessageAndQueueTabSwitch();
+            } else {
+                this.versionWarning(index);
+            }
+        } else {
+            this.configuration.isChangeWarning && this.activeQuestionnaire.isChanged ?
+                this.openModalOnDataChange() : this.versionWarning(index);
+        }
+    }
+
+    /**
+     * Function for showing loader and queuing tab switch
+     * - the default API loader will be shown with a custom message
+     * - tab switch by the user will be placed in a queue till the autosave APIs are completed
+     */
+    private showLoaderMessageAndQueueTabSwitch(): void {
+        this._commonService.isPreventDefaultLoader = false;
+        this._commonService.isShowLoader.next(true);
+        this._commonService.appLoaderContent = 'Saving... Please wait a moment.';
+        this.hasQueuedTabSwitch = true;
+    }
+
+    /**
+     * Function for updating the hasPendingAPIs flag
+     * - hasPendingAPIs flag is used to know whether there are any pending autosave API calls to be finished.
+     * - value is true if there is pending API calls and value is false if there are no pending API calls
+     * - if hasQueuedTabSwitch is true (there is a tab switching done by user, but placed in queue since API calls are not completed)
+     * and hasPendingAPIs is true then we switch the tab since API calls are completed
+     */
+    public isAPIRequestPendingFlagUpdate(flag: boolean): void {
+        this.hasPendingAPIs = flag;
+        if (this.hasQueuedTabSwitch && !this.hasPendingAPIs) {
+            this.hasQueuedTabSwitch = false;
+            this._commonService.isShowLoader.next(false);
+            this._commonService.appLoaderContent = 'Loading...';
+            this.versionWarning(this.tempSelectedIndex);
+        }
     }
 
     markQuestionnaireAsEdited(status: boolean): void {
@@ -217,6 +263,8 @@ export class ViewQuestionnaireListComponent implements OnChanges, OnDestroy {
             const QUESTIONNAIRE = {...this.questionnaireList[this.selectedIndex]};
             QUESTIONNAIRE.IS_ALL_QUESTIONNAIRES_COMPLETE = this.isAllQuestionnairesCompleted();
             this.QuestionnaireSaveEvent.emit(QUESTIONNAIRE);
+        } else if (event.status === 'UPDATE') {
+            this.questionnaireList[this.selectedIndex].QUESTIONNAIRE_COMPLETED_FLAG = event.data.QUESTIONNAIRE_COMPLETED_FLAG;
         } else {
             this.QuestionnaireSaveEvent.emit(false);
         }

@@ -10,6 +10,7 @@ import { DuplicateEntityCheckComponent } from './duplicate-entity-check/duplicat
 import { DuplicateMarkingConfirmationComponent } from './duplicate-marking-confirmation/duplicate-marking-confirmation.component';
 import { EntityDetailsPopupCardComponent } from './entity-details-popup-card/entity-details-popup-card.component';
 import { RiskEditHistorySlider } from './entity-risk-section/risk-edit-history-slider/risk-edit-history-slider.component';
+import { EntityCommonQuestionnaireComponent } from './entity-common-questionnaire/entity-common-questionnaire.component';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { RiskEditHistorySlider } from './entity-risk-section/risk-edit-history-s
         DuplicateEntityCheckComponent,
         DuplicateMarkingConfirmationComponent,
         EntityDetailsPopupCardComponent,
-        RiskEditHistorySlider
+        RiskEditHistorySlider,
+        EntityCommonQuestionnaireComponent
     ],
     imports: [
         FormsModule,
@@ -34,7 +36,8 @@ import { RiskEditHistorySlider } from './entity-risk-section/risk-edit-history-s
         DuplicateEntityCheckComponent,
         EntityDetailsPopupCardComponent,
         DuplicateMarkingConfirmationComponent,
-        RiskEditHistorySlider
+        RiskEditHistorySlider,
+        EntityCommonQuestionnaireComponent
     ]
 })
 export class SharedEntityManagementModule { }

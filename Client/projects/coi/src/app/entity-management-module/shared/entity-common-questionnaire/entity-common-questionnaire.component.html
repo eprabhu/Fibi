@@ -1,0 +1,25 @@
+<div class="p-3 grey-border rounded-2" [id]="sectionId">
+    <div class="row mb-2">
+        <div class="col-12 d-flex align-items-center coloured-bg-header">
+            <span class="icon-bg me-2 coloured-icons fs-14 d-inline-flex">
+                <mat-icon class="coi-mat-icon-size" aria-hidden="true">quiz</mat-icon></span>
+            <span class="fs-16 fw-medium" id="coi-entity-sponsor-details">{{ sectionName }}
+                <app-common-help-text [subSectionId]="subSectionId"
+                                      [elementId]="elementNameMapping?.[subSectionId]+subSectionId"></app-common-help-text>
+            </span>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <app-view-questionnaire-list
+            [isShowExportButton]="false"
+            [isShowSave]="false"
+            [configuration]="configuration"
+            [questionnaireHeader]="''"
+            [isAutoSaveEnabled]="true"
+            (QuestionnaireSaveEvent)="getSaveEvent($event)"
+            (QuestionnaireEditEvent)="markQuestionnaireAsEdited($event)"
+            [isQuestionnaireValidateMode]="isQuestionnaireValidateMode">
+        </app-view-questionnaire-list>
+    </div>
+</div>
+

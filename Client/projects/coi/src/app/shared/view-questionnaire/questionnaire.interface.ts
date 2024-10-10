@@ -50,7 +50,7 @@ export interface Question {
     ANSWERS: ANSWERS;
     AC_TYPE: string;
     ANSWER_TYPE: string;
-    NO_OF_ANSWERS: number;
+    NO_OF_ANSWERS: number | Number;
     UPDATE_TIMESTAMP: number;
     PARENT_QUESTION_ID?: any;
     HEADERS: HEADER[];
@@ -59,5 +59,90 @@ export interface Question {
     IS_NO_VISIBLE_ANSWERS: boolean;
     IS_ANSWERED: boolean;
     IS_LIMIT_REACHED: boolean | null;
+    EXPLANATION: {};
+    ANSWER_LOOKUP_CODE?: string;
+}
+
+
+export interface OPTION {
+    EXPLANTION_LABEL: any;
+    QUESTION_OPTION_ID: number;
+    OPTION_NUMBER: any;
+    QUESTION_ID: number;
+    OPTION_LABEL: string;
+    REQUIRE_EXPLANATION: string;
+  }
+
+export class QuestionnaireRequestObject {
+    questionnaireId = null;
+    moduleItemKey = null;
+    moduleSubItemKey = '';
+    moduleItemCode = null;
+    moduleSubItemCode = null;
+    questionnaireAnswerHeaderId = null;
+    questionnaireCompleteFlag = null;
+    questionnaire = null;
+    header = null;
+}
+
+export class QuestionRequestObject {
+    QUESTION_ID = null;
+    AC_TYPE = null;
+    ANSWERS = null;
+    ANSWER_TYPE = null;
+    NO_OF_ANSWERS = null;
+    ANSWER_LOOKUP_CODE = '';
+    EXPLANATION = null;
+}
+
+export interface OptionRequestObject {
+    QUESTION_ID: number;
+    OPTION_LABEL: string;
+}
+
+export interface AutoSaveRequestQuestionnaireData {
+    questions: QuestionRequestObject[];
+    options: OptionRequestObject[];
+}
+
+export interface AutoSaveResponse {
+    moduleItemCode: number;
+    moduleSubItemCode: number;
+    moduleItemKey: string;
+    moduleSubItemKey: string;
+    questionnaireId: number;
+    questionnaireAnswerHeaderId: number;
+    questionnaireCompleteFlag: string;
+    questionnaire: AutoSaveResponseQuestionnaire;
+    asyncData: string;
+    header: AutoSaveResponseHeader;
+}
+
+export interface AutoSaveResponseQuestionnaire {
+    questions: Question[];
+}
+
+export interface AutoSaveResponseHeader {
+    TRIGGER_POST_EVALUATION: null;
+    QUESTIONNAIRE_VERSION: number;
+    QUESTIONNAIRE_COMPLETED_FLAG: string;
+    UPDATE_USER: string;
+    ANS_UPDATE_TIMESTAMP: number;
+    ANS_PERSON_FULL_NAME: string;
+    QUESTIONNAIRE_DESCRIPTION: null;
+    IS_FINAL: boolean;
+    QUESTIONNAIRE_NUMBER: number;
+    QUESTIONNAIRE_ID: number;
+    QUEST_GROUP_TYPE_CODE: null;
+    AC_TYPE: string;
+    QUESTIONNAIRE_NAME: string;
+    UPDATE_TIMESTAMP: number;
+}
+
+export interface AttachmentData {
+    attachment: File;
+    questionId: number;
+    fileName: string;
+    type: string;
 }
 

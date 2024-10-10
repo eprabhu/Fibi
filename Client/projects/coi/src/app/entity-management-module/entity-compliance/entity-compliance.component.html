@@ -14,5 +14,11 @@
                 [entityAttachmentsList]="entityComplianceAttachmentList" [riskCategoryCode]="'CO'">
             </app-entity-attachment-section>
         </div>
+        <div class="col-12">
+            <app-entity-common-questionnaire [sectionName]="questionnaireSectionDetails.sectionName"
+                                             [sectionId]="questionnaireSectionDetails.sectionId"
+                                             [subSectionId]="questionnaireSectionDetails.subSectionId"
+            ></app-entity-common-questionnaire>
+        </div>
     </div>
 </div>

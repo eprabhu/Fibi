@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { CommonService } from '../../common/services/common.service';
-import { SubawardOrganisationTab } from '../shared/entity-constants';
+import {
+    SUB_AWARD_QUESTIONNAIRE_SUB_SECTION_ID,
+    SubawardOrganisationTab
+} from '../shared/entity-constants';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
@@ -27,6 +30,7 @@ export class EntitySubawardComponent implements OnInit {
     riskSectionDetails = new EntitySectionDetails();
     entitySubAwarAttachmentList: EntityAttachment[] = [];
     attachmentSectionDetails = new EntitySectionDetails();
+    questionnaireSectionDetails = new EntitySectionDetails();
     entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public commonService: CommonService, private _dataStoreService: EntityDataStoreService, private _entitySubAwardService: EntitySubAwardService) { }
@@ -51,6 +55,9 @@ export class EntitySubawardComponent implements OnInit {
         this.attachmentSectionDetails.sectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_ATTACHMENTS');
         this.riskSectionDetails.sectionId = this.commonService.getSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_RISK');
         this.riskSectionDetails.sectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_RISK');
+        this.questionnaireSectionDetails.sectionId = this.commonService.getSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.sectionName = this.commonService.getSectionName(this.SUB_AWARD_TAB, 'SUB_AWARD_QUESTIONNAIRE');
+        this.questionnaireSectionDetails.subSectionId = this.commonService.getSubSectionId(this.SUB_AWARD_TAB, 'SUB_AWARD_QUESTIONNAIRE');
     }
 
     private getDataFromStore(): void {
