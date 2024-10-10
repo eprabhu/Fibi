@@ -28,6 +28,8 @@ export class COIAppConfig {
     EXTERNAL_DEV_PROPOSAL_URL: string = "";
     EXTERNAL_AWARD_URL: string = "";
     EXTERNAL_IP_URL: string = "";
+    EXTERNAL_PERSON_URL: string = "";
+    EXTERNAL_ROLODEX_PERSON_URL: string = "";
 
     constructor(init?: Partial<COIAppConfig>) {
         Object.assign(this, init);

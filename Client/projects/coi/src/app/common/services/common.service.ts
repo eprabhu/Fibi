@@ -4,7 +4,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {getFromLocalStorage, setIntoLocalStorage} from '../../../../../fibi/src/app/common/utilities/user-service';
 import {Toast} from 'bootstrap';
-import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG, OPA_DISCLOSURE_RIGHTS, OPA_DISCLOSURE_ADMIN_RIGHTS } from '../../app-constants';
+import { HTTP_SUCCESS_STATUS, AWARD_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, ADMIN_DASHBOARD_RIGHTS, COI_DISCLOSURE_SUPER_ADMIN_RIGHTS, HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG, OPA_DISCLOSURE_RIGHTS, OPA_DISCLOSURE_ADMIN_RIGHTS, PERSON_EXTERNAL_RESOURCE_URL, ROLODEX_PERSON_EXTERNAL_RESOURCE_URL } from '../../app-constants';
 import { getPersonLeadUnitDetails } from '../utilities/custom-utilities';
 import { Router } from '@angular/router';
 import { ElasticConfigService } from './elastic-config.service';
@@ -27,6 +27,8 @@ export class CommonService {
     fibiCOIConnectUrl = '';
     EXTERNAL_APPLICATION_BASE_URL = '';
     EXTERNAL_DEV_PROPOSAL_URL = '';
+    EXTERNAL_PERSON_URL = '';
+    EXTERNAL_ROLODEX_PERSON_URL = '';
     EXTERNAL_AWARD_URL = '';
     EXTERNAL_IP_URL = '';
     currencyFormat = '$';
@@ -146,6 +148,8 @@ export class CommonService {
         this.EXTERNAL_DEV_PROPOSAL_URL = configurationData.EXTERNAL_DEV_PROPOSAL_URL;
         this.EXTERNAL_AWARD_URL = configurationData.EXTERNAL_AWARD_URL;
         this.EXTERNAL_IP_URL = configurationData.EXTERNAL_IP_URL;
+        this.EXTERNAL_PERSON_URL = configurationData.EXTERNAL_PERSON_URL;
+        this.EXTERNAL_ROLODEX_PERSON_URL = configurationData.EXTERNAL_ROLODEX_PERSON_URL;
         this.entityURL = configurationData.entityURL;
     }
 
@@ -489,20 +493,42 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
      * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
      */
     redirectToProjectDetails(projectTypeCode: string | number, projectId: string): void {
-        const RESOURCE_URLS = {
-            1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
-            2: (this.EXTERNAL_IP_URL || IP_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
-            3: (this.EXTERNAL_DEV_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL).replace('{projectId}', projectId),
+        const PROJECT_URLS_MAP = {
+            1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL),
+            2: (this.EXTERNAL_IP_URL || IP_EXTERNAL_RESOURCE_URL),
+            3: (this.EXTERNAL_DEV_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL),
         };
-        const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
-        if (RESOURCE_URLS[projectTypeCode]) {
-            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URLS[projectTypeCode]}`, '_blank');
+        if (PROJECT_URLS_MAP[projectTypeCode]) {
+            const RESOURCE_URL = PROJECT_URLS_MAP[projectTypeCode].replace('{projectId}', projectId);
+            const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
+            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URL}`, '_blank');
         }
     }
 
-    redirectToPersonDetails(personId: string): void {
-        const URL = this.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personId}`;
-        window.open(URL);
+    /**
+     * Redirects to person details based on the mode ('PERSON' or 'ROLODEX').
+     * 
+     * @param personId - The unique ID of the person to redirect to.
+     * @param mode - Specifies if the person is a 'PERSON' (default) or 'ROLODEX'.
+     *
+     * PERSON: 
+     *  - EXTERNAL_PERSON_URL, PERSON_EXTERNAL_RESOURCE_URL => Used for KC integration or external integration.
+     * ROLODEX: 
+     *  - EXTERNAL_ROLODEX_PERSON_URL, ROLODEX_PERSON_EXTERNAL_RESOURCE_URL => Used for KC integration or external integration.
+     * 
+     * External Application Base URL:
+     *  - EXTERNAL_APPLICATION_BASE_URL, fibiApplicationUrl => Used as the base URL for FIBI redirection.
+     */
+    redirectToPersonDetails(personId: string, mode: 'PERSON' | 'ROLODEX' = 'PERSON'): void {
+        const PERSON_URLS_MAP = {
+            'PERSON': this.EXTERNAL_PERSON_URL || PERSON_EXTERNAL_RESOURCE_URL,
+            'ROLODEX': this.EXTERNAL_ROLODEX_PERSON_URL || ROLODEX_PERSON_EXTERNAL_RESOURCE_URL
+        };
+        if (PERSON_URLS_MAP[mode]) {
+            const RESOURCE_URL = PERSON_URLS_MAP[mode].replace('{personId}', personId);
+            const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
+            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URL}`, '_blank');
+        }
     }
 
     setLoaderRestriction(): void {

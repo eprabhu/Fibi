@@ -143,6 +143,9 @@ export const AWARD_EXTERNAL_RESOURCE_URL = '#/fibi/award/overview?awardId={proje
 export const PROPOSAL_EXTERNAL_RESOURCE_URL = '#/fibi/proposal/overview?proposalId={projectId}';
 export const IP_EXTERNAL_RESOURCE_URL = '#/fibi/instituteproposal/overview?instituteProposalId={projectId}';
 
+export const PERSON_EXTERNAL_RESOURCE_URL = '#/fibi/person/person-details?personId={personId}';
+export const ROLODEX_PERSON_EXTERNAL_RESOURCE_URL = '#/fibi/rolodex';
+
 export const URL_FOR_DISCLOSURE_PROJECT = '/fcoiDisclosure/projects/{disclosureId}';
 
 export const CLASS_RED_BADGE = 'red-badge';
