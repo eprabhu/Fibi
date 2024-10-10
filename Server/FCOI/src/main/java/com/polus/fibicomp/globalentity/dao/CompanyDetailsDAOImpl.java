@@ -1,5 +1,11 @@
 package com.polus.fibicomp.globalentity.dao;
 
+import static java.util.Map.entry;
+
+import java.util.Map;
+import java.util.StringJoiner;
+
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -17,6 +23,7 @@ import com.polus.core.security.AuthenticatedUser;
 import com.polus.fibicomp.globalentity.dto.AddressDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.IndustryDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestDTO;
+import com.polus.fibicomp.globalentity.dto.OtherDetailsRequestField;
 import com.polus.fibicomp.globalentity.dto.RegistrationDetailsRequestDTO;
 import com.polus.fibicomp.globalentity.pojo.EntityForeignName;
 import com.polus.fibicomp.globalentity.pojo.EntityIndustryClassification;
@@ -25,8 +32,11 @@ import com.polus.fibicomp.globalentity.pojo.EntityPriorName;
 import com.polus.fibicomp.globalentity.pojo.EntityRegistration;
 import com.polus.fibicomp.globalentity.pojo.IndustryCategoryCode;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
 @Transactional
+@Slf4j
 public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 
 	@Autowired
@@ -34,6 +44,18 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 
 	@Autowired
 	private CommonDao commonDao;
+
+	private static final Map<OtherDetailsRequestField, String> FIELD_MAPPINGS = Map.ofEntries(
+			entry(OtherDetailsRequestField.startDate, "startDate"),
+			entry(OtherDetailsRequestField.incorporationDate, "incorporationDate"),
+			entry(OtherDetailsRequestField.incorporatedIn, "incorporatedIn"),
+			entry(OtherDetailsRequestField.congressionalDistrict, "congressionalDistrict"),
+			entry(OtherDetailsRequestField.currencyCode, "currencyCode"),
+			entry(OtherDetailsRequestField.shortName, "shortName"),
+			entry(OtherDetailsRequestField.businessTypeCode, "businessTypeCode"),
+			entry(OtherDetailsRequestField.activityText, "activityText"),
+			entry(OtherDetailsRequestField.federalEmployerId, "federalEmployerId"),
+			entry(OtherDetailsRequestField.numberOfEmployees, "numberOfEmployees"));
 
 	@Override
 	public int saveIndustryDetails(EntityIndustryClassification entity) {
@@ -177,75 +199,43 @@ public class CompanyDetailsDAOImpl implements CompanyDetailsDAO {
 
 	@Override
 	public void updateOtherDetails(OtherDetailsRequestDTO dto) {
-		StringBuilder hqlQuery = new StringBuilder();
+		Map<OtherDetailsRequestField, Object> otherDetailsRequestFields = dto.getOtherDetailsRequestFields();
+
+		if (otherDetailsRequestFields == null || otherDetailsRequestFields.isEmpty()) {
+			log.info("otherDetailsRequestFields map is null or empty.");
+			return;
+		}
+
 		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-		hqlQuery.append("UPDATE Entity e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
-		if (dto.getStartDate() != null) {
-			hqlQuery.append(", e.startDate = :startDate");
-		}
-		if (dto.getIncorporationDate() != null) {
-			hqlQuery.append(", e.incorporationDate = :incorporationDate");
-		}
-		if (dto.getCurrencyCode() != null) {
-			hqlQuery.append(", e.currencyCode = :currencyCode");
-		}
-		if (dto.getIncorporatedIn() != null) {
-			hqlQuery.append(", e.incorporatedIn = :incorporatedIn");
-		}
-		if (dto.getShortName() != null) {
-			hqlQuery.append(", e.shortName = :shortName");
-		}
-		if (dto.getBusinessTypeCode() != null) {
-			hqlQuery.append(", e.businessTypeCode = :businessTypeCode");
-		}
-		if (dto.getActivityText() != null) {
-			hqlQuery.append(", e.activityText = :activityText");
-		}
-		if (dto.getCongressionalDistrict() != null) {
-			hqlQuery.append(", e.congressionalDistrict = :congressionalDistrict");
-		}
-		if (dto.getFederalEmployerId() != null) {
-			hqlQuery.append(", e.federalEmployerId = :federalEmployerId");
-		}
-		if (dto.getNumberOfEmployees() != null) {
-			hqlQuery.append(", e.numberOfEmployees = :numberOfEmployees");
-		}
+
+		StringBuilder hqlQuery = new StringBuilder("UPDATE Entity e SET e.updatedBy = :updatedBy, e.updateTimestamp = :updateTimestamp");
+		StringJoiner updates = new StringJoiner(", ");
+
+		otherDetailsRequestFields.forEach((field, value) -> {
+			String fieldName = FIELD_MAPPINGS.get(field);
+			if (fieldName != null) {
+				updates.add("e." + fieldName + " = :" + fieldName);
+			} else {
+				throw new IllegalArgumentException("Unknown field: " + field);
+			}
+		});
+
+		hqlQuery.append(", ").append(updates.toString());
 		hqlQuery.append(" WHERE e.entityId = :entityId");
+
 		Query query = session.createQuery(hqlQuery.toString());
-		if (dto.getStartDate() != null) {
-			query.setParameter("startDate", dto.getStartDate());
-		}
-		if (dto.getIncorporationDate() != null) {
-			query.setParameter("incorporationDate", dto.getIncorporationDate());
-		}
-		if (dto.getCurrencyCode() != null) {
-			query.setParameter("currencyCode", dto.getCurrencyCode());
-		}
-		if (dto.getIncorporatedIn() != null) {
-			query.setParameter("incorporatedIn", dto.getIncorporatedIn());
-		}
-		if (dto.getShortName() != null) {
-			query.setParameter("shortName", dto.getShortName());
-		}
-		if (dto.getBusinessTypeCode() != null) {
-			query.setParameter("businessTypeCode", dto.getBusinessTypeCode());
-		}
-		if (dto.getActivityText() != null) {
-			query.setParameter("activityText", dto.getActivityText());
-		}
-		if (dto.getCongressionalDistrict() != null) {
-			query.setParameter("congressionalDistrict", dto.getCongressionalDistrict());
-		}
-		if (dto.getFederalEmployerId() != null) {
-			query.setParameter("federalEmployerId", dto.getFederalEmployerId());
-		}
-		if (dto.getNumberOfEmployees() != null) {
-			query.setParameter("numberOfEmployees", dto.getNumberOfEmployees());
-		}
 		query.setParameter("entityId", dto.getEntityId());
 		query.setParameter("updatedBy", AuthenticatedUser.getLoginPersonId());
 		query.setParameter("updateTimestamp", commonDao.getCurrentTimestamp());
-		query.executeUpdate();
+
+		otherDetailsRequestFields.forEach((field, value) -> {
+			query.setParameter(FIELD_MAPPINGS.get(field), value);
+		});
+
+		int updatedRows = query.executeUpdate();
+		if (updatedRows == 0) {
+			throw new EntityNotFoundException("Entity with ID " + dto.getEntityId() + " not found.");
+		}
 	}
 
 	@Override

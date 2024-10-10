@@ -1,5 +1,7 @@
 package com.polus.fibicomp.globalentity.dto;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +24,6 @@ public class OtherDetailsRequestDTO {
 	private String activityText;
 	private String federalEmployerId;
 	private Integer numberOfEmployees;
+	private Map<OtherDetailsRequestField, Object> otherDetailsRequestFields;
 
 }
