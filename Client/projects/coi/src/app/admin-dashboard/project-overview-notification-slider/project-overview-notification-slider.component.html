@@ -150,7 +150,7 @@
                                 class="mandatory me-1">*</span>Subject</label>
                         <input id="notification-msg-subject" class="form-control"
                             [class.coi-invalid-FieldBorder]="validationMap.get('subject')"
-                            [(ngModel)]="notificationObject.subject" placeholder="Please provide a subject">
+                            [(ngModel)]="notificationObject.subject" appTailingSpaceRemover placeholder="Please provide a subject">
 
                         <!-- subject error -->
                         <span *ngIf="validationMap?.has('subject')"
