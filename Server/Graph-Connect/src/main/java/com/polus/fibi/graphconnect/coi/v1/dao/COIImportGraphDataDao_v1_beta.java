@@ -233,8 +233,8 @@ public class COIImportGraphDataDao_v1_beta {
 			entity.setId(resultSet.getString("ID"));
 			entity.setEntityNumber(resultSet.getString("ENTITY_NUMBER"));
 			entity.setEntityName(resultSet.getString("NAME"));
-			entity.setStatus(resultSet.getString("STATUS"));
-			entity.setType(resultSet.getString("TYPE"));
+			entity.setStatusType(resultSet.getString("STATUS"));
+			entity.setStatusType(resultSet.getString("TYPE"));
 			entity.setCountryName(resultSet.getString("COUNTRY_NAME"));
 			entity.setCountryCode(resultSet.getString("COUNTRY_CODE"));
 
