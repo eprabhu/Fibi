@@ -98,23 +98,19 @@ public class COIImportGraphDataDao {
 
 		var start = Instant.now();
 		logger.debug("--------- Import Entity: starts at ------------ " + start);
-
-		String query = "SELECT  CONCAT('ENT',t1.ENTITY_ID) as ID, t1.ENTITY_NUMBER,\r\n"
-				+ "t1.ENTITY_NAME as NAME, CASE \r\n"
-				+ "        WHEN t1.IS_ACTIVE = 'Y' THEN 'Active'\r\n"
-				+ "        WHEN t1.IS_ACTIVE = 'N' THEN 'Inactive' END as STATUS, \r\n"
-				+ "t3.DESCRIPTION as TYPE, \r\n"
-				+ "t5.DESCRIPTION as RISK,\r\n"
-				+ "t1.COUNTRY_CODE, t4.COUNTRY_NAME, t1.WEB_URL,\r\n"
-				+ "CASE\r\n"
-				+ "    WHEN (select count(s1.ENTITY_NUMBER) from entity_relationship s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.NODE_TYPE_CODE = '2') > 0 THEN \"Y\"\r\n"
-				+ "    ELSE 'N'\r\n"
-				+ "END AS IS_SPONSOR\r\n"
+		
+		String query = "SELECT  CONCAT('ENT',t1.ENTITY_ID) as ID, t1.ENTITY_ID, t1.ENTITY_NUMBER,\r\n"
+				+ "t1.PRIMARY_NAME as NAME,\r\n"
+				+ "t2.DESCRIPTION as DOCUMENT_STATUS_TYPE, \r\n"
+				+ "t3.DESCRIPTION as OWNERSHIP_TYPE, \r\n"
+				+ "t5.DESCRIPTION as STATUS_TYPE,\r\n"
+				+ "t1.COUNTRY_CODE, t4.COUNTRY_NAME, "
+				+ "t1.WEBSITE_ADDRESS\r\n"
 				+ "FROM entity t1\r\n"
-				+ "inner join entity_risk_category t5 on t1.RISK_CATEGORY_CODE = t5.RISK_CATEGORY_CODE\r\n"
-				+ "inner join entity_type t3 on t1.entity_type_code = t3.entity_type_code\r\n"
-				+ "left outer join country t4 on t1.COUNTRY_CODE = t4.COUNTRY_CODE\r\n"
-				+ "WHERE t1.VERSION_NUMBER IN  (select MAX(s1.VERSION_NUMBER) from entity s1 where s1.ENTITY_NUMBER = t1.ENTITY_NUMBER and s1.VERSION_STATUS = 'ACTIVE' )";
+				+ "inner join entity_document_status_type t2 on t1.DOCUMENT_STATUS_TYPE_CODE = t2.DOCUMENT_STATUS_TYPE_CODE\r\n"
+				+ "inner join entity_ownership_type t3 on t1.ENTITY_OWNERSHIP_TYPE_CODE = t3.OWNERSHIP_TYPE_CODE\r\n"
+				+ "inner join entity_status_type t5 on t1.ENTITY_STATUS_TYPE_CODE = t5.ENTITY_STATUS_TYPE_CODE\r\n"
+				+ "left outer join country t4 on t1.COUNTRY_CODE = t4.COUNTRY_CODE";
 
 		int pageSize = 4000; // Number of records to fetch in each batch
 
@@ -147,12 +143,15 @@ public class COIImportGraphDataDao {
 		return jdbcTemplate.query(paginatedQuery, (resultSet, rowNum) -> {
 
 			COIEntity entity = COIEntity.builder().id(resultSet.getString("ID"))
-					.entityNumber(resultSet.getString("ENTITY_NUMBER")).entityName(resultSet.getString("NAME"))
-					.status(resultSet.getString("STATUS"))
-					.isSponsor(resultSet.getString("IS_SPONSOR"))
-					.type(resultSet.getString("TYPE"))
-					.risk(resultSet.getString("RISK"))
-					.countryName(resultSet.getString("COUNTRY_NAME")).countryCode(resultSet.getString("COUNTRY_CODE"))
+					.entityId(resultSet.getString("ENTITY_ID"))
+					.entityNumber(resultSet.getString("ENTITY_NUMBER"))
+					.entityName(resultSet.getString("NAME"))
+					.statusType(resultSet.getString("STATUS_TYPE"))
+					.documentStatusType(resultSet.getString("DOCUMENT_STATUS_TYPE"))
+					.ownershipType(resultSet.getString("OWNERSHIP_TYPE"))
+					.websiteAddress(resultSet.getString("WEBSITE_ADDRESS"))
+					.countryName(resultSet.getString("COUNTRY_NAME"))
+					.countryCode(resultSet.getString("COUNTRY_CODE"))
 					.build();
 			return entity;
 
@@ -247,13 +246,12 @@ public class COIImportGraphDataDao {
 
 		String query = """
 					select
-					z0.PERSON_ID,z0.ENTITY_NUMBER , z0.ENTITY_NAME,
-					GROUP_CONCAT(DISTINCT t6.disclosure_type SEPARATOR ',') AS CATEGORY,
+					z0.PERSON_ID,z0.ENTITY_ID , z0.ENTITY_NAME,
 					GROUP_CONCAT(DISTINCT  z0.REL  SEPARATOR ',') AS REL
 					from
 					(
 						select
-						t0.PERSON_ID,t0.ENTITY_NUMBER, t5.ENTITY_NAME ,
+						t0.PERSON_ID,t0.ENTITY_ID, t5.PRIMARY_NAME as  ENTITY_NAME ,
 						CONCAT(t3.DESCRIPTION, '[', GROUP_CONCAT(DISTINCT t4.DESCRIPTION SEPARATOR ','), ']') AS REL
 						from person_entity t0
 						inner join person_entity_relationship t1 on t1.PERSON_ENTITY_ID  = t0.PERSON_ENTITY_ID
@@ -261,41 +259,17 @@ public class COIImportGraphDataDao {
 						inner join coi_disclosure_type t3 on t2.DISCLOSURE_TYPE_CODE = t3.DISCLOSURE_TYPE_CODE
 						inner join person_entity_rel_type t4 on t4.RELATIONSHIP_TYPE_CODE = t2.RELATIONSHIP_TYPE_CODE
 						inner join entity t5 on t5.ENTITY_ID = t0.ENTITY_ID
-						group by t0.PERSON_ID,t0.ENTITY_NUMBER , t5.ENTITY_NAME  ,t3.DESCRIPTION
+						group by t0.PERSON_ID,t0.ENTITY_ID , ENTITY_NAME  ,t3.DESCRIPTION
 					) z0
-					left outer join (
-
-							select
-							PERSON_ID,
-							ENTITY_NUMBER,
-							'TRAVEL' as disclosure_type
-							from coi_travel_disclosure
-
-					        UNION ALL
-
-							select t20.PERSON_ID,t21.ENTITY_NUMBER, 'FCOI' as disclosure_type
-							from coi_disclosure t20
-							inner join coi_discl_ent_proj_details t21 on t20.DISCLOSURE_ID = t21.DISCLOSURE_ID
-							where t20.FCOI_TYPE_CODE = '1'
-							and t21.ENTITY_NUMBER is not null
-							group by t20.PERSON_ID,t21.ENTITY_NUMBER
-
-					) t6 on t6.PERSON_ID = z0.PERSON_ID and t6.ENTITY_NUMBER = z0.ENTITY_NUMBER
-
-					group by z0.PERSON_ID,z0.ENTITY_NUMBER,z0.ENTITY_NAME
-
-
-
-
+					group by z0.PERSON_ID,z0.ENTITY_ID,z0.ENTITY_NAME
 				""";
 
 		jdbcTemplate.query(query, (resultSet, rowNum) -> {
 
 			String cypherQuery = "	MATCH (person:Person {person_id: '" + resultSet.getString("PERSON_ID") + "' })\r\n"
-					+ "				MATCH (entity:Entity {entity_number: '" + resultSet.getString("ENTITY_NUMBER")
+					+ "				MATCH (entity:Entity {entity_id: '" + resultSet.getString("entity_id")
 					+ "' })\r\n" + " MERGE (person)-[x:ASSOCIATED_ENTITIES]->(entity)\r\n"
-					+ "				SET x.Category = '" + resultSet.getString("CATEGORY") + "' ,\r\n"
-					+ "		x.Relationship_Info = '" + resultSet.getString("REL") + "'	  ";
+					+ "				SET x.Relationship_Info = '" + resultSet.getString("REL") + "'	  ";
 
 			neo4jClient.query(cypherQuery).in(schema).fetchAs(Map.class).all();
 
@@ -310,19 +284,24 @@ public class COIImportGraphDataDao {
 		String query = """
 
 						SELECT
-						t1.ENTITY_NUMBER as FROM_ENTITY,
-						t2.DESCRIPTION as REL_TYPE,
-						t1.NODE_ID as TO_ENTITY
-						FROM entity_relationship t1
-						INNER JOIN entity_relationship_type t2 on t1.ENTITY_REL_TYPE_CODE = t2.ENTITY_REL_TYPE_CODE
-						where t1.NODE_TYPE_CODE = 1
+						t1.ENTITY_ID as TO_ENTITY,
+						'PARENT' as REL_TYPE,
+						t1.PARENT_ENTITY_ID as FROM_ENTITY
+						FROM entity_family_tree t1
+                        UNION ALL
+                        SELECT 
+                        t1.ENTITY_ID as FROM_ENTITY,
+                        'DUPLICATE' as REL_TYPE,
+                        t1.ORIGINAL_ENTITY_ID as TO_ENTITY
+                        FROM ENTITY t1
+                        WHERE T1.ORIGINAL_ENTITY_ID is not null
 
 				""";
 
 		jdbcTemplate.query(query, (resultSet, rowNum) -> {
 
-			String cypherQuery = " MATCH (entity_1:Entity {entity_number: '" + resultSet.getString("FROM_ENTITY")
-					+ "' })\r\n" + " MATCH (entity_2:Entity {entity_number: '" + resultSet.getString("TO_ENTITY")
+			String cypherQuery = " MATCH (entity_1:Entity {entity_id: '" + resultSet.getString("FROM_ENTITY")
+					+ "' })\r\n" + " MATCH (entity_2:Entity {entity_id: '" + resultSet.getString("TO_ENTITY")
 					+ "' })\r\n" + " MERGE (entity_1)-[x:AFFILIATED_ENTITIES]->(entity_2) "
 					+ "				 SET x.Relationship_type = '" + resultSet.getString("REL_TYPE") + "' ";
 			;

@@ -1,10 +1,6 @@
 package com.polus.fibi.graphconnect.entity;
 
 import org.springframework.data.neo4j.core.schema.Id;
-
-import java.util.List;
-
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -26,6 +22,9 @@ public class COIEntity {
 	@Property(name="id")
 	private String id;
 
+	@Property(name="entity_id")
+	private String entityId;
+
 	@Property(name="entity_number")
 	private String entityNumber;
 
@@ -38,17 +37,17 @@ public class COIEntity {
 	@Property(name="country_code")
 	private String countryCode;
 	
-	@Property(name="status")
-	private String status;
+	@Property(name="status_type")
+	private String statusType;
 
-	@Property(name="is_sponsor")
-	private String isSponsor;
+	@Property(name="document_status_type")
+	private String documentStatusType;
 
-	@Property(name="type")
-	private String type;
+	@Property(name="ownership_type")
+	private String ownershipType;
 
-	@Property(name="risk")
-	private String risk;
+	@Property(name="website_address")
+	private String websiteAddress;
 
 	@Relationship(type = "COUNTRY_OWNED", direction = Direction.OUTGOING)
 	private Country countryOwned;
