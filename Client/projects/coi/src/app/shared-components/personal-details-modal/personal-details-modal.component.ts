@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { PersonDetailsModalService } from './person-details-modal.service';
 import { Subscription } from 'rxjs';
-import { HTTP_ERROR_STATUS } from '../../app-constants';
+import { COMMON_ERROR_TOAST_MSG, HTTP_ERROR_STATUS } from '../../app-constants';
 import { CommonService } from '../../common/services/common.service';
 
 @Component({
@@ -52,12 +52,11 @@ export class PersonalDetailsModalComponent implements OnInit {
 
     private clearModalDataAndShowToast(): void {
         this.commonService.modalPersonId = '';
-        this.commonService.showToast(HTTP_ERROR_STATUS, 'Something went wrong. Please try again.');
+        this.commonService.showToast(HTTP_ERROR_STATUS, COMMON_ERROR_TOAST_MSG);
     }
 
     viewPersonDetails(personTrainingId: string): void {
-        const url = this.commonService.fibiApplicationUrl + `#/fibi/person/person-details?personId=${personTrainingId}`;
-        window.open(url);
+        this.commonService.redirectToPersonDetails(personTrainingId);
     }
 
 }

@@ -484,50 +484,61 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
     }
 
     /**
+     * Redirects to project details based on the project type.
      *
-     * @param projectTypeCode
-     * @param projectId
+     * @param projectTypeCode - The moduleCode/typeCode of project (1: Award, 2: Institute Proposal, 3: Development Proposal).
+     * @param projectId - The unique ID of the project to redirect to.
      *
-     * 1: award, 2: institute proposal, 3: development proposal
-     * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration
-     * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI
+     * Project Types:
+     * 1: Award - Uses EXTERNAL_AWARD_URL (if defined) or falls back to AWARD_EXTERNAL_RESOURCE_URL for FIBI integration.
+     * 2: Institute Proposal - Uses EXTERNAL_IP_URL (if defined) or falls back to IP_EXTERNAL_RESOURCE_URL for FIBI integration.
+     * 3: Development Proposal - Uses EXTERNAL_DEV_PROPOSAL_URL (if defined) or falls back to PROPOSAL_EXTERNAL_RESOURCE_URL for FIBI integration.
+     *
+     * External URLs:
+     * EXTERNAL_AWARD_URL, EXTERNAL_IP_URL, EXTERNAL_DEV_PROPOSAL_URL, EXTERNAL_APPLICATION_BASE_URL => for KC integration or external integration.
+     * AWARD_EXTERNAL_RESOURCE_URL, IP_EXTERNAL_RESOURCE_URL, PROPOSAL_EXTERNAL_RESOURCE_URL, fibiApplicationUrl => for FIBI.
      */
     redirectToProjectDetails(projectTypeCode: string | number, projectId: string): void {
+        const EXTERNAL_PROJECT_URLS = [this.EXTERNAL_AWARD_URL, this.EXTERNAL_IP_URL, this.EXTERNAL_DEV_PROPOSAL_URL];
         const PROJECT_URLS_MAP = {
-            1: (this.EXTERNAL_AWARD_URL || AWARD_EXTERNAL_RESOURCE_URL),
-            2: (this.EXTERNAL_IP_URL || IP_EXTERNAL_RESOURCE_URL),
-            3: (this.EXTERNAL_DEV_PROPOSAL_URL || PROPOSAL_EXTERNAL_RESOURCE_URL),
+            1: EXTERNAL_PROJECT_URLS[0] || AWARD_EXTERNAL_RESOURCE_URL,
+            2: EXTERNAL_PROJECT_URLS[1] || IP_EXTERNAL_RESOURCE_URL,
+            3: EXTERNAL_PROJECT_URLS[2] || PROPOSAL_EXTERNAL_RESOURCE_URL,
         };
         if (PROJECT_URLS_MAP[projectTypeCode]) {
+            const IS_EXTERNAL_URL = EXTERNAL_PROJECT_URLS.includes(PROJECT_URLS_MAP[projectTypeCode]);
+            const BASE_URL = IS_EXTERNAL_URL ? this.EXTERNAL_APPLICATION_BASE_URL : this.fibiApplicationUrl;
             const RESOURCE_URL = PROJECT_URLS_MAP[projectTypeCode].replace('{projectId}', projectId);
-            const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
-            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URL}`, '_blank');
+            window.open(`${BASE_URL}${RESOURCE_URL}`, '_blank');
         }
     }
 
     /**
-     * Redirects to person details based on the mode ('PERSON' or 'ROLODEX').
+     * Redirects to person details based on the personType ('PERSON' or 'ROLODEX').
      * 
      * @param personId - The unique ID of the person to redirect to.
-     * @param mode - Specifies if the person is a 'PERSON' (default) or 'ROLODEX'.
+     * @param personType - Specifies if the person is a 'PERSON' (default) or 'ROLODEX'.
      *
      * PERSON: 
-     *  - EXTERNAL_PERSON_URL, PERSON_EXTERNAL_RESOURCE_URL => Used for KC integration or external integration.
+     *  - Uses EXTERNAL_PERSON_URL (if defined) or falls back to PERSON_EXTERNAL_RESOURCE_URL for FIBI integration.
+     *  - Represents standard users or individuals directly interacting with the application.
      * ROLODEX: 
-     *  - EXTERNAL_ROLODEX_PERSON_URL, ROLODEX_PERSON_EXTERNAL_RESOURCE_URL => Used for KC integration or external integration.
-     * 
-     * External Application Base URL:
-     *  - EXTERNAL_APPLICATION_BASE_URL, fibiApplicationUrl => Used as the base URL for FIBI redirection.
+     *  - Uses EXTERNAL_ROLODEX_PERSON_URL (if defined) or falls back to ROLODEX_PERSON_EXTERNAL_RESOURCE_URL for KC integration or external integration.
+     *  - Represents contacts stored in a rolodex-like directory, typically external users / not standard users of the application.
+     * BASE_URL:
+     *  - Uses EXTERNAL_APPLICATION_BASE_URL if the URL is external; otherwise, it uses fibiApplicationUrl for FIBI redirection.
      */
-    redirectToPersonDetails(personId: string, mode: 'PERSON' | 'ROLODEX' = 'PERSON'): void {
+    redirectToPersonDetails(personId: string, personType: 'PERSON' | 'ROLODEX' = 'PERSON'): void {
+        const EXTERNAL_PERSON_URLS = [this.EXTERNAL_PERSON_URL, this.EXTERNAL_ROLODEX_PERSON_URL];
         const PERSON_URLS_MAP = {
-            'PERSON': this.EXTERNAL_PERSON_URL || PERSON_EXTERNAL_RESOURCE_URL,
-            'ROLODEX': this.EXTERNAL_ROLODEX_PERSON_URL || ROLODEX_PERSON_EXTERNAL_RESOURCE_URL
+            'PERSON': EXTERNAL_PERSON_URLS[0] || PERSON_EXTERNAL_RESOURCE_URL,
+            'ROLODEX': EXTERNAL_PERSON_URLS[1] || ROLODEX_PERSON_EXTERNAL_RESOURCE_URL
         };
-        if (PERSON_URLS_MAP[mode]) {
-            const RESOURCE_URL = PERSON_URLS_MAP[mode].replace('{personId}', personId);
-            const EXTERNAL_BASE_URL = this.EXTERNAL_APPLICATION_BASE_URL || this.fibiApplicationUrl;
-            window.open(`${EXTERNAL_BASE_URL}${RESOURCE_URL}`, '_blank');
+        if (PERSON_URLS_MAP[personType]) {
+            const IS_EXTERNAL_URL = EXTERNAL_PERSON_URLS.includes(PERSON_URLS_MAP[personType]);
+            const BASE_URL = IS_EXTERNAL_URL ? this.EXTERNAL_APPLICATION_BASE_URL : this.fibiApplicationUrl;
+            const RESOURCE_URL = PERSON_URLS_MAP[personType].replace('{personId}', personId);
+            window.open(`${BASE_URL}${RESOURCE_URL}`, '_blank');
         }
     }
 
