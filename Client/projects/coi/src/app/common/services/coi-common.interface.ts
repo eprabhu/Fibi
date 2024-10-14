@@ -7,29 +7,29 @@ export type GlobalEventNotifier = { uniqueId: GlobalEventNotifierUniqueId, conte
 export type LoginPersonDetailsKey = keyof LoginPersonDetails;
 
 export class COIAppConfig {
-    baseUrl: string = "";
-    fibiUrl: string = "";
-    authUrl: string = "";
-    opaUrl: string = "";
-    formUrl: string = "";
-    fibiCOIConnectUrl: string = "";
-    entityURL: string = "";
-    enableSSO: boolean = false;
-    enableGraph: boolean = true;
-    isElasticAuthentiaction: boolean = false;
-    elasticUserName: string = "";
-    elasticDelimiter: string = "";
-    elasticPassword: string = "";
-    elasticAuthScheme: string = "";
-    elasticIndexUrl: string = "";
-    indexValue: string = "";
-    fibiApplicationUrl: string = "";
-    EXTERNAL_APPLICATION_BASE_URL: string = "";
-    EXTERNAL_DEV_PROPOSAL_URL: string = "";
-    EXTERNAL_AWARD_URL: string = "";
-    EXTERNAL_IP_URL: string = "";
-    EXTERNAL_PERSON_URL: string = "";
-    EXTERNAL_ROLODEX_PERSON_URL: string = "";
+    baseUrl = '';
+    fibiUrl = '';
+    authUrl = '';
+    opaUrl = '';
+    formUrl = '';
+    fibiCOIConnectUrl = '';
+    entityURL = '';
+    enableSSO = false;
+    enableGraph = true;
+    isElasticAuthentiaction = false;
+    elasticUserName = '';
+    elasticDelimiter = '';
+    elasticPassword = '';
+    elasticAuthScheme = '';
+    elasticIndexUrl = '';
+    indexValue = '';
+    fibiApplicationUrl = '';
+    EXTERNAL_APPLICATION_BASE_URL = '';
+    EXTERNAL_DEV_PROPOSAL_URL = '';
+    EXTERNAL_AWARD_URL = '';
+    EXTERNAL_IP_URL = '';
+    EXTERNAL_PERSON_URL: '';
+    EXTERNAL_ROLODEX_PERSON_URL: '';
 
     constructor(init?: Partial<COIAppConfig>) {
         Object.assign(this, init);
