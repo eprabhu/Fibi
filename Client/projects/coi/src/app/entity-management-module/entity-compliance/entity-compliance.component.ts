@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { CommonService } from '../../common/services/common.service';
-import {COMPLIANCE_QUESTIONNAIRE_SUB_SECTION_ID, ComplianceTab} from '../shared/entity-constants';
+import { ComplianceTab} from '../shared/entity-constants';
 import { EntityComplianceService } from './entity-compliance.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails, SubAwardOrganization } from '../shared/entity-interface';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { DataStoreEvent, EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails, SubAwardOrganization } from '../shared/entity-interface';
 import { Subscription } from 'rxjs';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
+import { isEmptyObject } from '../../common/utilities/custom-utilities';
 
 @Component({
     selector: 'app-entity-compliance',
@@ -65,7 +65,7 @@ export class EntityComplianceComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

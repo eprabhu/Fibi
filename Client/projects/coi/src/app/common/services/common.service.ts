@@ -14,6 +14,7 @@ import { AttachmentInputType, COIAttachment } from '../../attachments/attachment
 import { hideModal } from "../../../../../fibi/src/app/common/utilities/custom-utilities";
 import { ProjectHierarchySliderPayload } from '../../shared-components/project-hierarchy-slider/services/project-hierarchy-slider.interface';
 import { NotificationTypeRO } from '../../admin-dashboard/admin-dashboard.interface';
+import { removeToast } from '../../entity-management-module/shared/entity-interface';
 
 @Injectable()
 export class CommonService {
@@ -515,14 +516,14 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
 
     /**
      * Redirects to person details based on the personType ('PERSON' or 'ROLODEX').
-     * 
+     *
      * @param personId - The unique ID of the person to redirect to.
      * @param personType - Specifies if the person is a 'PERSON' (default) or 'ROLODEX'.
      *
-     * PERSON: 
+     * PERSON:
      *  - Uses EXTERNAL_PERSON_URL (if defined) or falls back to PERSON_EXTERNAL_RESOURCE_URL for FIBI integration.
      *  - Represents standard users or individuals directly interacting with the application.
-     * ROLODEX: 
+     * ROLODEX:
      *  - Uses EXTERNAL_ROLODEX_PERSON_URL (if defined) or falls back to ROLODEX_PERSON_EXTERNAL_RESOURCE_URL for KC integration or external integration.
      *  - Represents contacts stored in a rolodex-like directory, typically external users / not standard users of the application.
      * BASE_URL:
@@ -717,6 +718,12 @@ getProjectDisclosureConflictStatusBadgeForConfiltSliderStyleRequierment(statusCo
             hideModal('coi-entity-confirmation-modal');
             this._router.navigateByUrl(this.attemptedPath);
         }
+    }
+
+    showAutoSaveLoader(): void {
+        removeToast('SUCCESS');
+        removeToast('ERROR');
+        this.autoSaveSavingLoader = 'SHOW';
     }
 
 }

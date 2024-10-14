@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RegistrationDetails} from '../../shared/entity-interface';
+import {DataStoreEvent, RegistrationDetails} from '../../shared/entity-interface';
 import {hideModal, isEmptyObject, openModal} from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import {Subscription} from 'rxjs';
 import {EntityOverviewService} from '../entity-overview.service';
@@ -55,7 +55,7 @@ export class RegistrationDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

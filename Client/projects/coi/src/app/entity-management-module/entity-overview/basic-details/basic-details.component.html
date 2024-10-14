@@ -9,6 +9,6 @@
         </div>
     </div>
     <app-entity-creation [isCreateView]="false" [isEditMode]="isEditMode"
-        [entityDetails]="entityDetails"
+        [entityDetails]="autoSaveEntityDetails"
         (emitAutoSaveObj)="updateStoreData($event)"></app-entity-creation>
 </div>

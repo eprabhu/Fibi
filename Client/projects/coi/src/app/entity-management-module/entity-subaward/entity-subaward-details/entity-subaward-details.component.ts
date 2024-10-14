@@ -7,7 +7,7 @@ import { EntityDataStoreService } from '../../entity-data-store.service';
 import { canUpdateOrgFeed } from '../../entity-management.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
-import { EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabStatus, removeToast, showEntityToast, SubAwardOrganizationDetails, SubawardOrgFields, SubAwardOrgUpdateClass } from '../../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityDetails, EntityOrganizationType, EntityTabStatus, removeToast, showEntityToast, SubAwardOrganizationDetails, SubawardOrgFields, SubAwardOrgUpdateClass } from '../../shared/entity-interface';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from '../entity-subaward.service';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -67,7 +67,7 @@ export class EntitySubawardDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

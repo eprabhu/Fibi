@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AdditionalAddress} from '../../shared/entity-interface';
+import {AdditionalAddress, DataStoreEvent} from '../../shared/entity-interface';
 import {getEndPointOptionsForCountry} from 'projects/fibi/src/app/common/services/end-point.config';
 import {
     deepCloneObject,
@@ -144,7 +144,7 @@ export class AdditionalAddressesComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStorService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

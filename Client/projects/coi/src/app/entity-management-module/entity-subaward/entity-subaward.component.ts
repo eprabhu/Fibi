@@ -8,7 +8,7 @@ import {
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { EntitySubAwardService, isOrganizationConditionSatisfied } from './entity-subaward.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails, SubAwardOrgUpdateClass } from '../shared/entity-interface';
+import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntityTabStatus, EntitySectionDetails, SubAwardOrganization, SubAwardOrganizationDetails, SubAwardOrgUpdateClass, DataStoreEvent } from '../shared/entity-interface';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 import { COMMON_ERROR_TOAST_MSG, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE, HTTP_ERROR_STATUS } from '../../app-constants';
 
@@ -72,7 +72,7 @@ export class EntitySubawardComponent implements OnInit {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             }));
     }

@@ -7,7 +7,7 @@ import {
 } from '../shared/entity-constants';
 import { Subscription } from 'rxjs';
 import { EntitySponsorService } from './entity-sponsor.service';
-import { EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityAttachment, EntityDetails, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { HTTP_ERROR_STATUS } from '../../app-constants';
 import { subscriptionHandler } from '../../common/utilities/subscription-handler';
@@ -72,7 +72,7 @@ export class EntitySponsorComponent {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

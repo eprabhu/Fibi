@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { isValidEmailAddress, inputRestrictionForNumberField, phoneNumberValidation, openModal } from '../../common/utilities/custom-utilities';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { isValidEmailAddress, inputRestrictionForNumberField, phoneNumberValidation, openModal, isEmptyObject } from '../../common/utilities/custom-utilities';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounce } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CommonService } from '../../common/services/common.service';
 import { EntityCreationService } from './entity-creation.service';
 import { getEndPointOptionsForCountry } from './../../../../../fibi/src/app/common/services/end-point.config';
-import { deepCloneObject, isEmptyObject } from './../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {
     DuplicateCheckObj,
     EntityDetails,
@@ -29,7 +28,7 @@ import { subscriptionHandler } from '../../common/utilities/subscription-handler
     styleUrls: ['./entity-creation.component.scss'],
     providers: [EntityCreationService]
 })
-export class EntityCreationComponent implements OnInit, OnDestroy {
+export class EntityCreationComponent implements OnInit, OnDestroy, OnChanges {
 
     clearCountryField: any;
     mandatoryList = new Map();
@@ -55,13 +54,16 @@ export class EntityCreationComponent implements OnInit, OnDestroy {
         private _commonService: CommonService, private _autoSaveService: AutoSaveService) { }
 
     ngOnInit() {
-        this.COUNTRY_SEARCH_OPTIONS = getEndPointOptionsForCountry(this._commonService.fibiUrl);
-        this.setLocalEntityUpdateObj();
         this.setCommonChangesFlag();
         this.listenDebounceEvent();
         this.autoSaveSubscribe();
         this.listenNumberDebounceEvent();
         this.listenManadatoryCheck();
+    }
+
+    ngOnChanges() {
+        this.COUNTRY_SEARCH_OPTIONS = getEndPointOptionsForCountry(this._commonService.fibiUrl);
+        this.setLocalEntityUpdateObj();
     }
 
     private setLocalEntityUpdateObj(): void {

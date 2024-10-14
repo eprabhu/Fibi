@@ -294,3 +294,11 @@ export function openModal(elementId: string, options = null) {
     let myModal = new bootstrap.Modal(document.getElementById(elementId), options);
     myModal?.show();
   }
+
+export function deepCloneObject(obj: any): any {
+    const nativeCloneFunction = (window as any).structuredClone;
+    if (typeof nativeCloneFunction === 'function') {
+        return nativeCloneFunction(obj);
+    }
+    return JSON.parse(JSON.stringify(obj));
+}

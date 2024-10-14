@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { OverviewTabSection } from '../shared/entity-constants';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import { EntireEntityDetails, EntityAttachment, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityAttachment, EntityRisk, EntitySectionDetails } from '../shared/entity-interface';
 import { Subscription } from 'rxjs';
-import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
+import { deepCloneObject, isEmptyObject } from '../../common/utilities/custom-utilities';
+import { subscriptionHandler } from '../../common/utilities/subscription-handler';
 
 @Component({
     selector: 'app-entity-overview',
@@ -56,7 +56,7 @@ export class EntityOverviewComponent {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );
@@ -79,6 +79,6 @@ export class EntityOverviewComponent {
     attachemntUpdated(attachmentList: EntityAttachment[]): void{
         const UPDATED_ATTACHMENT_LIST = deepCloneObject(attachmentList);
         this._dataStoreService.updateStore(['attachments'], {'attachments':  UPDATED_ATTACHMENT_LIST});
-    } 
+    }
 
 }

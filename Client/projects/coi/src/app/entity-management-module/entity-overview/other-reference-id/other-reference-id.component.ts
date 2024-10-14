@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {EntityExternalIdMappings, OtherReferenceId} from '../../shared/entity-interface';
+import {DataStoreEvent, EntityExternalIdMappings, OtherReferenceId} from '../../shared/entity-interface';
 import {deepCloneObject, hideModal, isEmptyObject, openModal} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {Subscription} from 'rxjs';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
@@ -47,7 +47,7 @@ export class OtherReferenceIdComponent implements OnInit, OnDestroy {
 
     listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

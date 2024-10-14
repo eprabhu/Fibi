@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonService } from '../../common/services/common.service';
 import { QuestionnaireRequestObject } from './questionnaire.interface';
 import { HTTP_SUCCESS_STATUS } from '../../app-constants';
+import { removeToast, showEntityToast } from '../../entity-management-module/shared/entity-interface';
 
 @Injectable()
 export class QuestionnaireService {
@@ -50,7 +51,7 @@ export class QuestionnaireService {
      * - Shows a toaster with the below content till the API response is received
      */
     autoSaveQuestionnaire(data: QuestionnaireRequestObject) {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving...');
+        this._commonService.showAutoSaveLoader();
         return this._http.post(this._commonService.fibiUrl + '/saveQuestionnaire/v1', data);
     }
 
@@ -59,7 +60,7 @@ export class QuestionnaireService {
      * - Shows a toaster with the below content till the API response is received
      */
     autoSaveQuestionnaireAttachment(formData: FormData) {
-        this._commonService.showToast(HTTP_SUCCESS_STATUS, 'Saving...');
+        this._commonService.showAutoSaveLoader();
         return this._http.post(this._commonService.fibiUrl + '/saveAttachmentQuestionnaire/v1', formData);
     }
 

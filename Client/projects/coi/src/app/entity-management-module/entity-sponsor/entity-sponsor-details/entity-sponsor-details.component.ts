@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { EntireEntityDetails, EntityTabStatus, removeToast, showEntityToast, SponsorDetails, SponsorFields, SponsorType, SponsorUpdateClass } from '../../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityTabStatus, removeToast, showEntityToast, SponsorDetails, SponsorFields, SponsorType, SponsorUpdateClass } from '../../shared/entity-interface';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
@@ -62,7 +62,7 @@ export class EntitySponsorDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );
