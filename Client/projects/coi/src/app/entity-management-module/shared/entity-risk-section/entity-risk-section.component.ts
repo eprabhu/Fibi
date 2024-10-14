@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { EntireEntityDetails, EntityDetails, EntityRisk, EntityRiskProxyController, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskRO, RiskType, RiskLevel } from '../../shared/entity-interface';
+import { EntireEntityDetails, EntityDetails, EntityRisk, EntityRiskProxyController, EntityRiskCategoryCode, EntityRiskModalDetails, EntityRiskRO, RiskType, RiskLevel, DataStoreEvent } from '../../shared/entity-interface';
 import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
@@ -66,7 +66,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             }));
     }
@@ -76,7 +76,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             this.entityRiskLevelList = [];
             return;
         }
-    
+
         this.$subscriptions.push(
             this._entityRiskSectionService.fetchRiskLevels(riskTypeCode).subscribe(
                 (riskLevelList: RiskLevel[]) => {
@@ -89,7 +89,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             )
         );
     }
-    
+
 
     private fetchRiskTypes(): void {
         this.$subscriptions.push(
@@ -236,7 +236,7 @@ export class EntityRiskSectionComponent implements OnInit, OnDestroy {
             this.entityRiskList.unshift(updatedRisk);
             this.editIndex = 0;
             this.riskUpdated.emit(this.entityRiskList);
-        }    
+        }
     }
 
 }

@@ -60,6 +60,7 @@ import {DATE_PLACEHOLDER, HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS} from '../../ap
 import {ElasticConfigService} from '../../common/services/elastic-config.service';
 import {jumpToSection} from '../../common/utilities/custom-utilities';
 import {debounceTime} from 'rxjs/operators';
+import { showEntityToast } from '../../entity-management-module/shared/entity-interface';
 
 declare const $: any;
 
@@ -1586,6 +1587,10 @@ export class ViewQuestionnaireComponent implements OnInit, OnChanges, OnDestroy 
         }
 
         this.checkIfPendingAPIs();
+        if(!this.hasPendingAPIs) {
+            showEntityToast('SUCCESS');
+            this._commonService.autoSaveSavingLoader = 'HIDE';
+        }
     }
 
     /**
@@ -1700,6 +1705,7 @@ export class ViewQuestionnaireComponent implements OnInit, OnChanges, OnDestroy 
     private handleError() {
         this._commonService.isPreventDefaultLoader = false;
         this.questionnaireSaveEvent.emit({status: 'ERROR', data: this.questionnaireDetails});
+        this._commonService.autoSaveSavingLoader = 'HIDE';
         this.clearAutoSaveQueues();
     }
 

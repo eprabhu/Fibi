@@ -5,6 +5,7 @@ export type EntityRiskCategoryCode = 'OR' | 'EN' | 'CO' | 'SP' | '';
 export type VerifyActionType = 'API_FAILED' | 'VIEW_DUPLICATE' | 'VIEW_SPONSOR' | 'VIEW_SUBAWARD' | 'VIEW_OVERVIEW';
 export type DuplicateActionType = 'CLOSE_BTN' | 'SECONDARY_BTN' | 'PRIMARY_BTN' | 'NOT_FOUND' | 'CHECK_BOX' | 'CLOSE_SLIDER' | 'API_FAILED';
 export type VerifyModalAction = ModalActionEvent | { event?: any, action: VerifyActionType };
+export type DataStoreEvent = { dependencies: string[], action: 'REFRESH' | 'UPDATE' };
 export const ENTITY_DUPLICATE_MATCH_MODAL_ID = 'duplicate_entity_match_found_modal';
 export const ENTITY_DUPLICATE_MATCH_SLIDER_ID = 'duplicate_entity_match_found_slider';
 

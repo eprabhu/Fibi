@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { COIModalConfig, ModalActionEvent } from '../../shared-components/coi-modal/coi-modal.interface';
-import { closeCommonModal, openCommonModal } from '../../common/utilities/custom-utilities';
+import { closeCommonModal, isEmptyObject, openCommonModal } from '../../common/utilities/custom-utilities';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { forkJoin, Subscription } from 'rxjs';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { CommonService } from '../../common/services/common.service';
 import { EntityDataStoreService } from '../entity-data-store.service';
-import { DuplicateCheckObj, EntireEntityDetails, EntityCardDetails, EntityDetails, EntityDupCheckConfig, EntitySponsor, EntityTabStatus, removeToast, SubAwardOrganization, VerifyModalAction } from '../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityCardDetails, EntityDetails, EntitySponsor, EntityTabStatus, removeToast, SubAwardOrganization, VerifyModalAction } from '../shared/entity-interface';
 import { EntityManagementService } from '../entity-management.service';
 import { HTTP_ERROR_STATUS, HTTP_SUCCESS_STATUS } from '../../app-constants';
 import { Router } from '@angular/router';
@@ -97,7 +96,7 @@ export class EnitityVerifyModalComponent implements OnInit {
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             }));
     }

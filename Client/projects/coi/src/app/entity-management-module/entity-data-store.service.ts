@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { DuplicateCheckObj, EntireEntityDetails, EntityDetails, EntityTabStatus, SponsorUpdateClass, SubAwardOrgUpdateClass } from './shared/entity-interface';
+import { DataStoreEvent, DuplicateCheckObj, EntireEntityDetails, EntityDetails, EntityTabStatus, SponsorUpdateClass, SubAwardOrgUpdateClass } from './shared/entity-interface';
 import { CommonService } from '../common/services/common.service';
 import { ENTITY_DOCUMNET_STATUS_TYPE, ENTITY_VERIFICATION_STATUS, FEED_STATUS_CODE } from '../app-constants';
 import { canUpdateSponsorFeed, canUpdateOrgFeed } from './entity-management.service';
@@ -14,9 +14,8 @@ export class EntityDataStoreService {
     private storeData = new EntireEntityDetails();
     entitySectionConfig: any = {};
     entityRiskType: any[] = [];
-    dataEvent = new Subject<string[]>();
+    dataEvent = new Subject<DataStoreEvent>();
     canLogModificationHistory = false;
-
     getEditMode(): boolean {
         return this.storeData?.entityDetails?.entityDocumentStatusType?.documentStatusTypeCode === ENTITY_DOCUMNET_STATUS_TYPE.ACTIVE &&
                (this._commonService.isEntityModified || this.storeData?.entityDetails?.entityStatusType?.entityStatusTypeCode == ENTITY_VERIFICATION_STATUS.UNVERIFIED );
@@ -58,13 +57,13 @@ export class EntityDataStoreService {
         KEYS.forEach(key => {
             this.storeData[key] = this.structuredClone(updatedData[key]);
         });
-        this.dataEvent.next(KEYS);
+        this.dataEvent.next({dependencies: KEYS, action: 'REFRESH'});
     }
 
     setStoreData(data: any): void {
         this.storeData = this.structuredClone(data);
         const KEYS = Object.keys(this.storeData);
-        this.dataEvent.next(KEYS);
+        this.dataEvent.next({dependencies: KEYS, action: 'UPDATE'});
     }
 
     getFilterRiskByCode(code: 'EN' | 'SP' | 'OR' | 'CO' | ''): any[] {

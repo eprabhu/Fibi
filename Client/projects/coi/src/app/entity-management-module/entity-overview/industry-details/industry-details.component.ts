@@ -5,7 +5,7 @@ import {
     isEmptyObject,
     openModal
 } from 'projects/fibi/src/app/common/utilities/custom-utilities';
-import {IndustryDetails} from '../../shared/entity-interface';
+import {DataStoreEvent, IndustryDetails} from '../../shared/entity-interface';
 import {forkJoin, Subscription} from 'rxjs';
 import {EntityOverviewService} from '../entity-overview.service';
 import {EntityDataStoreService} from '../../entity-data-store.service';
@@ -178,7 +178,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );
@@ -201,7 +201,7 @@ export class IndustryDetailsComponent implements OnInit, OnDestroy {
             return relationsTypeGroup;
         }, new Map<string, any[]>());
     }
-    
+
     async editIndustry(industry, index: number) {
         this.selectedIndustry = deepCloneObject(industry);
         this.isEditIndex = index;

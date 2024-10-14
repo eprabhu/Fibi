@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EntityDetails, EntityTabStatus, LookUpClass, OtherDetailsClass, OtherDetailsUpdate, removeToast, showEntityToast } from '../../shared/entity-interface';
+import { DataStoreEvent, EntityDetails, EntityTabStatus, LookUpClass, OtherDetailsClass, OtherDetailsUpdate, removeToast, showEntityToast } from '../../shared/entity-interface';
 import { getDateObjectFromTimeStamp, parseDateWithoutTimestamp } from '../../../common/utilities/date-utilities';
 import { CommonService } from '../../../common/services/common.service';
 import { COMMON_ERROR_TOAST_MSG, DATE_PLACEHOLDER, ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../../app-constants';
@@ -55,11 +55,9 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.getCurrencyList();
         this.triggerSingleSave();
-        this.getDataFromStore();
+        this.getDataFromStore(true);
         this.autoSaveSubscribe();
         this.listenDataChangeFromStore();
-        this.updateSelectedLookupList();
-        this.setOtherDetailsObject();
     }
 
     private getCurrencyList(): void {
@@ -88,7 +86,7 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         this.$subscriptions.push(this._autoSaveService.autoSaveTrigger$.subscribe(event => this.addOtherDetailsAPI()));
     }
 
-    private getDataFromStore(): void {
+    private getDataFromStore(canUpdateOtherDetails: boolean = false): void {
         const ENTITY_DATA = this.dataStore.getData();
         if (!ENTITY_DATA || isEmptyObject(ENTITY_DATA)) {
             return;
@@ -98,12 +96,16 @@ export class OtherDetailsComponent implements OnInit, OnDestroy {
         this.foreignNames = ENTITY_DATA.foreignNames;
         this.entityTabStatus = ENTITY_DATA.entityTabStatus;
         this.checkUserHasRight();
+        if(canUpdateOtherDetails) {
+            this.updateSelectedLookupList();
+            this.setOtherDetailsObject();
+        }
     }
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
+            this.dataStore.dataEvent.subscribe((dependencies: DataStoreEvent) => {
+                this.getDataFromStore(dependencies.action === 'REFRESH');
             })
         );
     }

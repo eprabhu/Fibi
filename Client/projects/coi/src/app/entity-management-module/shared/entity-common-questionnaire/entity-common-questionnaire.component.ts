@@ -9,7 +9,7 @@ import {
 } from '../../../app-constants';
 import {CommonService} from '../../../common/services/common.service';
 import {EntityDataStoreService} from '../../entity-data-store.service';
-import {EntireEntityDetails} from '../entity-interface';
+import {DataStoreEvent, EntireEntityDetails} from '../entity-interface';
 import {deepCloneObject, isEmptyObject} from '../../../../../../fibi/src/app/common/utilities/custom-utilities';
 import {Subscription} from 'rxjs';
 import {
@@ -76,7 +76,7 @@ export class EntityCommonQuestionnaireComponent implements OnInit {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStoreService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStoreService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
                 this.updateQuestionnaireEdit();
             })

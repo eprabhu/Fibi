@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { DuplicateMarkingAPIReq, DupMarkingModalConfig, EntityCardDetails, EntityDetails, EntityDetailsInPopup, removeToast } from '../entity-interface';
+import { DataStoreEvent, DuplicateMarkingAPIReq, DupMarkingModalConfig, EntityCardDetails, EntityDetails, EntityDetailsInPopup, removeToast } from '../entity-interface';
 import { Subscription } from 'rxjs';
 import { subscriptionHandler } from 'projects/fibi/src/app/common/utilities/subscription-handler';
 import { DuplicateMarkingConfirmationService } from './duplicate-marking-confirmation.service';
@@ -109,7 +109,7 @@ export class DuplicateMarkingConfirmationComponent implements OnInit, OnChanges,
 
     private listenDataChangeFromStore(): void {
         this.$subscriptions.push(
-            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStorService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

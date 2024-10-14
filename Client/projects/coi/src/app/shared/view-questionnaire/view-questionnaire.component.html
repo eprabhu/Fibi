@@ -516,7 +516,7 @@
 <!-- attachment modal -->
 <div class="modal fade mySkinDialog" id="AttachmentModal{{questionnaireDetails?.QUESTIONNAIRE_ID}}" tabindex="-1"
 	role="dialog" aria-labelledby="AttachmentModal" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document" appModalDrag>
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document" appModalDrag>
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="AttachmentModalTitle">Add Attachment</h5>
@@ -547,7 +547,7 @@
 					<button type="button" (click)="tempFiles = [];" class="btn btn-outline-secondary fs-14" aria-label="Click here to close" title="Close"
 						data-bs-dismiss="modal">Close</button>
 					<button type="button" (click)="addFileToArray();" data-bs-dismiss="modal" aria-label="Click here to add" title="Add"
-						class="btn btn-outline-primary fs-14">Add</button>
+						class="btn btn-primary fs-14">Add</button>
 				</div>
 			</div>
 		</div>
@@ -556,21 +556,19 @@
 
 <!-- Delete Attachment Modal -->
 <div class="modal fade mySkinDialog" tabindex="-1" id="deleteAttachmentModal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" appModalDrag>
+    <div class="modal-dialog modal-dialog-centered" role="document" appModalDrag>
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Attachment</h5>
-                <button type="button" id="delete-attachment-modal-close" class="close" data-bs-dismiss="modal" title="Close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn btn-close" title="Click here to close"  id="delete-attachment-modal-close" data-bs-dismiss="modal" aria-label="Click here to close"></button>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete this attachment?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="attach-delete-attach-no-btn" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-outline-secondary" id="attach-delete-attach-no-btn" data-bs-dismiss="modal"
 					title="Click here to cancel" aria-label="Click here to cancel">Cancel</button>
-                <button type="button" class="btn btn-primary-sub btn-sm" id="attach-delete-attach-del-btn"
+                <button type="button" class="btn btn-primary" id="attach-delete-attach-del-btn"
                     data-bs-dismiss="modal" title="Click here to delete" aria-label="Click here to delete">Delete</button>
             </div>
         </div>
@@ -583,15 +581,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Delete Row</h5>
-                <button type="button" id="delete-table-modal-close" class="close" data-bs-dismiss="modal" title="Close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn btn-close" title="Click here to close" id="delete-table-modal-close"
+                data-bs-dismiss="modal" aria-label="Click here to close"></button>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete this row?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="row-delete-row-no-btn" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-outline-secondary" id="row-delete-row-no-btn" data-bs-dismiss="modal"
 					title="Click here to cancel" aria-label="Click here to cancel">Cancel</button>
                 <button type="button" class="btn btn-primary-sub btn-sm" id="row-delete-row-del-btn"
                     data-bs-dismiss="modal" title="Click here to delete" aria-label="Click here to delete">Delete</button>

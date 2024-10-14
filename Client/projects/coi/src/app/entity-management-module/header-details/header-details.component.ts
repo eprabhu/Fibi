@@ -5,6 +5,7 @@ import { deepCloneObject, isEmptyObject } from 'projects/fibi/src/app/common/uti
 import { forkJoin, Subscription } from 'rxjs';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import {
+    DataStoreEvent,
     DNBReqObj,
     DuplicateActionType,
     DuplicateCheckObj,
@@ -155,7 +156,7 @@ export class HeaderDetailsComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
+            this.dataStore.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

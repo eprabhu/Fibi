@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { EntityDataStoreService } from '../entity-data-store.service';
 import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
 import { EntityManagementService } from '../entity-management.service';
-import { EntireEntityDetails, EntityTabStatus } from '../shared/entity-interface';
+import { DataStoreEvent, EntireEntityDetails, EntityTabStatus } from '../shared/entity-interface';
 
 @Component({
   selector: 'app-right-panel',
@@ -59,7 +59,7 @@ export class RightPanelComponent {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStorService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );

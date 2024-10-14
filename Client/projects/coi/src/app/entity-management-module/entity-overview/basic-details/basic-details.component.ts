@@ -1,13 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import { EntityDetails, EntityTabStatus } from '../../shared/entity-interface';
-import { isEmptyObject } from 'projects/fibi/src/app/common/utilities/custom-utilities';
+import { DataStoreEvent, EntityDetails, EntityTabStatus } from '../../shared/entity-interface';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import {subscriptionHandler} from '../../../../../../fibi/src/app/common/utilities/subscription-handler';
 import { forkJoin, Subscription } from 'rxjs';
 import {CommonService} from '../../../common/services/common.service';
 import { ENTITY_VERIFICATION_STATUS, HTTP_ERROR_STATUS } from '../../../app-constants';
-import { ActivatedRoute } from '@angular/router';
 import { EntityManagementService } from '../../entity-management.service';
+import { deepCloneObject, isEmptyObject } from '../../../common/utilities/custom-utilities';
 
 @Component({
   selector: 'app-basic-details',
@@ -20,26 +19,31 @@ export class BasicDetailsComponent implements OnInit, OnDestroy {
     @Input() sectionId: any;
     $subscriptions: Subscription[] = [];
     entityDetails: EntityDetails = new EntityDetails();
+    autoSaveEntityDetails : EntityDetails = new EntityDetails();
     entityTabStatus: EntityTabStatus = new EntityTabStatus();
 
     constructor(public dataStore: EntityDataStoreService, private _commonService: CommonService, private _entityManagementService: EntityManagementService) {}
 
     ngOnInit() {
-        this.getDataFromStore();
+        this.getDataFromStore(true);
         this.listenDataChangeFromStore();
     }
 
-    private getDataFromStore() {
+    private getDataFromStore(canUpdateEntity: boolean = false) {
         const entityData = this.dataStore.getData();
         if (isEmptyObject(entityData)) { return; }
         this.entityDetails = entityData.entityDetails;
         this.entityTabStatus = entityData?.entityTabStatus;
         this.checkUserHasRight();
+        if(canUpdateEntity) {
+            this.autoSaveEntityDetails = deepCloneObject(this.entityDetails);
+        }
     }
+
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this.dataStore.dataEvent.subscribe((dependencies: string[]) => {
-                this.getDataFromStore();
+            this.dataStore.dataEvent.subscribe((dependencies: DataStoreEvent) => {
+                this.getDataFromStore(dependencies.action === 'REFRESH');
             })
         );
     }

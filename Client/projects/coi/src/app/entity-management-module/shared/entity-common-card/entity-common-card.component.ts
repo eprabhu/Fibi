@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { EntityManagementService } from '../../entity-management.service';
 import { EntityDataStoreService } from '../../entity-data-store.service';
 import { Subscription } from 'rxjs';
-import { EntityCardDetails } from '../entity-interface';
+import { DataStoreEvent, EntityCardDetails } from '../entity-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEmptyObject, openInNewTab } from '../../../common/utilities/custom-utilities';
 import { subscriptionHandler } from '../../../common/utilities/subscription-handler';
@@ -70,7 +70,7 @@ export class EntityCommonCardComponent implements OnInit, OnDestroy {
 
     private listenDataChangeFromStore() {
         this.$subscriptions.push(
-            this._dataStorService.dataEvent.subscribe((dependencies: string[]) => {
+            this._dataStorService.dataEvent.subscribe((dependencies: DataStoreEvent) => {
                 this.getDataFromStore();
             })
         );
