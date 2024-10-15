@@ -57,13 +57,13 @@ export class EntityDataStoreService {
         KEYS.forEach(key => {
             this.storeData[key] = this.structuredClone(updatedData[key]);
         });
-        this.dataEvent.next({dependencies: KEYS, action: 'REFRESH'});
+        this.dataEvent.next({dependencies: KEYS, action: 'UPDATE'});
     }
 
     setStoreData(data: any): void {
         this.storeData = this.structuredClone(data);
         const KEYS = Object.keys(this.storeData);
-        this.dataEvent.next({dependencies: KEYS, action: 'UPDATE'});
+        this.dataEvent.next({dependencies: KEYS, action: 'REFRESH'});
     }
 
     getFilterRiskByCode(code: 'EN' | 'SP' | 'OR' | 'CO' | ''): any[] {
