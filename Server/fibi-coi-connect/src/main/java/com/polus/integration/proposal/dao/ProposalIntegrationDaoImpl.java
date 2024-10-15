@@ -170,7 +170,7 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 					try (ResultSet rset = cs.executeQuery()) {
 						if (rset != null && rset.next()) {
-							Integer id = rset.getInt("DISCLOSURE_ID");
+							Integer id = rset.getObject("DISCLOSURE_ID") != null ? rset.getInt("DISCLOSURE_ID") : null;
 							String status = rset.getString("DISCLOSURE_STATUS");
 
 							log.info("Disclosure ID: {}, Status: {} for proposalNumber: {}, personId: {}", id, status, proposalNumber, personId);
@@ -225,10 +225,10 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 		} catch (PersistenceException e) {
 			log.error("Database error for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
-			throw e;
+			return DisclosureResponse.builder().error("Database access error occurred. Please try again later.").build();
 		} catch (Exception e) {
 			log.error("Error fetching disclosure status for proposalNumber {}: {}", proposalNumber, e.getMessage(), e);
-			throw e;
+			return DisclosureResponse.builder().error("An unexpected error occurred. Please try again later.").build();
 		}
 	}
 
@@ -254,10 +254,10 @@ public class ProposalIntegrationDaoImpl implements ProposalIntegrationDao {
 
 		} catch (PersistenceException e) {
 			log.error("Database error for personId: {} and disclosureType: {}: {}", personId, disclosureType, e.getMessage(), e);
-			throw e;
+			return DisclosureResponse.builder().error("Database access error occurred. Please try again later.").build();
 		} catch (Exception e) {
 			log.error("Error fetching expiration date for personId: {} and disclosureType: {}: {}", personId, disclosureType, e.getMessage(), e);
-			throw e;
+			return DisclosureResponse.builder().error("An unexpected error occurred. Please try again later.").build();
 		}
 	}
 

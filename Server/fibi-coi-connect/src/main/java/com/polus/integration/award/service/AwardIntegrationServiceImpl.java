@@ -26,6 +26,7 @@ import com.polus.integration.dao.IntegrationDao;
 import com.polus.integration.exception.service.MQRouterException;
 import com.polus.integration.instituteProposal.repository.InstituteProposalRepository;
 import com.polus.integration.instituteProposal.vo.DisclosureSyncVO;
+import com.polus.integration.proposal.dto.DisclosureResponse;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -227,6 +228,16 @@ public class AwardIntegrationServiceImpl implements AwardIntegrationService {
 	                Constant.AWARD_MODULE_CODE, Constant.SUB_MODULE_CODE,
 	                Constant.AWARD_INTEGRATION_ACTION_TYPE, integrationDao.generateUUID());
 	    }
+	}
+
+	@Override
+	public DisclosureResponse feedAwardPersonDisclosureStatus(String awardNumber, String personId) {
+		return awardDao.feedAwardDisclosureStatus(awardNumber, personId);
+	}
+
+	@Override
+	public DisclosureResponse checkAwardDisclosureStatus(String awardNumber) {
+		return awardDao.checkAwardDisclosureStatus(awardNumber);
 	}
 
 }

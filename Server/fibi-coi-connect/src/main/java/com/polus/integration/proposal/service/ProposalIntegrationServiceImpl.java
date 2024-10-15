@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
@@ -470,31 +469,16 @@ public class ProposalIntegrationServiceImpl implements ProposalIntegrationServic
 
 	@Override
 	public DisclosureResponse feedProposalPersonDisclosureStatus(String proposalNumber, String personId) {
-		if (StringUtils.isBlank(proposalNumber) || StringUtils.isBlank(personId)) {
-			log.warn("Invalid proposal number or person ID provided.");
-			return DisclosureResponse.builder().error("Invalid proposal number or person ID.").build();
-		}
-
 		return proposalIntegrationDao.feedProposalDisclosureStatus(proposalNumber, personId);
 	}
 
 	@Override
 	public DisclosureResponse checkProposalDisclosureStatus(String proposalNumber) {
-		if (StringUtils.isBlank(proposalNumber)) {
-			log.warn("Invalid proposal number provided.");
-			return DisclosureResponse.builder().error("Invalid proposal number.").build();
-		}
-
 		return proposalIntegrationDao.checkProposalDisclosureStatus(proposalNumber);
 	}
 
 	@Override
 	public DisclosureResponse feedDisclosureExpirationDate(String disclosureType, String personId) {
-		if (StringUtils.isBlank(personId) || StringUtils.isBlank(disclosureType)) {
-			log.warn("Invalid personId or disclosureType provided.");
-			return DisclosureResponse.builder().error("Invalid personId or disclosureType.").build();
-		}
-
 		return proposalIntegrationDao.feedDisclosureExpirationDate(disclosureType, personId);
 	}
 

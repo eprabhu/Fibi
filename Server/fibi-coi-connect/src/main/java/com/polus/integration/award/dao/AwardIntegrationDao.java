@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.polus.integration.award.dto.AwardDTO;
 import com.polus.integration.award.pojo.COIIntegrationAward;
 import com.polus.integration.award.pojo.COIIntegrationAwardPerson;
+import com.polus.integration.proposal.dto.DisclosureResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -34,5 +35,9 @@ public interface AwardIntegrationDao {
 	 * @param projectPerson
 	 */
 	public void saveAwardPerson(COIIntegrationAwardPerson projectPerson);
+
+	public DisclosureResponse feedAwardDisclosureStatus(String awardNumber, String personId);
+
+	public DisclosureResponse checkAwardDisclosureStatus(String awardNumber);
 
 }
